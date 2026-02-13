@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "Egnis",
+			"Path": "..\\Source\\Egnis.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "EgnisEditor",
+			"Path": "..\\Source\\EgnisEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

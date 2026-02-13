@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Egnis.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Egnis.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\EgnisEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\Egnis">
+      <UniqueIdentifier>{633BDC01-6706-3C92-915D-E431068D2CC5}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Egnis\Egnis.Build.cs">
+      <Filter>Source\Egnis</Filter>
+    </None>
+    <ClInclude Include="..\..\Source\Egnis\Egnis.h">
+      <Filter>Source\Egnis</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Egnis\Egnis.cpp">
+      <Filter>Source\Egnis</Filter>
+    </ClCompile>
+    <Filter Include="Source\Egnis\Public">
+      <UniqueIdentifier>{E6A80C6C-7153-3D97-A37E-A1BCC0AFB98C}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\Egnis\Public\CharacterBase.h">
+      <Filter>Source\Egnis\Public</Filter>
+    </ClInclude>
+    <Filter Include="Source\Egnis\Private">
+      <UniqueIdentifier>{D19FC2AE-E097-331B-80AB-CF2906ABDB26}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Egnis\Private\CharacterBase.cpp">
+      <Filter>Source\Egnis\Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
