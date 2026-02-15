@@ -1,0 +1,26 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\egnis\\module.egnis.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\egniseditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.inclorderunreal5_3.h.pch",
+        "Includes": [
+            "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\egnis\\definitions.egnis.h",
+            "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\unrealeditor\\inc\\egnis\\uht\\characterbase.gen.cpp",
+            "f:\\adriana\\egnis\\egnis\\source\\egnis\\public\\characterbase.h",
+            "d:\\epic games\\ue_5.6\\engine\\source\\runtime\\engine\\classes\\gameframework\\character.h",
+            "d:\\epic games\\ue_5.6\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementreplication.h",
+            "d:\\epic games\\ue_5.6\\engine\\source\\runtime\\net\\core\\public\\net\\core\\nettoken\\nettokenexportcontext.h",
+            "d:\\epic games\\ue_5.6\\engine\\source\\runtime\\experimental\\iris\\core\\public\\iris\\serialization\\irisobjectreferencepackagemap.h",
+            "d:\\epic games\\ue_5.6\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\iriscore\\uht\\irisobjectreferencepackagemap.generated.h",
+            "d:\\epic games\\ue_5.6\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\charactermovementreplication.generated.h",
+            "d:\\epic games\\ue_5.6\\engine\\source\\runtime\\engine\\classes\\gameframework\\rootmotionsource.h",
+            "d:\\epic games\\ue_5.6\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\rootmotionsource.generated.h",
+            "d:\\epic games\\ue_5.6\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\character.generated.h",
+            "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\unrealeditor\\inc\\egnis\\uht\\characterbase.generated.h",
+            "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\unrealeditor\\inc\\egnis\\uht\\egnis.init.gen.cpp"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
