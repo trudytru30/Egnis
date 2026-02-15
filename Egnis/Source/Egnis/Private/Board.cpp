@@ -23,4 +23,3 @@ void ABoard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-

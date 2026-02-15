@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
@@ -21,12 +19,12 @@ struct FClickResult
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintreadWrite) bool  bHit = false;
-	UPROPERTY(BlueprintreadWrite) bool  bHitUnit = false;
-	UPROPERTY(BlueprintreadWrite) bool  bHitBoard = false;
+	UPROPERTY(BlueprintReadWrite) bool  bHit = false;
+	UPROPERTY(BlueprintReadWrite) bool  bHitUnit = false;
+	UPROPERTY(BlueprintReadWrite) bool  bHitBoard = false;
 
-	UPROPERTY(BlueprintreadWrite) TObjectPtr<class AActor> HitActor = nullptr;
-	UPROPERTY(BlueprintreadWrite) FVector WorldPoint = FVector::ZeroVector;
+	UPROPERTY(BlueprintReadWrite) TObjectPtr<class AActor> HitActor = nullptr;
+	UPROPERTY(BlueprintReadWrite) FVector WorldPoint = FVector::ZeroVector;
 };
 
 UCLASS()
@@ -43,15 +41,23 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
+#pragma region Input
 	UFUNCTION(BlueprintImplementableEvent, Category="Input")
 	void BP_OnclickResolved(const FClickResult& Result);
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputMappingContext> IMCGameplay;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> DefaultMappingContext;
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputMappingContext> IMCUI;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> PauseAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> ClickAction ;
-
+#pragma endregion
+	
 	UPROPERTY(EditDefaultsOnly, Category="Click|Trace")
 	TEnumAsByte<ECollisionChannel> UnitTraceChannel = ECC_GameTraceChannel1;
 
@@ -59,6 +65,12 @@ protected:
 	TEnumAsByte<ECollisionChannel> BoardTraceChannel = ECC_GameTraceChannel2;
 
 private:
+	
+	bool bIsInMenu = false;
+	
+	void OpenMenu();
+	void CloseMenu();
+	void HandleMenu();
 	void HandleLeftClick();
 	bool TraceUnderCursor(ECollisionChannel Channel, FHitResult& OutHit ) const;
 	
