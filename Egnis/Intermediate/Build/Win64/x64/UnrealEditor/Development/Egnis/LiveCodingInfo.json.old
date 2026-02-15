@@ -1,0 +1,9 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.Egnis.gen.cpp.obj": [
+			"CharacterBase.gen.cpp.obj",
+			"Egnis.init.gen.cpp.obj"
+		]
+	}
+}

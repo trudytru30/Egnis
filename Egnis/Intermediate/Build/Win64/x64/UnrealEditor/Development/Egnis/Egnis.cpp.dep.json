@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "f:\\adriana\\egnis\\egnis\\source\\egnis\\egnis.cpp",
+        "ProvidedModule": "",
+        "PCH": "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\egniseditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.inclorderunreal5_3.h.pch",
+        "Includes": [
+            "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\egnis\\definitions.egnis.h",
+            "f:\\adriana\\egnis\\egnis\\source\\egnis\\egnis.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

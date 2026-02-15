@@ -1,0 +1,23 @@
+{
+	"version": 1,
+	"changelists": [
+		{
+			"guid": "00000000000000000000000000000000",
+			"description": "Default Uncontrolled Changelist",
+			"files": [
+				"F:/Adriana/Egnis/Egnis/Content/MAPs/GYMs/Board.umap",
+				"F:/Adriana/Egnis/Egnis/Content/EnhancedInput/InputActionss/IA_Click.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/EnhancedInput/MapContexts/IMC_Default.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/BPs/BP_BoardCharacter.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/BPs/GM_Default.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/BPs/BP_Board.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/BPs/BP_Unit.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/Assets/Gyms/MAT_Board.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/Assets/Gyms/Tablero_Gym.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/BPs/BP_Prueba.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/EnhancedInput/InputActionss/IA_Clik.uasset",
+				"F:/Adriana/Egnis/Egnis/Content/EnhancedInput/MapContexts/NewInputMappingContext.uasset"
+			]
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\egnis\\permoduleinline.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\egniseditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.inclorderunreal5_3.h.pch",
+        "Includes": [
+            "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\egnis\\definitions.egnis.h",
+            "d:\\epic games\\ue_5.6\\engine\\source\\runtime\\core\\public\\hal\\permoduleinline.inl"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
