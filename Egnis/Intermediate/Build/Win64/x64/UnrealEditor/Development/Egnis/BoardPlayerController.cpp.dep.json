@@ -6,7 +6,7 @@
         "PCH": "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\egniseditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.inclorderunreal5_3.h.pch",
         "Includes": [
             "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\egnis\\definitions.egnis.h",
-            "f:\\adriana\\egnis\\egnis\\source\\egnis\\private\\boardplayercontroller.h",
+            "f:\\adriana\\egnis\\egnis\\source\\egnis\\public\\boardplayercontroller.h",
             "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\unrealeditor\\inc\\egnis\\uht\\boardplayercontroller.generated.h",
             "d:\\epic games\\ue_5.6\\engine\\plugins\\enhancedinput\\source\\enhancedinput\\public\\enhancedinputsubsystems.h",
             "d:\\epic games\\ue_5.6\\engine\\plugins\\enhancedinput\\source\\enhancedinput\\public\\enhancedinputsubsysteminterface.h",
@@ -33,7 +33,9 @@
             "d:\\epic games\\ue_5.6\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputsubsysteminterface.generated.h",
             "d:\\epic games\\ue_5.6\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputsubsystems.generated.h",
             "d:\\epic games\\ue_5.6\\engine\\plugins\\enhancedinput\\source\\enhancedinput\\public\\enhancedinputcomponent.h",
-            "d:\\epic games\\ue_5.6\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputcomponent.generated.h"
+            "d:\\epic games\\ue_5.6\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputcomponent.generated.h",
+            "f:\\adriana\\egnis\\egnis\\source\\egnis\\public\\board.h",
+            "f:\\adriana\\egnis\\egnis\\intermediate\\build\\win64\\unrealeditor\\inc\\egnis\\uht\\board.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

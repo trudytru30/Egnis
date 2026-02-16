@@ -2,6 +2,9 @@
 	"RemapUnityFiles": 
 	{
 		"Module.Egnis.gen.cpp.obj": [
+			"AIEnemyController.gen.cpp.obj",
+			"Board.gen.cpp.obj",
+			"BoardPlayerController.gen.cpp.obj",
 			"CharacterBase.gen.cpp.obj",
 			"Egnis.init.gen.cpp.obj"
 		]

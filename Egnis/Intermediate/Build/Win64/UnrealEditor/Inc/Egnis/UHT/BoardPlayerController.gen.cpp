@@ -45,7 +45,7 @@ struct Z_Construct_UEnum_Egnis_EInputIntent_Statics
 	static constexpr UECodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
 		{ "Action.Name", "EInputIntent::Action" },
 		{ "BlueprintType", "true" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 		{ "Move.Name", "EInputIntent::Move" },
 	};
 #endif // WITH_METADATA
@@ -92,27 +92,27 @@ struct Z_Construct_UScriptStruct_FClickResult_Statics
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Struct_MetaDataParams[] = {
 		{ "BlueprintType", "true" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_bHit_MetaData[] = {
 		{ "Category", "ClickResult" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_bHitUnit_MetaData[] = {
 		{ "Category", "ClickResult" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_bHitBoard_MetaData[] = {
 		{ "Category", "ClickResult" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_HitActor_MetaData[] = {
 		{ "Category", "ClickResult" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_WorldPoint_MetaData[] = {
 		{ "Category", "ClickResult" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 #endif // WITH_METADATA
 	static void NewProp_bHit_SetBit(void* Obj);
@@ -196,7 +196,7 @@ struct Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved_Statics
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
 		{ "Category", "Input" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Result_MetaData[] = {
 		{ "NativeConst", "" },
@@ -206,7 +206,7 @@ struct Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved_Statics::NewProp_Result = { "Result", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BoardPlayerController_eventBP_OnclickResolved_Parms, Result), Z_Construct_UScriptStruct_FClickResult, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Result_MetaData), NewProp_Result_MetaData) }; // 860500039
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved_Statics::NewProp_Result = { "Result", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BoardPlayerController_eventBP_OnclickResolved_Parms, Result), Z_Construct_UScriptStruct_FClickResult, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Result_MetaData), NewProp_Result_MetaData) }; // 2780328015
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved_Statics::NewProp_Result,
 };
@@ -263,39 +263,49 @@ struct Z_Construct_UClass_ABoardPlayerController_Statics
 	static constexpr UECodeGen_Private::FMetaDataPairParam Class_MetaDataParams[] = {
 		{ "HideCategories", "Collision Rendering Transformation" },
 		{ "IncludePath", "BoardPlayerController.h" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_CurrentIntent_MetaData[] = {
 		{ "Category", "Input" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultMappingContext_MetaData[] = {
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_IMCGameplay_MetaData[] = {
 		{ "Category", "Input" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_IMCUI_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_PauseAction_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ClickAction_MetaData[] = {
 		{ "Category", "Input" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_UnitTraceChannel_MetaData[] = {
 		{ "Category", "Click|Trace" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_BoardTraceChannel_MetaData[] = {
 		{ "Category", "Click|Trace" },
-		{ "ModuleRelativePath", "Private/BoardPlayerController.h" },
+		{ "ModuleRelativePath", "Public/BoardPlayerController.h" },
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FBytePropertyParams NewProp_CurrentIntent_Underlying;
 	static const UECodeGen_Private::FEnumPropertyParams NewProp_CurrentIntent;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp_DefaultMappingContext;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_IMCGameplay;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_IMCUI;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_PauseAction;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_ClickAction;
 	static const UECodeGen_Private::FBytePropertyParams NewProp_UnitTraceChannel;
 	static const UECodeGen_Private::FBytePropertyParams NewProp_BoardTraceChannel;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
-		{ &Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved, "BP_OnclickResolved" }, // 2698148820
+		{ &Z_Construct_UFunction_ABoardPlayerController_BP_OnclickResolved, "BP_OnclickResolved" }, // 2181110355
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -304,15 +314,19 @@ struct Z_Construct_UClass_ABoardPlayerController_Statics
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_CurrentIntent_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, nullptr, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_CurrentIntent = { "CurrentIntent", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, CurrentIntent), Z_Construct_UEnum_Egnis_EInputIntent, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CurrentIntent_MetaData), NewProp_CurrentIntent_MetaData) }; // 463737328
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_DefaultMappingContext = { "DefaultMappingContext", nullptr, (EPropertyFlags)0x0124080000010001, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, DefaultMappingContext), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultMappingContext_MetaData), NewProp_DefaultMappingContext_MetaData) };
+const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_CurrentIntent = { "CurrentIntent", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, CurrentIntent), Z_Construct_UEnum_Egnis_EInputIntent, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CurrentIntent_MetaData), NewProp_CurrentIntent_MetaData) }; // 1807670252
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_IMCGameplay = { "IMCGameplay", nullptr, (EPropertyFlags)0x0124080000010001, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, IMCGameplay), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_IMCGameplay_MetaData), NewProp_IMCGameplay_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_IMCUI = { "IMCUI", nullptr, (EPropertyFlags)0x0124080000010001, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, IMCUI), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_IMCUI_MetaData), NewProp_IMCUI_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_PauseAction = { "PauseAction", nullptr, (EPropertyFlags)0x0124080000010001, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, PauseAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PauseAction_MetaData), NewProp_PauseAction_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_ClickAction = { "ClickAction", nullptr, (EPropertyFlags)0x0124080000010001, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, ClickAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ClickAction_MetaData), NewProp_ClickAction_MetaData) };
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_UnitTraceChannel = { "UnitTraceChannel", nullptr, (EPropertyFlags)0x0020080000010001, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, UnitTraceChannel), Z_Construct_UEnum_Engine_ECollisionChannel, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_UnitTraceChannel_MetaData), NewProp_UnitTraceChannel_MetaData) }; // 756624936
 const UECodeGen_Private::FBytePropertyParams Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_BoardTraceChannel = { "BoardTraceChannel", nullptr, (EPropertyFlags)0x0020080000010001, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABoardPlayerController, BoardTraceChannel), Z_Construct_UEnum_Engine_ECollisionChannel, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_BoardTraceChannel_MetaData), NewProp_BoardTraceChannel_MetaData) }; // 756624936
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABoardPlayerController_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_CurrentIntent_Underlying,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_CurrentIntent,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_DefaultMappingContext,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_IMCGameplay,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_IMCUI,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_PauseAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_ClickAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_UnitTraceChannel,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABoardPlayerController_Statics::NewProp_BoardTraceChannel,
@@ -351,22 +365,22 @@ ABoardPlayerController::~ABoardPlayerController() {}
 // ********** End Class ABoardPlayerController *****************************************************
 
 // ********** Begin Registration *******************************************************************
-struct Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_Statics
+struct Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_Statics
 {
 	static constexpr FEnumRegisterCompiledInInfo EnumInfo[] = {
-		{ EInputIntent_StaticEnum, TEXT("EInputIntent"), &Z_Registration_Info_UEnum_EInputIntent, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 463737328U) },
+		{ EInputIntent_StaticEnum, TEXT("EInputIntent"), &Z_Registration_Info_UEnum_EInputIntent, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 1807670252U) },
 	};
 	static constexpr FStructRegisterCompiledInInfo ScriptStructInfo[] = {
-		{ FClickResult::StaticStruct, Z_Construct_UScriptStruct_FClickResult_Statics::NewStructOps, TEXT("ClickResult"), &Z_Registration_Info_UScriptStruct_FClickResult, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FClickResult), 860500039U) },
+		{ FClickResult::StaticStruct, Z_Construct_UScriptStruct_FClickResult_Statics::NewStructOps, TEXT("ClickResult"), &Z_Registration_Info_UScriptStruct_FClickResult, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FClickResult), 2780328015U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABoardPlayerController, ABoardPlayerController::StaticClass, TEXT("ABoardPlayerController"), &Z_Registration_Info_UClass_ABoardPlayerController, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABoardPlayerController), 2564033628U) },
+		{ Z_Construct_UClass_ABoardPlayerController, ABoardPlayerController::StaticClass, TEXT("ABoardPlayerController"), &Z_Registration_Info_UClass_ABoardPlayerController, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABoardPlayerController), 1290429263U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_1312654755(TEXT("/Script/Egnis"),
-	Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_Statics::ClassInfo),
-	Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_Statics::ScriptStructInfo),
-	Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Private_BoardPlayerController_h__Script_Egnis_Statics::EnumInfo));
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_1144295809(TEXT("/Script/Egnis"),
+	Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_Statics::ClassInfo),
+	Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_Statics::ScriptStructInfo),
+	Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Egnis_Source_Egnis_Public_BoardPlayerController_h__Script_Egnis_Statics::EnumInfo));
 // ********** End Registration *********************************************************************
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

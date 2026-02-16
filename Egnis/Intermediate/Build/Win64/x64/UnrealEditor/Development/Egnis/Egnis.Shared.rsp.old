@@ -1,5 +1,8 @@
 /I "."
 /I "F:/Adriana/Egnis/Egnis/Source/Egnis/Private"
+/I "../Plugins/EnhancedInput/Intermediate/Build/Win64/UnrealEditor/Inc/EnhancedInput/UHT"
+/I "../Plugins/EnhancedInput/Source"
+/I "../Plugins/EnhancedInput/Source/EnhancedInput/Public"
 /I "../Intermediate/Build/Win64/UnrealEditor/Inc/Engine/UHT"
 /I "Runtime/Engine/Classes"
 /I "Runtime/Engine/Public"

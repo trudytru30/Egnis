@@ -2,6 +2,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Board.h"
 
 ABoardPlayerController::ABoardPlayerController()
 {
@@ -94,6 +95,42 @@ void ABoardPlayerController::HandleLeftClick()
 			Result.WorldPoint = Hit.ImpactPoint;
 		}
 	}
+
+	if (Result.bHitBoard && Result.HitActor)
+	{
+		if (ABoard* Board = Cast<ABoard>(Result.HitActor))
+		{
+			FTileCoord Tile;
+			if (Board->WorldPointToTile(Result.WorldPoint, Tile))
+			{
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(
+						-1, 2.0f, FColor::Yellow,
+						FString::Printf(TEXT("Tile = (%d, %d)"), Tile.X, Tile.Y)
+					);
+				}
+
+				// Debug visual del centro de la casilla
+				const FVector Center = Board->TileToWorldCenter(Tile);
+				DrawDebugSphere(GetWorld(), Center, 18.f, 12, FColor::Yellow, false, 2.0f);
+			}
+			else
+			{
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Click fuera del tablero"));
+				}
+			}
+		}
+		else
+		{
+			// Si aquí entras, significa que el actor golpeado NO es tu ABoard.
+			// O estás golpeando otro actor distinto, o el mesh que bloquea no pertenece a ABoard.
+			UE_LOG(LogTemp, Warning, TEXT("HitActor is not ABoard. Actor=%s"), *Result.HitActor->GetName());
+		}
+	}
+
 	
 	// Debug rápido
 	if (GEngine)
@@ -133,8 +170,7 @@ bool ABoardPlayerController::TraceUnderCursor(ECollisionChannel Channel, FHitRes
 	const FVector Start = WorldOrigin;
 	const FVector End = WorldOrigin + (WorldDirection * TraceDistance);
 
-	// Debug line (siempre)
-	DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.5f);
+
 
 	FCollisionQueryParams Params(SCENE_QUERY_STAT(ClickTrace), true);
 	const bool bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, Channel, Params);

@@ -289,6 +289,9 @@
 /I "F:/Adriana/Egnis/Egnis/Intermediate/Build/Win64/UnrealEditor/Inc/Egnis/UHT"
 /I "F:/Adriana/Egnis/Egnis/Source"
 /I "F:/Adriana/Egnis/Egnis/Source/Egnis/Public"
+/I "../Intermediate/Build/Win64/UnrealEditor/Inc/AIModule/UHT"
+/I "Runtime/AIModule/Classes"
+/I "Runtime/AIModule/Public"
 /I "F:/Adriana/Egnis/Egnis/Intermediate/Build/Win64/x64/EgnisEditor/Development/UnrealEd"
 /external:W0
 /external:I "ThirdParty/GuidelinesSupportLibrary/GSL-1144/include"
