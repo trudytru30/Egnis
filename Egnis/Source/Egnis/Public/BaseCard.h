@@ -14,6 +14,9 @@ protected:
 	// ===== Stats =====
 #pragma region Stats
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	ECardType CardName;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
 	ECardType CardType;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")

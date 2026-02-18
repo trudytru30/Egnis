@@ -1,14 +1,34 @@
 #include "DeckManager.h"
 
+// Aniadir cartas al mazo
+void UDeckManager::GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCarts)
+{
+	if (SelectedCarts.Num() < InitialDeckSize)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No hay suficientes cartas seleccionadas para generar el mazo"));
+		return;
+	}
+	
+	Deck.Empty();	// Limpiar mazo antes de añadir las nuevas
+	
+	for (TSubclassOf<UBaseCard> Card : SelectedCarts)
+	{
+		if (!Card) continue;	// Comprobar que no es null
+		Deck.Add(NewObject<UBaseCard>(this, Card));
+	}
+}
+
 // Inicializar mazo al principio de la batalla
 void UDeckManager::InitializeDeck()
 {
 	DrawPile = Deck;
+	DiscardedPile.Empty();
+	Hand.Empty();
 	
 	ShuffleDeck();
 	
 	// Robar mano inicial
-	for (int32 i = 0; i < CurrentDeckSize; i++)
+	for (int32 i = 0; i < InitialHandSize; i++)
 	{
 		DrawCard();
 	}
@@ -27,36 +47,50 @@ void UDeckManager::ShuffleDeck()
 // Robar cartas del mazo
 void UDeckManager::DrawCard()
 {
-	if (DrawPile.Num() > 0)
-	{
-		Hand.Add(DrawPile.Last());
-		DrawPile.Pop();
-	}
+	if (Hand.Num() >= MaxHandSize) return;
 	
 	if (DrawPile.Num() <= 0)
 	{
 		DrawPile = DiscardedPile;
 		DiscardedPile.Empty();
 		ShuffleDeck();
+	} else if (DrawPile.Num() > 0)
+	{
+		Hand.Add(DrawPile.Last());
+		DrawPile.Pop();
 	}
 }
 
-// Descartar cartas a la pila de descarte
-void UDeckManager::DiscardCard()
+// Descartar cartas de la mano a la pila de descarte
+void UDeckManager::DiscardCardFromHand(UBaseCard* Card)
 {
-	
+	if (Hand.Contains(Card))
+	{
+		Hand.Remove(Card);
+		DiscardedPile.Add(Card);
+	}
+}
+
+// Descartar cartas del mazo a la pila de descarte
+void UDeckManager::DiscardCardFromDrawPile(UBaseCard* Card)
+{
+	if (DrawPile.Contains(Card))
+	{
+		DrawPile.Remove(Card);
+		DiscardedPile.Add(Card);
+	}
 }
 
 // Aniadir cartas al mazo permanentemente
-void UDeckManager::AddCardToDeck(TSubclassOf<class UBaseCard> Card)
+void UDeckManager::AddCardToDeck(UBaseCard* Card)
 {
-	
+	Deck.Add(Card);
 }
 
 // Eliminar una carta del mazo permanentemente
-void UDeckManager::RemoveCardFromDeck(TSubclassOf<class UBaseCard> Card)
+void UDeckManager::RemoveCardFromDeck(UBaseCard* Card)
 {
-	
+	Deck.RemoveSingle(Card);
 }
 
 // Reiniciar mazo (al terminar una partida, no una batalla)

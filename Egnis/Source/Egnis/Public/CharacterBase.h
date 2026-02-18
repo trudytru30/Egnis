@@ -1,11 +1,10 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "CharacterBase.generated.h"
 #include "ColorType.h"
+#include "HealthComponent.h"
+#include "CharacterBase.generated.h"
 
 UCLASS()
 class EGNIS_API ACharacterBase : public ACharacter

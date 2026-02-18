@@ -1,7 +1,7 @@
 #include "BaseCard.h"
 
 // Utilizar carta
-void UBaseCard::Execute(ECardType CardType)
+void UBaseCard::Execute(const ECardType CardType)
 {
 	switch (CardType)
 	{
