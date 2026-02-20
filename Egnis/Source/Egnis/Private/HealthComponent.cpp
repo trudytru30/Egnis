@@ -1,8 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "HealthComponent.h"
-
+﻿#include "HealthComponent.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -16,7 +12,6 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentHealth = FMath::Clamp(CurrentHealth, 0.0f, MaxHealth);
-	BroadcastHealth();
 	
 }
 

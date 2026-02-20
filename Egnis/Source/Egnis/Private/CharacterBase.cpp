@@ -11,13 +11,6 @@ ACharacterBase::ACharacterBase()
 
 }
 
-// Called when the game starts or when spawned
-void ACharacterBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 // Called every frame
 void ACharacterBase::Tick(float DeltaTime)
 {
@@ -41,3 +34,18 @@ void ACharacterBase::LossHealth(float HealthToLoss)
 	HealthComp->ApplyDelta(-HealthToLoss);
 }
 
+void ACharacterBase::GainHealth(float AmountHealed)
+{
+	if (!HealthComp)
+	{
+		return;
+	}
+
+	HealthComp->ApplyDelta(+AmountHealed);
+}
+
+// Getter para obtener el equipo del enemigo
+int32 ACharacterBase::GetTeam()
+{
+	return Team;
+}
