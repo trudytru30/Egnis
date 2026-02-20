@@ -30,13 +30,6 @@ float UHealthComponent::ApplyDelta(float Delta)
 	const float OldHealth = CurrentHealth;
 	CurrentHealth  = FMath::Clamp(CurrentHealth+Delta,0.0f,MaxHealth);
 
-	const bool bChanged = !FMath::IsNearlyEqual(CurrentHealth,OldHealth);
-
-	if (bChanged)
-	{
-		BroadcastHealth();
-	}
-
 	//Si el delta es por daño y no por curacion
 	const bool bDamageApplied = (Delta < 0.0f) && (CurrentHealth < OldHealth);
 
@@ -49,14 +42,14 @@ float UHealthComponent::ApplyDelta(float Delta)
 	//Si nos mata aplicamos Death
 	if (OldHealth > 0.0f &&  CurrentHealth <=0.0f)
 	{
-		OnDeath.Broadcast();
+		OnDeath();
 	}
 
 	return CurrentHealth;
 }
 
-
-void UHealthComponent::BroadcastHealth()
+void UHealthComponent::OnDeath()
 {
-	OnHealthChanged.Broadcast(CurrentHealth,MaxHealth);
+	bDead = true;
+	//deasctiva el character
 }

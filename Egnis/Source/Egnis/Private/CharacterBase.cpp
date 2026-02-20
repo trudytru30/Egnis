@@ -29,6 +29,15 @@ void ACharacterBase::Tick(float DeltaTime)
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
 
+void ACharacterBase::LossHealth(float HealthToLoss)
+{
+	if (!HealthComp)
+	{
+		return;
+	}
+
+	HealthComp->ApplyDelta(-HealthToLoss);
 }
 

@@ -20,9 +20,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UHealthComponent* HealthComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EColorType Type;
 
 public:	
@@ -32,4 +29,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	UHealthComponent* HealthComp = nullptr;
+	
+	UFUNCTION(BlueprintCallable, Category="Stats")
+	void LossHealth(float HealthToLoss);
 };

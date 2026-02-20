@@ -6,11 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature,float,CurrentHealth,float,MaxHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FonDeathSignature);
-
-
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PELEAMELEE_API UHealthComponent : public UActorComponent
 {
@@ -29,15 +24,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Health")
 	float GetMaxHealt() {return MaxHealth;}
 
-	UFUNCTION(BlueprintCallable, Category="Health")
-	bool IsDead() {return CurrentHealth<=0.0f;}
-
-	UPROPERTY(BlueprintAssignable, Category="Health")
-	FOnHealthChangedSignature OnHealthChanged;
-
-	UPROPERTY(BlueprintAssignable, Category="Health")
-	FonDeathSignature OnDeath;
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -48,6 +34,9 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Health")
 	float CurrentHealth = 100;
 
+	bool bDead = false;
+
 private:
 	void BroadcastHealth();
+	void OnDeath();
 };
