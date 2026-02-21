@@ -1,20 +1,13 @@
 #include "BaseCard.h"
 
 // Utilizar carta
-/*void UBaseCard::Execute(const ECardType CardType)
+void UBaseCard::Execute(UDeckManager* Deck)
 {
-	switch (CardType)
+	for (UCardEffect* Effect : Effects)
 	{
-	case ECardType::Attack:
-		
-		break;
-		
-	case ECardType::Heal:
-		
-		break;
-		
-	case ECardType::Utility:
-		
-		break;
+		if (Effect)
+		{
+			Effect->Execute(Deck);
+		}
 	}
-}*/
+}

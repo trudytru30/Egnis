@@ -12,6 +12,9 @@ class EGNIS_API UDeckManager : public UObject
 	// TODO: En un futuro hacer publica la mano (el turnManager necesita saber el coste de las cartas)
 	GENERATED_BODY()
 	
+public:
+	void DrawCard();	// TODO: Llamar desde TurnManager
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Decks")
 	TArray<UBaseCard*> TotalCards;
@@ -50,7 +53,6 @@ private:
 	// Llamar al inicio de cada combate, genera el mazo y roba la primera mano
 	void InitializeDeck();	
 	void ShuffleDeck();
-	void DrawCard();	// TODO: Llamar desde TurnManager
 	void DiscardCardFromHand(UBaseCard* Card);	// TODO: Llamar desde TurnManager (al terminar el turno del jugador)
 	void DiscardCardFromDrawPile(UBaseCard* Card);
 	void AddCardToDeck(UBaseCard* Card);

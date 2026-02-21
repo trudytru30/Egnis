@@ -47,7 +47,8 @@ void UDeckManager::ShuffleDeck()
 // Robar cartas del mazo
 void UDeckManager::DrawCard()
 {
-	if (Hand.Num() >= MaxHandSize) return;
+	
+	if (Hand.Num() >= MaxHandSize) return;	//TODO: El TurnManager tiene que comprobar esto
 	
 	if (DrawPile.Num() <= 0)
 	{
