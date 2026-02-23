@@ -14,5 +14,5 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AttackEffect")
 	int32 DamageAmount;
 	
-	virtual void Execute(AActor* Source = nullptr, ACharacterBase* Target = nullptr);
+	virtual void Execute_Enemy(ACharacterBase* Self, ACharacterBase* Enemy) override;
 };

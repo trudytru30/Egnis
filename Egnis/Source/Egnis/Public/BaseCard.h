@@ -5,8 +5,10 @@
 #include "CardTarget.h"
 #include "CardType.h"
 #include "ColorType.h"
-#include "DeckManager.h"
 #include "BaseCard.generated.h"
+
+class UDeckManager;
+class ACharacterBase;
 
 UCLASS(BlueprintType, Abstract)
 class EGNIS_API UBaseCard : public UObject
@@ -14,10 +16,7 @@ class EGNIS_API UBaseCard : public UObject
 	GENERATED_BODY()
 
 public:
-	// ===== Funciones =====
-	void Execute(UDeckManager* Deck);	//TODO: Ejecucion de cartas sin terminar
 	
-protected:
 	// ===== Stats =====
 #pragma region Stats
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
@@ -37,8 +36,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
 	TArray<UCardEffect*> Effects;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
-	UTexture2D* CardImage;
+
 #pragma endregion
+	
+	// ===== Funciones =====
+	void Execute(UDeckManager* Deck, ACharacterBase* Self, ACharacterBase* TargetCharacter, FVector Location);
 };

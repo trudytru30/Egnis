@@ -1,13 +1,29 @@
 #include "BaseCard.h"
 
 // Utilizar carta
-void UBaseCard::Execute(UDeckManager* Deck)
+void UBaseCard::Execute(UDeckManager* Deck, ACharacterBase* Self, ACharacterBase* TargetCharacter, FVector Location)
 {
 	for (UCardEffect* Effect : Effects)
 	{
-		if (Effect)
+		switch (Effect->Target)
 		{
-			Effect->Execute(Deck);
+			case ECardTarget::None:
+				Effect->Execute_None(Deck);
+				break;
+			case ECardTarget::Ally:
+				Effect->Execute_Ally(Self, TargetCharacter);
+				break;
+			case ECardTarget::Enemy:
+				Effect->Execute_Enemy(Self, TargetCharacter);
+				break;
+			case ECardTarget::Self:
+				Effect->Execute_Self(Self);
+				break;
+			case ECardTarget::Tile:
+				Effect->Execute_Tile(Location);
+				break;
+			default:
+				break;
 		}
 	}
 }

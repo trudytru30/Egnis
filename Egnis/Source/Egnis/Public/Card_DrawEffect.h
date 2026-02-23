@@ -11,5 +11,10 @@ class EGNIS_API UCard_DrawEffect : public UCardEffect
 {
 	GENERATED_BODY()
 	
-	virtual void Execute(UDeckManager* Deck);
+public:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Draw")
+	int32 DrawAmount = 1;
+	
+	virtual void Execute_None(UDeckManager* Deck) override;
 };

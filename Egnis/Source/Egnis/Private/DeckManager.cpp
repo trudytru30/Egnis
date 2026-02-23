@@ -44,11 +44,11 @@ void UDeckManager::ShuffleDeck()
 	}
 }
 
-// Robar cartas del mazo
+// Robar cartas mediante habilidades
 void UDeckManager::DrawCard()
 {
-	
-	if (Hand.Num() >= MaxHandSize) return;	//TODO: El TurnManager tiene que comprobar esto
+	//TODO: El TurnManager es el que tiene que comprobar esto junto a que haya cartas en la pila de robo
+	if (Hand.Num() >= MaxHandSize) return;	
 	
 	if (DrawPile.Num() <= 0)
 	{
@@ -59,6 +59,15 @@ void UDeckManager::DrawCard()
 	{
 		Hand.Add(DrawPile.Last());
 		DrawPile.Pop();
+	}
+}
+
+// Robar cartas (con habilidades)
+void UDeckManager::DrawCardAmount(int32 Amount)
+{
+	for (int32 i = 0; i < Amount; i++)
+	{
+		DrawCard();
 	}
 }
 

@@ -1,9 +1,11 @@
 #include "Card_DrawEffect.h"
 #include "DeckManager.h"
 
-void UCard_DrawEffect::Execute(UDeckManager* Deck)
+void UCard_DrawEffect::Execute_None(UDeckManager* Deck)
 {
+	Super::Execute_None(Deck);
+	
 	if (!Deck) return;
 	
-	Deck->DrawCard();	//TODO: Para versión final, cambiar DrawCard para que reciba cuantas cartas se roban
+	Deck->DrawCardAmount(DrawAmount);
 }
