@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterBase.h"
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class EGNIS_API AEnemy : public AActor
+class EGNIS_API AEnemy : public ACharacterBase
 {
 	GENERATED_BODY()
 

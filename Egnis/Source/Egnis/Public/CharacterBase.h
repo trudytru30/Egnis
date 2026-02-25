@@ -1,10 +1,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Board.h"
 #include "GameFramework/Character.h"
 #include "ColorType.h"
 #include "HealthComponent.h"
 #include "CharacterBase.generated.h"
+
 
 UCLASS()
 class EGNIS_API ACharacterBase : public ACharacter
@@ -28,9 +30,30 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="Stats")
 	int32 GetTeam();
+
+	// ===== Grid / Board =====
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Grid")
+	TObjectPtr<ABoard> Board = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
+	FTileCoord CurrentTile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
+	bool bSnapToTileOnBeginPlay = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
+	float TileZOffset = 0.f;
+
+	UFUNCTION(BlueprintCallable, Category="Grid")
+	bool SetCurrentTile(const FTileCoord& NewTile);
+
+	UFUNCTION(BlueprintCallable, Category="Grid")
+	void SnapToCurrentTile(bool bKeepCurrentZ = false ); 
 	
 protected:
-	
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void Tick(float DeltaTime) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
