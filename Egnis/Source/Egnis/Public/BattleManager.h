@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DeckManager.h"
 #include "BattleManager.generated.h"
 
 class UBaseCard;
@@ -14,34 +15,42 @@ UCLASS()
 class EGNIS_API UBattleManager : public UObject
 {
 	GENERATED_BODY()
-	
+
 public:
+	
 	void StartBattle();
-	void TurnChange();
 	
 protected:
-	
+
 #pragma region Variables
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	TArray<ACharacterBase*> CharactersOnField;
+	int32 CharactersOnField = 1;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
 	TArray<ACharacterBase*> AlliesAlive;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	int32 UnitsAlive;
+	TArray<ACharacterBase*> EnemiesAlive;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	TArray<UBaseCard*> Deck;
+	UDeckManager* DeckManager;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
 	int32 TurnNumber = 0;
 #pragma endregion
 	
 private:
+	
+#pragma region Inner Variables
 	ETurnEnum CurrentTurn = ETurnEnum::PlayerTurn;
-	
-	// ===== Funciones =====
+	bool bEndTurn = false;
+#pragma endregion
+
+#pragma region Inner Functions
+	void TurnChange();
 	void UpdateUnitsAlive();
-	
+	void StartPlayerTurn();
+	void StartEnemyTurn();
+	void EndBattle(int Team);
+#pragma endregion
 };

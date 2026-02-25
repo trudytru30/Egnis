@@ -71,6 +71,16 @@ void UDeckManager::DrawCardAmount(int32 Amount)
 	}
 }
 
+// Descartar mano completa
+void UDeckManager::DiscardHand()
+{
+	for (UBaseCard* Card : Hand)
+	{
+		DiscardCardFromHand(Card);
+		DiscardedPile.Add(Card);
+	}
+}
+
 // Descartar cartas de la mano a la pila de descarte
 void UDeckManager::DiscardCardFromHand(UBaseCard* Card)
 {
