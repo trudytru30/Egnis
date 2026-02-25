@@ -14,6 +14,16 @@ struct FTileCoord
 	
 };
 
+FORCEINLINE bool operator==(const FTileCoord& A, const FTileCoord& B)
+{
+	return A.X == B.X && A.Y == B.Y;
+}
+
+FORCEINLINE uint32 GetTypeHash(const FTileCoord& T)
+{
+	return HashCombine(::GetTypeHash(T.X), ::GetTypeHash(T.Y));
+}
+
 UCLASS()
 class EGNIS_API ABoard : public AActor
 {
@@ -37,6 +47,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Board")
 	FVector TileToWorldCenter(const FTileCoord& Tile) const;
 
+	UFUNCTION(BlueprintCallable, Category="Board|Ocupacion")
+	bool IsTileOccupied(const FTileCoord& Tile) const;
+
+	UFUNCTION(BlueprintCallable, Category="Board|Ocupacion")
+	AActor* GetTileOccupant(const FTileCoord& Tile) const;
+
+	UFUNCTION(BlueprintCallable, Category="Board|Ocupacion")
+	void SetTileOccupant(const FTileCoord& Tile, AActor* Occupant);
+
+private:
+	UPROPERTY()
+	TMap<FTileCoord, TObjectPtr<AActor>> TileOccupants;
+	
 protected:
 	virtual void BeginPlay() override;
 

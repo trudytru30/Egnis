@@ -48,7 +48,29 @@ FVector ABoard::TileToWorldCenter(const FTileCoord& Tile) const
 
 	return Corner00->GetComponentTransform().TransformPosition(LocalCenter);
 }
+bool ABoard::IsTileOccupied(const FTileCoord& Tile) const
+{
+	const TObjectPtr<AActor>* Found = TileOccupants.Find(Tile);
+	return Found && Found->Get() != nullptr;
+}
 
+AActor* ABoard::GetTileOccupant(const FTileCoord& Tile) const
+{
+	const TObjectPtr<AActor>* Found = TileOccupants.Find(Tile);
+	return Found ? Found->Get() : nullptr;
+}
+
+void ABoard::SetTileOccupant(const FTileCoord& Tile, AActor* Occupant)
+{
+	if (Occupant)
+	{
+		TileOccupants.Add(Tile, Occupant);
+	}
+	else
+	{
+		TileOccupants.Remove(Tile);
+	}
+}
 // Called when the game starts or when spawned
 void ABoard::BeginPlay()
 {

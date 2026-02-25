@@ -15,7 +15,20 @@ UGridMovementComponent::UGridMovementComponent()
 
 	// ...
 }
+void UGridMovementComponent::BeginPlay()
+{
+	Super::BeginPlay();
 
+	EnsureBoardActor();
+	if (!BoardActor) return;
+
+	FTileCoord StartTile;
+	if (getCurrentTile(StartTile))
+	{
+		// Ocupamos la casilla inicial
+		BoardActor->SetTileOccupant(StartTile, GetOwner());
+	}
+}
 
 void UGridMovementComponent::EnsureBoardActor()
 {
@@ -136,6 +149,13 @@ bool UGridMovementComponent::canMoveToTile(const FTileCoord& Target)
 		return false;
 	}
 
+	//si casilla esta ocupada no se puede mover
+	AActor* Occupant = BoardActor->GetTileOccupant(Target);
+	if (Occupant && Occupant != GetOwner())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Casilla ocupada (%d,%d)"), Target.X, Target.Y);
+		return false;
+	}
 	//obtiene las casillas a las que se puede mover
 	TArray<FTileCoord> ReachableTiles;
 	getRachableTiles(ReachableTiles);
@@ -173,16 +193,28 @@ bool UGridMovementComponent::moveToTile(const FTileCoord& Target)
 		UE_LOG(LogTemp, Warning, TEXT("Movimiento no permitido a (%d,%d)"), Target.X, Target.Y);
 		return false;
 	}
+	
+
+	//casilla a pos en juego
+	FVector Destination = BoardActor->TileToWorldCenter(Target);
+
 	/*
 	 *Actualizar sist de ocupacion de casillas del tablero
 	 *liberar casilla anterior
 	 * marcar casilla nueva como ocupada
 	 */
-
-	//casilla a pos en juego
-	FVector Destination = BoardActor->TileToWorldCenter(Target);
+	//guarda la casilla anterior para liberar
+	FTileCoord OldTile;
+	const bool bHasOldTile = getCurrentTile(OldTile);
 	//mover actor
 	GetOwner()->SetActorLocation(Destination);
+
+	//actualiza ocupacion del tablero
+	if (bHasOldTile)
+	{
+		BoardActor->SetTileOccupant(OldTile, nullptr);
+	}
+	BoardActor->SetTileOccupant(Target, GetOwner());
 	UE_LOG(LogTemp, Log, TEXT("Unidad movida a (%d,%d)"), Target.X, Target.Y);
 
 	return true;

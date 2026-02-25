@@ -54,5 +54,5 @@ private:
 
 	
 protected:
-	
+	virtual void BeginPlay() override;
 };
