@@ -9,12 +9,12 @@ class UBaseCard;
 UCLASS()
 class EGNIS_API UDeckManager : public UObject
 {
+	// TODO: En un futuro hacer publica la mano (el turnManager necesita saber el coste de las cartas)
 	GENERATED_BODY()
 	
-	UPROPERTY()
-	TArray<UBaseCard*> Hand;
-	
 public:
+	
+	// ===== PROPIEDADES =====
 #pragma region Properties
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Decks")
 	TArray<UBaseCard*> TotalCards;
@@ -31,49 +31,37 @@ public:
 	UPROPERTY()
 	TArray<UBaseCard*> DiscardedPile;
 	
-	
+	UPROPERTY()
+	TArray<UBaseCard*> Hand;
 #pragma endregion
-
-#pragma region Functions
-	// Se llama al modificar las cartas del mazo elegidas por el player
-	void GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCarts);
 	
-	// Se llama al inicio de cada combate, genera el mazo y roba la primera mano
-	void InitializeDeck();
-	
-	// Barajar mazo (al principio de la batalla y al acabarse el mazo de robo)
-	void ShuffleDeck();
-	
-	// Limpiar el mazo despues de cada batalla (Draw, Discarded y hand)
-	void ResetDeck();
-	
-	// Descartar mano completa (al finalizar el turno)
-	void DiscardHand();
-	
-	// Descartar una carta concreta de la mano (mediante habilidades)
-	void DiscardCardFromHand(UBaseCard* Card);
-	
-	// Descartar cartas del mazo (mediante habilidades o al cambiar de turno)
-	void DiscardCardFromDrawPile(UBaseCard* Card);
-	
-	// Aniadir una carta al mazo (permanente)
-	void AddCardToDeck(UBaseCard* Card);
-	
-	// Descartar una carta del mazo (permanente)
-	void RemoveCardFromDeck(UBaseCard* Card);
-	
-	// Robar una carta
-	void DrawCard();
-	
-	// Robar x numero de cartas
+	// ===== FUNCIONES =====
+	void DrawCard();	// TODO: Llamar desde TurnManager
 	void DrawCardAmount(int32 Amount);
-#pragma endregion
+	void ShuffleDeck();
+	void DiscardCardFromHand(UBaseCard* Card);	// TODO: Llamar desde TurnManager (al terminar el turno del jugador)
+	void DiscardCardFromDrawPile(UBaseCard* Card);
+	void AddCardToDeck(UBaseCard* Card);
+	void RemoveCardFromDeck(UBaseCard* Card);
 
 private:
 	
-#pragma region Deck variables
+#pragma region DeckStats
 	int32 InitialDeckSize = 20;
 	int32 InitialHandSize = 6;
 	int32 MaxHandSize = 9;
+#pragma endregion
+	
+#pragma region Functions
+	// ===== Funciones =====
+	
+	// Llamar al modificar las cartas del mazo elegidas por el player
+	void GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCarts);
+	// Llamar al actualizar el mazo con cartas temporales (invocaciones, etc.)
+	// UpdateCombatDeck(UBaseCard* TempCard);
+	// Llamar al inicio de cada combate, genera el mazo y roba la primera mano
+	void InitializeDeck();	
+	// Limpiar el mazo despues de cada batalla (Draw, Discarded y hand)
+	void ResetDeck();
 #pragma endregion
 };
