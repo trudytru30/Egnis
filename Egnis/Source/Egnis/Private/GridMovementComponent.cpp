@@ -118,12 +118,23 @@ void UGridMovementComponent::getRachableTiles(TArray<FTileCoord>& OutTiles)
 			FTileCoord Target = { CurrentTile.X + Dir.X * Step, CurrentTile.Y + Dir.Y * Step };
 			if (IsTileValid(Target))
 			{
-				OutTiles.Add(Target);
+
 				//meter sist blqueos u obstaculos
 				/*if(IsTileBlocked(Target)){
 				 *break;
 				 *}
 				 **/
+				//si la casilla esta ocupada ,no se mueve
+				AActor* Occupant = BoardActor->GetTileOccupant(Target);
+
+				if (Occupant && Occupant != GetOwner())
+				{
+					//bloquea el movimiento en esta direccion
+					break;//en caso de no bloquear cambiar por continue;
+				}
+				
+				OutTiles.Add(Target);
+				
 			}
 			else
 			{
