@@ -73,5 +73,4 @@ private:
 	void HandleMenu();
 	void HandleLeftClick();
 	bool TraceUnderCursor(ECollisionChannel Channel, FHitResult& OutHit ) const;
-	
 };
