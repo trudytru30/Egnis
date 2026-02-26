@@ -17,10 +17,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Effect")
 	ECardTarget Target = ECardTarget::None;
 	
-	// ===== FUNCIONES =====
+#pragma region Effects
 	virtual void Execute_None(UDeckManager* Deck) {};
 	virtual void Execute_Ally(ACharacterBase* Self, ACharacterBase* Ally) {};
 	virtual void Execute_Enemy(ACharacterBase* Self, ACharacterBase* Enemy) {};
 	virtual void Execute_Self(ACharacterBase* Source) {};
 	virtual void Execute_Tile(FVector Location) {};
+#pragma endregion
 };

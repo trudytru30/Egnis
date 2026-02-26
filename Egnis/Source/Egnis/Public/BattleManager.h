@@ -3,12 +3,13 @@
 #include "CoreMinimal.h"
 #include "BattleManager.generated.h"
 
+class UDeckManager;
 class UBaseCard;
 class ACharacterBase;
 
 // Enumerador de los posibles turnos
 UENUM()
-enum ETurnEnum { PlayerTurn, EnemyTurn };	// Para poder aniadir otros tipos en el futuro
+enum class ETurnEnum { PlayerTurn, EnemyTurn };	// Para poder aniadir otros tipos en el futuro
 
 UCLASS()
 class EGNIS_API UBattleManager : public UObject
@@ -16,32 +17,37 @@ class EGNIS_API UBattleManager : public UObject
 	GENERATED_BODY()
 	
 public:
+	void Initialize(UDeckManager* DeckManager);
 	void StartBattle();
-	void TurnChange();
-	
-protected:
+	void StartPlayerTurn();
+	void StartEnemyTurn();
+	void EndTurn();
+	bool PlayCard(UBaseCard* Card, ACharacterBase* Character, ACharacterBase* TargetCharacter, FVector Location);
+	void UpdateUnitsAlive();
+	void EndBattle(bool bPlayerWon);
+	// Getters
+	int32 GetTurnCount() const;
+	int32 GetCurrentEnergy() const;
+private:
 	
 #pragma region Variables
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	TArray<ACharacterBase*> CharactersOnField;
+	// ===== Managers =====
+	UPROPERTY()
+	UDeckManager* DeckManager;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	TArray<ACharacterBase*> AlliesAlive;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	int32 UnitsAlive;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	TArray<UBaseCard*> Deck;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BattleManager")
-	int32 TurnNumber = 0;
-#pragma endregion
-	
-private:
+	// ===== Turn System =====
+	UPROPERTY()
+	int32 TurnCount = 0;
 	ETurnEnum CurrentTurn = ETurnEnum::PlayerTurn;
 	
-	// ===== Funciones =====
-	void UpdateUnitsAlive();
+	// ===== Energy System =====
+	int32 MaxEnergy = 10;
+	int32 InitialEnergy = 5;
+	int32 CurrentEnergy = InitialEnergy;
 	
+	// ===== Units =====
+	UPROPERTY()
+	TArray<ACharacterBase*> CharactersOnField;
+	
+#pragma endregion
 };

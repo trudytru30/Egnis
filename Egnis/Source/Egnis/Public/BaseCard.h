@@ -16,29 +16,37 @@ class EGNIS_API UBaseCard : public UObject
 	GENERATED_BODY()
 
 public:
+#pragma region Functions
+	// Acciones de las cartas
+	void Execute(UDeckManager* Deck, ACharacterBase* Self, ACharacterBase* TargetCharacter, FVector Location);
+	// Getters
+	FText GetCardName() const;
+	ECardType GetCardType() const;
+	EColorType GetColor() const;
+	int32 GetCost() const;
+	ECardTarget GetTarget() const;
+#pragma endregion
 	
-	// ===== Stats =====
+private:
+	
 #pragma region Stats
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY()
 	FText CardName;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY()
 	ECardType CardType;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY()
 	EColorType Color;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY()
 	int32 Cost;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY()
 	ECardTarget Target = ECardTarget::None;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY()
 	TArray<UCardEffect*> Effects;
 
 #pragma endregion
-	
-	// ===== Funciones =====
-	void Execute(UDeckManager* Deck, ACharacterBase* Self, ACharacterBase* TargetCharacter, FVector Location);
 };

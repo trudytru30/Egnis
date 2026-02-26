@@ -1,4 +1,12 @@
 #include "GameManager.h"
+#include "BoardPlayerController.h"
+#include "BattleManager.h"
+#include "DeckManager.h"
+
+AGameManager::AGameManager()
+{
+	PlayerControllerClass = ABoardPlayerController::StaticClass();
+}
 
 void AGameManager::BeginPlay()
 {
@@ -10,10 +18,13 @@ void AGameManager::BeginPlay()
 void AGameManager::InitializeManagers()
 {
 	// Crear PlayerController
-	PlayerController = NewObject<ABoardPlayerController>(this);
+	DeckManager = NewObject<UDeckManager>(this);
+	check(DeckManager);
 	
 	// Crear BattleController
 	BattleManager = NewObject<UBattleManager>(this);
+	check(BattleManager);
+	BattleManager->Initialize(DeckManager);
 	
 	// Iniciar combate
 	BattleManager->StartBattle();

@@ -2,9 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "BoardPlayerController.h"
-#include "BattleManager.h"
 #include "GameManager.generated.h"
+
+class UBattleManager;
+class UDeckManager;
 
 UCLASS()
 class EGNIS_API AGameManager : public AGameModeBase
@@ -12,15 +13,19 @@ class EGNIS_API AGameManager : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GameManager")
-	ABoardPlayerController* PlayerController = nullptr;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameManager")
-	UBattleManager* BattleManager = nullptr;
+	AGameManager();
 	
 protected:
+	
 	virtual void BeginPlay() override;
 	
 private:
+	
+	UPROPERTY()
+	UDeckManager* DeckManager;
+	
+	UPROPERTY()
+	UBattleManager* BattleManager;
+	
 	void InitializeManagers();
 };

@@ -27,3 +27,29 @@ void UBaseCard::Execute(UDeckManager* Deck, ACharacterBase* Self, ACharacterBase
 		}
 	}
 }
+
+// ===== Getters =====
+FText UBaseCard::GetCardName() const
+{
+	return CardName;
+}
+
+int32 UBaseCard::GetCost() const
+{
+	return Cost;
+}
+
+ECardType UBaseCard::GetCardType() const
+{
+	return CardType;
+}
+
+EColorType UBaseCard::GetColor() const
+{
+	return Color;
+}
+
+ECardTarget UBaseCard::GetTarget() const
+{
+	return Target;
+}

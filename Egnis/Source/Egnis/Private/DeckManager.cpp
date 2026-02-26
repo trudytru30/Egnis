@@ -103,6 +103,8 @@ void UDeckManager::RemoveCardFromDeck(UBaseCard* Card)
 	Deck.RemoveSingle(Card);
 }
 
+
+
 // Reiniciar mazo (al terminar una partida, no una batalla)
 void UDeckManager::ResetDeck()
 {
@@ -110,4 +112,20 @@ void UDeckManager::ResetDeck()
 	DrawPile.Empty();
 	DiscardedPile.Empty();
 	Hand.Empty();
+}
+
+// ===== Getters =====
+int32 UDeckManager::GetInitialHandSize()
+{
+	return InitialHandSize;
+}
+
+int32 UDeckManager::GetMaxHandSize()
+{
+	return MaxHandSize;
+}
+
+TArray<UBaseCard*> UDeckManager::GetHand()
+{
+	return Hand;
 }
