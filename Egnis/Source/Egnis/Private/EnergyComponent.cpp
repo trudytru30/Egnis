@@ -7,11 +7,7 @@
 // Sets default values for this component's properties
 UEnergyComponent::UEnergyComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 
@@ -20,17 +16,19 @@ void UEnergyComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	CurrentPoints = FMath::Clamp(CurrentPoints, 0.0f, MaxPoints); //clampea valores de los puntos
 	
 }
 
-
-// Called every frame
-void UEnergyComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                     FActorComponentTickFunction* ThisTickFunction)
+int32 UEnergyComponent::ApplyDelta(int32 Delta)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	CurrentPoints += Delta; //por si a futuro se quiren cartas que sumen puntos de energia
+	return CurrentPoints;
+}
 
-	// ...
+int32 UEnergyComponent::ResetPoints()
+{
+	CurrentPoints = MaxPoints;
+	return CurrentPoints;
 }
 

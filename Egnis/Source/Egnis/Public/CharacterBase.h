@@ -19,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
 	UHealthComponent* HealthComp = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	UEnergyComponent* EnergyComp = nullptr;
 	
 	// ===== Funciones =====
 	UFUNCTION(BlueprintCallable, Category="Stats")
