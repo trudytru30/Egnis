@@ -72,7 +72,9 @@ void UBattleManager::EndTurn()
 	}
 }
 
-bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character, ACharacterBase* TargetCharacter, FVector Location)
+// Comprobar si el player puede jugar una carta (es decir, que sea su turno y tenga energia)
+bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
+	ACharacterBase* TargetCharacter, FVector Location)
 {
 	// Comprobaciones
 	if (CurrentTurn != ETurnEnum::PlayerTurn || !Card || !DeckManager)

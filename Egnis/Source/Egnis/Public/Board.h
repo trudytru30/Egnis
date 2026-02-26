@@ -36,6 +36,8 @@ class EGNIS_API ABoard : public AActor
 public:
 	ABoard();
 
+	virtual void Tick(float DeltaTime) override;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Board)
 	float TileSize = 100.f;
 
@@ -89,7 +91,4 @@ protected:
 	TObjectPtr<USceneComponent> Corner00;
 	
 	TMap<FTileCoord, TWeakObjectPtr<AActor>> OccupiedBy;
-
-public:
-	virtual void Tick(float DeltaTime) override;
 };

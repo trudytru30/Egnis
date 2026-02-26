@@ -9,7 +9,7 @@ class ACharacterBase;
 
 // Enumerador de los posibles turnos
 UENUM()
-enum class ETurnEnum { PlayerTurn, EnemyTurn };	// Para poder aniadir otros tipos en el futuro
+enum class ETurnEnum { PlayerTurn = 0, EnemyTurn = 1 };	// Para poder aniadir otros tipos en el futuro
 
 UCLASS()
 class EGNIS_API UBattleManager : public UObject
