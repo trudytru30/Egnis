@@ -73,11 +73,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Board|Occupancy")
 	void SetTileOccupant(const FTileCoord& Tile, AActor* Occupant);
 
+	bool IsInside(const FTileCoord& Tile) const;
+
 private:
 	UPROPERTY()
 	TMap<FTileCoord, TObjectPtr<AActor>> TileOccupants;
 	
-	bool IsInside(const FTileCoord& Tile) const;
+
 
 
 	

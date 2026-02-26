@@ -7,6 +7,10 @@
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
 
+enum class EActionId : uint8;
+class UActionDataAsset;
+class UEnemyArchetypeDataAsset;
+
 UCLASS()
 class EGNIS_API AEnemy : public ACharacterBase
 {
@@ -23,4 +27,23 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	//Selecionar Arquetipo
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Enemy|Data")
+	TObjectPtr<UEnemyArchetypeDataAsset> ArchetypeData = nullptr;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category ="Enemy|AI")
+	bool bDebugMovementOnBeginPlay = false;
+
+	UFUNCTION(BlueprintCallable, Category ="Enemy|AI")
+	void MoveTowardClosesPlayer();
+
+	UFUNCTION(BlueprintCallable,Category = "Enemy|Actions")
+	const UActionDataAsset* GetActionById(EActionId ActionId) const;
+
+private:
+
+	ACharacterBase* FindClosestPlayer() const;
+	static int32 ManhattanDistance(const FTileCoord& A, const FTileCoord& B);
+	
+
 };

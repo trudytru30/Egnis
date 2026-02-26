@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterBase.h"
 #include "GameFramework/Character.h"
 #include "Ally.generated.h"
 
 UCLASS()
-class EGNIS_API AAlly : public ACharacter
+class EGNIS_API AAlly : public ACharacterBase
 {
 	GENERATED_BODY()
 
