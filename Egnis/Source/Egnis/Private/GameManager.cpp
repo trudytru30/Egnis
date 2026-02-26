@@ -21,7 +21,7 @@ void AGameManager::InitializeManagers()
 	DeckManager = NewObject<UDeckManager>(this);
 	check(DeckManager);
 	
-	// Crear BattleController
+	// Crear BattleManager
 	BattleManager = NewObject<UBattleManager>(this);
 	check(BattleManager);
 	BattleManager->Initialize(DeckManager);

@@ -4,10 +4,13 @@
 #include "CharacterBase.h"
 #include "EngineUtils.h"
 
-// Inicializar combate
+// Iniciar combate
 void UBattleManager::Initialize(UDeckManager* InDeckManager)
 {
-	DeckManager = InDeckManager;
+	// Recibir el mazo de combate e inicializarlo, despues empieza el combate
+	DeckManager = InDeckManager;	
+	if (DeckManager)
+		DeckManager->InitializeDeck();
 }
 
 // Inicio del combate, se inicializa el mazo, la vida de los personajes y las posiciones
@@ -32,9 +35,9 @@ void UBattleManager::StartPlayerTurn()
 	// Robar mano al inicio del turno y establecer energia
 	CurrentEnergy = InitialEnergy;
 	
-	if (DeckManager)
+	if (DeckManager && DeckManager->GetHand().Num() < DeckManager->GetInitialHandSize())
 	{
-		DeckManager->DrawCardAmount(DeckManager->GetInitialHandSize());	
+		DeckManager->DrawCardAmount(DeckManager->GetInitialHandSize());
 	}
 	
 	UE_LOG(LogTemp, Log, TEXT("Player Turn %d, energy: %d"), TurnCount, CurrentEnergy);
@@ -46,22 +49,26 @@ void UBattleManager::StartEnemyTurn()
 	UE_LOG(LogTemp, Log, TEXT("Enemy Turn %d"), TurnCount);
 	//TODO: Llamar a la IA del enemigo
 	
-	// Comprobar estado de unidades despues de cada turno enemigo
+	// Comprobar estado de unidades despues de cada turno enemigo y terminar el turno
 	UpdateUnitsAlive();
+	EndTurn();
 }
 
 // Fin del turno y cambio al otro bando
 void UBattleManager::EndTurn()
 {
-	if (CurrentTurn == ETurnEnum::PlayerTurn)
+	switch ( CurrentTurn)
 	{
-		CurrentTurn = ETurnEnum::EnemyTurn;
-		StartEnemyTurn();
-	} else
-	{
-		CurrentTurn = ETurnEnum::PlayerTurn;
-		TurnCount++;
-		StartPlayerTurn();
+		case ETurnEnum::PlayerTurn:
+			CurrentTurn = ETurnEnum::EnemyTurn;
+			StartEnemyTurn();
+			break;
+		case ETurnEnum::EnemyTurn:
+			CurrentTurn = ETurnEnum::PlayerTurn;
+			TurnCount++;
+			StartPlayerTurn();
+			break;
+	default: UE_LOG(LogTemp, Warning, TEXT("Invalid turn"));
 	}
 }
 
@@ -127,7 +134,7 @@ void UBattleManager::EndBattle(bool bPlayerWon)
 			TEXT("PLAYER LOST"));
 	}
 	
-	//TODO: Notificar al GameMode
+	//TODO: Notificar al GameMode (no entra en prototipo)
 }
 
 // ===== Getters =====
@@ -139,4 +146,9 @@ int32 UBattleManager::GetTurnCount() const
 int32 UBattleManager::GetCurrentEnergy() const
 {
 	return CurrentEnergy;
+}
+
+TArray<ACharacterBase*> UBattleManager::GetCharactersOnField() const
+{
+	return CharactersOnField;
 }

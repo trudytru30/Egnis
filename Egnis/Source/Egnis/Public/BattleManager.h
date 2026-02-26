@@ -17,6 +17,8 @@ class EGNIS_API UBattleManager : public UObject
 	GENERATED_BODY()
 	
 public:
+	
+#pragma region Functions
 	void Initialize(UDeckManager* DeckManager);
 	void StartBattle();
 	void StartPlayerTurn();
@@ -28,6 +30,9 @@ public:
 	// Getters
 	int32 GetTurnCount() const;
 	int32 GetCurrentEnergy() const;
+	TArray<ACharacterBase*> GetCharactersOnField() const;
+#pragma endregion
+	
 private:
 	
 #pragma region Variables
@@ -48,6 +53,5 @@ private:
 	// ===== Units =====
 	UPROPERTY()
 	TArray<ACharacterBase*> CharactersOnField;
-	
 #pragma endregion
 };

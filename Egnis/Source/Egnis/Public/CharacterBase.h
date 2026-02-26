@@ -7,7 +7,6 @@
 #include "HealthComponent.h"
 #include "CharacterBase.generated.h"
 
-
 UCLASS()
 class EGNIS_API ACharacterBase : public ACharacter
 {

@@ -9,11 +9,11 @@ void UDeckManager::GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCa
 		return;
 	}
 	
-	Deck.Empty();	// Limpiar mazo antes de añadir las nuevas
-	
-	for (TSubclassOf<UBaseCard> Card : SelectedCarts)
+	// Limpiar mazo y aniadir las cartas
+	Deck.Empty();	
+	for (TSubclassOf Card : SelectedCarts)
 	{
-		if (!Card) continue;	// Comprobar que no es null
+		if (!Card) continue;
 		Deck.Add(NewObject<UBaseCard>(this, Card));
 	}
 }
@@ -26,12 +26,6 @@ void UDeckManager::InitializeDeck()
 	Hand.Empty();
 	
 	ShuffleDeck();
-	
-	// Robar mano inicial
-	for (int32 i = 0; i < InitialHandSize; i++)
-	{
-		DrawCard();
-	}
 }
 
 // Barajar cartas de forma aleatoria
@@ -47,9 +41,6 @@ void UDeckManager::ShuffleDeck()
 // Robar cartas mediante habilidades
 void UDeckManager::DrawCard()
 {
-	//TODO: El TurnManager es el que tiene que comprobar esto junto a que haya cartas en la pila de robo
-	if (Hand.Num() >= MaxHandSize) return;	
-	
 	if (DrawPile.Num() <= 0)
 	{
 		DrawPile = DiscardedPile;
@@ -102,8 +93,6 @@ void UDeckManager::RemoveCardFromDeck(UBaseCard* Card)
 {
 	Deck.RemoveSingle(Card);
 }
-
-
 
 // Reiniciar mazo (al terminar una partida, no una batalla)
 void UDeckManager::ResetDeck()

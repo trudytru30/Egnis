@@ -14,6 +14,11 @@ class EGNIS_API UDeckManager : public UObject
 public:
 
 #pragma region Functions
+	// Llamar al modificar las cartas del mazo elegidas por el player
+	//TODO: Llamar desde boton de la UI
+	void GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCarts);
+	void InitializeDeck();	// Llamar al inicio de cada combate, genera el mazo y roba la primera mano
+	void ResetDeck();	// Limpiar los mazo despues de cada batalla (Draw, Discarded y hand)
 	void DrawCard();
 	void DrawCardAmount(int32 Amount);
 	void ShuffleDeck();
@@ -52,14 +57,5 @@ private:
 	int32 InitialDeckSize = 20;
 	int32 InitialHandSize = 6;
 	int32 MaxHandSize = 9;
-#pragma endregion
-	
-#pragma region Functions
-	// Llamar al modificar las cartas del mazo elegidas por el player
-	void GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCarts);
-	// Llamar al inicio de cada combate, genera el mazo y roba la primera mano
-	void InitializeDeck();
-	// Limpiar el mazo despues de cada batalla (Draw, Discarded y hand)
-	void ResetDeck();
 #pragma endregion
 };
