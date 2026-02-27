@@ -2,7 +2,7 @@
 #include "DeckManager.h"
 #include "BaseCard.h"
 #include "CharacterBase.h"
-#include "Enemy.h"
+#include "EnergyComponent.h"
 #include "EngineUtils.h"
 
 // Iniciar combate
@@ -36,14 +36,18 @@ void UBattleManager::StartBattle()
 void UBattleManager::StartPlayerTurn()
 {
 	// Robar mano al inicio del turno y establecer energia
-	CurrentEnergy = InitialEnergy;
+	for (ACharacterBase* Character : CharactersOnField)
+	{
+		if (Character->GetTeam() == 0)
+			Character->GainPoints(-1);
+	}
 	
 	if (DeckManager && DeckManager->GetHand().Num() < DeckManager->GetInitialHandSize())
 	{
 		DeckManager->DrawCardAmount(DeckManager->GetInitialHandSize());
 	}
 	
-	UE_LOG(LogTemp, Log, TEXT("Player Turn %d, energy: %d"), TurnCount, CurrentEnergy);
+	UE_LOG(LogTemp, Log, TEXT("Player Turn %d"), TurnCount);
 }
 
 // Turno del enemigo
@@ -92,6 +96,9 @@ void UBattleManager::EndTurn()
 	}
 }
 
+//TODO: Funcion para elegir un aliado haciendo click en el (y habilitar usar cartas)
+
+
 // Comprobar si el player puede jugar una carta (es decir, que sea su turno y tenga energia)
 bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
 	ACharacterBase* TargetCharacter, FVector Location)
@@ -102,19 +109,21 @@ bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
 		return false;
 	}
 	
-	if (CurrentEnergy < Card->GetCost())
+	if (Character->EnergyComp->GetCurrentPoints() < Card->GetCost())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Not enough energy to play card"));
 		return false;
+	} else
+	{
+		// Jugar carta y restar coste
+		Character->LossPoints(Card->GetCost());
+		UE_LOG(LogTemp, Log, TEXT("Played card: %s. Energy left: %d"), *Card->GetName(), 
+			Character->EnergyComp->GetCurrentPoints());
+		Card->Execute(DeckManager, Character, TargetCharacter, Location);
+		UpdateUnitsAlive();
+	
+		return true;
 	}
-	
-	// Jugar carta y restar coste
-	CurrentEnergy -= Card->GetCost();
-	UE_LOG(LogTemp, Log, TEXT("Played card: %s. Energy left: %d"), *Card->GetName(), CurrentEnergy);
-	Card->Execute(DeckManager, Character, TargetCharacter, Location);
-	UpdateUnitsAlive();
-	
-	return true;
 }
 
 // Gestionar las unidades que hay en el campo de batalla (despues de cada carta/ accion enemiga lo suyo es llamar a esto)
@@ -163,11 +172,6 @@ void UBattleManager::EndBattle(bool bPlayerWon)
 int32 UBattleManager::GetTurnCount() const
 {
 	return TurnCount;
-}
-
-int32 UBattleManager::GetCurrentEnergy() const
-{
-	return CurrentEnergy;
 }
 
 TArray<ACharacterBase*> UBattleManager::GetCharactersOnField() const

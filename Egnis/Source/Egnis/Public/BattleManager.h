@@ -28,9 +28,15 @@ public:
 	bool PlayCard(UBaseCard* Card, ACharacterBase* Character, ACharacterBase* TargetCharacter, FVector Location);
 	void UpdateUnitsAlive();
 	void EndBattle(bool bPlayerWon);
+	// Funciones que se llaman desde Bps
+	UPROPERTY(BlueprintCallable)
+	void SelectUnit();
+	UPROPERTY(BlueprintCallable)
+	void SelectCard();
+	UPROPERTY(BlueprintCallable)
+	void SelectTarget();
 	// Getters
 	int32 GetTurnCount() const;
-	int32 GetCurrentEnergy() const;
 	TArray<ACharacterBase*> GetCharactersOnField() const;
 #pragma endregion
 	
@@ -45,11 +51,6 @@ private:
 	UPROPERTY()
 	int32 TurnCount = 0;
 	ETurnEnum CurrentTurn = ETurnEnum::PlayerTurn;
-	
-	// ===== Energy System =====
-	int32 MaxEnergy = 10;
-	int32 InitialEnergy = 5;
-	int32 CurrentEnergy = InitialEnergy;
 	
 	// ===== Units =====
 	UPROPERTY()
