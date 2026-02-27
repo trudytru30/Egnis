@@ -5,6 +5,7 @@
 
 #include "ActionDataAsset.h"
 #include "EnemyArcheTypeDataAsset.h"
+#include "EntitySystem/MovieSceneEntitySystemRunner.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -151,6 +152,51 @@ void AEnemy::MoveTowardClosesPlayer()
 
 void AEnemy::MakeAction()
 {
+	if (!ArchetypeData)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] MakeAction: ArchetypeData is null."), *GetName());
+		return;
+	}
+
+	ACharacterBase* Target = nullptr;
+	int32 Range = 0;
+	//Intentar curar si tiene Heal
+	if (const UActionDataAsset* HealAction = GetActionById(EActionId::Heal))
+	{
+		Target = FindBestTarget(HealAction->Range, 1, 1);
+		Range = HealAction->Range;
+	}
+
+	if (Target)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[%s] Heal -> %s (Range=%d) Amount=%.1f"),
+			*GetName(), *Target->GetName(), Range, HealAmount);
+
+		Target->GainHealth(HealAmount);
+		return;
+	}
+
+	//sino cura ataca
+	const UActionDataAsset* AttackAction = GetActionById(EActionId::Attack);
+	if (!AttackAction)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] MakeAction: No Attack action available."), *GetName());
+		return;
+	}
+
+	Target = FindBestTarget(AttackAction->Range, 2, 0);
+	Range = AttackAction->Range;
+
+	if (Target)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[%s] Attack -> %s (Range=%d) Damage=%.1f"),
+			*GetName(), *Target->GetName(), Range, AttackDamage);
+
+		Target->LossHealth(AttackDamage);
+		return;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("[%s] MakeAction: No valid heal/attack targets in range."), *GetName());
 }
 
 
@@ -185,6 +231,67 @@ ACharacterBase* AEnemy::FindClosestPlayer() const
 int32 AEnemy::ManhattanDistance(const FTileCoord& A, const FTileCoord& B)
 {
 	return FMath::Abs(A.X - B.X) + FMath::Abs(A.Y - B.Y);
+}
+
+ACharacterBase* AEnemy::FindBestTarget(int32 Range, int32 _BestRatio, int32 Team)
+{
+	auto HealthRatio = [](const ACharacterBase* Unit) -> float
+	{
+		if (!Unit || !Unit->HealthComp)
+		{
+			return 1.0f;
+		}
+		Unit->HealthComp->GetMaxHealth();
+		if (Unit->HealthComp->GetMaxHealth() <= 0.f)
+		{
+			return 1.0f;
+		}
+		return Unit->HealthComp->GetCurrentHealth() / Unit->HealthComp->GetMaxHealth();
+	};
+	
+	ACharacterBase* BestTarget = nullptr;
+	float BestRatio = _BestRatio; // se establece a 1 para que busque por debajo (curar) o cualquiera <= 1 mejora (atacar)
+	int32 BestDist = TNumericLimits<int32>::Max();
+	
+	TArray<AActor*> Found;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), Found);
+
+	for (AActor* A : Found)
+	{
+		ACharacterBase* Char = Cast<ACharacterBase>(A);
+		if (!Char)
+		{
+			continue;
+		}
+
+		// Solo un team
+		if (Char->GetTeam() != Team)
+		{
+			continue;
+		}
+
+		const int32 Dist = ManhattanDistance(CurrentTile, Char->CurrentTile);
+		if (Dist > Range)
+		{
+			continue;
+		}
+
+		const float Ratio = HealthRatio(Char);
+
+		// Atacar/curar al que menos vida tenga. Empate -> más cercano.
+		const bool bBetter =
+			(Ratio < BestRatio) ||
+			(FMath::IsNearlyEqual(Ratio, BestRatio) && Dist < BestDist);
+
+		if (bBetter)
+		{
+			BestRatio = Ratio;
+			BestDist = Dist;
+			BestTarget = Char;
+		}
+	}
+
+	return BestTarget;
 }
 
 const UActionDataAsset* AEnemy::GetActionById(EActionId ActionId) const

@@ -34,6 +34,12 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category ="Enemy|AI")
 	bool bDebugMovementOnBeginPlay = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Enemy|Combat")
+	float AttackDamage = 10.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Enemy|Combat")
+	float HealAmount = 8.f;
+
 	UFUNCTION(BlueprintCallable, Category ="Enemy|AI")
 	void MoveTowardClosesPlayer();
 
@@ -47,6 +53,6 @@ private:
 
 	ACharacterBase* FindClosestPlayer() const;
 	static int32 ManhattanDistance(const FTileCoord& A, const FTileCoord& B);
-	
 
+	ACharacterBase* FindBestTarget(int32 Range, int32 _BestRatio, int32 Team);
 };

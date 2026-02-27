@@ -16,10 +16,13 @@ public:
 	float ApplyDelta(float Delta);
 	
 	UFUNCTION(BlueprintCallable, Category="Health")
-	float GetCurrentHealt() {return CurrentHealth;}
+	float GetCurrentHealth() {return CurrentHealth;}
 
 	UFUNCTION(BlueprintCallable, Category="Health")
-	float GetMaxHealt() {return MaxHealth;}
+	float GetMaxHealth() {return MaxHealth;}
+
+	UFUNCTION(BlueprintCallable, Category="Health")
+	float GetHealthRatio(){return GetCurrentHealth() / GetMaxHealth();}
 
 protected:
 	virtual void BeginPlay() override;
