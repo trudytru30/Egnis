@@ -30,9 +30,9 @@ public:
 	void EndBattle(bool bPlayerWon);
 	// Funciones que se llaman desde Bps
 	UFUNCTION(BlueprintCallable)
-	void SelectUnit();
-	UFUNCTION(BlueprintCallable)
 	void SelectCard();
+	UFUNCTION(BlueprintCallable)
+	void SelectUnit();
 	UFUNCTION(BlueprintCallable)
 	void SelectTarget();
 	// Getters

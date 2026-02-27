@@ -89,6 +89,9 @@ void UBattleManager::EndTurn()
 	switch ( CurrentTurn)
 	{
 		case ETurnEnum::PlayerTurn:
+			if (DeckManager->GetHand().Num() > 0)
+				for (int32 i = 0; i < DeckManager->GetHand().Num(); i++)
+					DeckManager->DiscardCardFromHand(DeckManager->GetHand()[i]);
 			CurrentTurn = ETurnEnum::EnemyTurn;
 			StartEnemyTurn();
 			break;
@@ -100,9 +103,6 @@ void UBattleManager::EndTurn()
 	default: UE_LOG(LogTemp, Warning, TEXT("Invalid turn"));
 	}
 }
-
-//TODO: Funcion para elegir un aliado haciendo click en el (y habilitar usar cartas)
-
 
 // Comprobar si el player puede jugar una carta (es decir, que sea su turno y tenga energia)
 bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
@@ -173,16 +173,22 @@ void UBattleManager::EndBattle(bool bPlayerWon)
 	//TODO: Notificar al GameMode (no entra en prototipo)
 }
 
-void UBattleManager::SelectUnit()
-{
-}
-
+// Seleccionar carta para jugar
 void UBattleManager::SelectCard()
 {
+	
 }
 
+// Seleccionar unidad para jugar la carta
+void UBattleManager::SelectUnit()
+{
+	
+}
+
+// Seleccionar objetivo de la carta
 void UBattleManager::SelectTarget()
 {
+	
 }
 
 // ===== Getters =====
