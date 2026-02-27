@@ -4,6 +4,7 @@
 #include "EnhancedInputComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Board.h"
+#include "CharacterBase.h"
 #include "GameManager.h"
 
 ABoardPlayerController::ABoardPlayerController()
@@ -87,7 +88,73 @@ void ABoardPlayerController::HandleLeftClick()
 
 	FHitResult Hit;
 
-	// ===== CONTROLAR ESTADOS =====
+	// ===== CONTROL DE ESTADOS DE JUEGO DE CARTAS =====
+	// Comprobar que se esta jugando una carta (BeginPlayCard cambia el estado de None ECardSelectionState)
+	if (SelectionState != ECardSelectionState::None)
+	{
+		// 1- Eligiendo unidad que juega la carta
+		if (SelectionState == ECardSelectionState::SelectingUnit)
+		{
+			if (TraceUnderCursor(UnitChannel, Hit))
+			{
+				if (ACharacterBase* Character = Cast<ACharacterBase>(Hit.GetActor()))
+				{
+					if (Character->GetTeam() == 0)	// Solo se pueden seleccionar unidades aliadas para jugar cartas
+					{
+						PendingSource = Character;
+						SelectionState = ECardSelectionState::SelectingTarget;
+						Result.bHit = true;
+						Result.bHitUnit = true;
+						Result.HitActor = Hit.GetActor();
+						Result.WorldPoint = Hit.ImpactPoint;
+						UE_LOG(LogTemp, Log, TEXT("Unit selected: %s"), *Character->GetName());
+					}
+					else
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Selected unit is not an ally"));
+					}
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Clicked actor is not a character"));
+				}
+			}
+			return;
+		// 2- Eligiendo objetivo de la carta
+		} else if (SelectionState == ECardSelectionState::SelectingTarget)
+		{
+			ACharacterBase* TargetUnit = nullptr;
+			FVector TargetLocation = FVector::ZeroVector;
+			
+			// Elegir enemigo
+			if (Result.bHitUnit)
+			{
+				TargetUnit = Cast<ACharacterBase>(Hit.GetActor());
+				TargetLocation = Hit.ImpactPoint;
+			// Elegir casilla del tablero
+			} else if (Result.bHitBoard)
+			{
+				TargetLocation = Hit.ImpactPoint;
+			}
+			
+			// Comprobar que hay una carta y unidad ya seleccionadas
+			if (PendingCard && PendingSource)
+			{
+				if (BM)
+				{
+					BM->PlayCard(PendingCard, PendingSource, TargetUnit, TargetLocation);
+				}
+			}
+
+			// Resetear selección
+			PendingCard = nullptr;
+			PendingSource = nullptr;
+			SelectionState = ECardSelectionState::None;
+			CurrentIntent = EInputIntent::Move;
+
+			return;
+		}
+	}
 	
 	if (CurrentIntent == EInputIntent::Action)
 	{
@@ -199,9 +266,8 @@ bool ABoardPlayerController::TraceUnderCursor(ECollisionChannel Channel, FHitRes
 }
 
 // Gestionar controles cuando se abre un menu (ya sea de pausa, tutorial, etc.)
-void ABoardPlayerController::OpenMenu()	// De momento solo el de pausa, en un futuro se pueden aniadir mas
+void ABoardPlayerController::OpenMenu()	// De momento solo el de pausa
 {
-	UE_LOG(LogTemp, Warning, TEXT("OpenMenu"));	// TODO: Borrar al final
 	bIsInMenu = true;
 	
 	// Desactivar InputMappingContext
