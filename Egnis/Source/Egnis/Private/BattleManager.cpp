@@ -2,6 +2,7 @@
 #include "DeckManager.h"
 #include "BaseCard.h"
 #include "CharacterBase.h"
+#include "Enemy.h"
 #include "EnergyComponent.h"
 #include "EngineUtils.h"
 
@@ -55,15 +56,19 @@ void UBattleManager::StartEnemyTurn()
 {
 	UE_LOG(LogTemp, Log, TEXT("Enemy Turn %d"), TurnCount);
 	//TODO: Llamar a la IA del enemigo
-	/*//identifica enemigos
+	//identifica enemigos
 	TArray<AEnemy*> Enemies;
-	int32 index = 0;
+
 	for (ACharacterBase* Character : CharactersOnField)
 	{
+		if (!Character) continue;
+
 		if (Character->GetTeam() == 1)
 		{
-			Enemies[index];
-			index++;
+			if (AEnemy* Enemy = Cast<AEnemy>(Character))
+			{
+				Enemies.Add(Enemy);
+			}
 		}
 	}
 
@@ -71,7 +76,7 @@ void UBattleManager::StartEnemyTurn()
 	{
 		Enemy->MoveTowardClosesPlayer();
 		Enemy->MakeAction();
-	}*/
+	}
 	
 	// Comprobar estado de unidades despues de cada turno enemigo y terminar el turno
 	UpdateUnitsAlive();
