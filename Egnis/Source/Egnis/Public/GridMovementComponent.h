@@ -15,7 +15,13 @@ UENUM(BlueprintType)
 enum class EMovePattern : uint8
 {
 	Straight_WBlock UMETA(DisplayName="Recto 8 dir con bloaqueo"),
-	Straight_CanPass UMETA(DisplayName="Recto 8 dir sin bloqueo")//ignora obstaculos
+	Straight_CanPass UMETA(DisplayName="Recto 8 dir sin bloqueo"),//ignora obstaculos
+
+	L_CanStop UMETA(DisplayName="L: puede parar en cualquier casilla"),
+	L_MustEnd UMETA(DisplayName="L: debe parar al final"),
+
+	Triangle UMETA(DisplayName="Triángulo (abanico)"),
+	DiagonalPlusRing1 UMETA(DisplayName="Diagonal + 1 alrededor")
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -51,6 +57,9 @@ public:
 private:
 	void EnsureBoardActor();//comprueba que este
 	bool IsTileValid(const FTileCoord& T);//mira que este dentro de limites tablero
+	void AddLTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles, bool bCanStopAnywhere);//calcula las casillas en L
+	void AddTriangleTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles);
+	void AddDiagonalPlusRing1Tiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles);
 
 	
 protected:

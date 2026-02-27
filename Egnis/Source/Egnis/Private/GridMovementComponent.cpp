@@ -6,15 +6,9 @@
 #include"Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 
-// Sets default values for this component's properties
-UGridMovementComponent::UGridMovementComponent()
-{
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	//PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
-}
+UGridMovementComponent::UGridMovementComponent(){}
+
 void UGridMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -25,7 +19,7 @@ void UGridMovementComponent::BeginPlay()
 	FTileCoord StartTile;
 	if (getCurrentTile(StartTile))
 	{
-		// Ocupamos la casilla inicial
+		//ocupa la casilla inicial en el tablero
 		BoardActor->SetTileOccupant(StartTile, GetOwner());
 	}
 }
@@ -86,6 +80,12 @@ bool UGridMovementComponent::getCurrentTile(FTileCoord& OutTile)
 	return BoardActor->WorldPointToTile(GetOwner()->GetActorLocation(), OutTile);
 }
 
+
+// A FUTURO:
+// - separar cálculo de patrón de ocupación o bloqueos
+// - permitir orientación elegida por jugador (triangulo apuntando al click)
+// - Extraer patrones a strategy
+
 //devuelve tods las casillas a las que se puede mover (8 dir hasra rango)
 void UGridMovementComponent::getRachableTiles(TArray<FTileCoord>& OutTiles)
 {
@@ -105,42 +105,72 @@ void UGridMovementComponent::getRachableTiles(TArray<FTileCoord>& OutTiles)
 		return;
 	}
 
-	//definicion de 8 dir 
-	const TArray<FTileCoord> Directions = {
-		{1, 0}, {1, 1}, {0, 1}, {-1, 1},
-		{-1, 0}, {-1, -1}, {0, -1}, {1, -1}
-	};
-
-	for (const FTileCoord& Dir : Directions)
+	switch (movePattern)
 	{
-		for (int32 Step = 1; Step <= moveRange; ++Step)
+	case EMovePattern::Straight_WBlock:
+	case EMovePattern::Straight_CanPass:
 		{
-			FTileCoord Target = { CurrentTile.X + Dir.X * Step, CurrentTile.Y + Dir.Y * Step };
-			if (IsTileValid(Target))
+			//movimiento 8 dir
+			const TArray<FTileCoord> Directions = {
+				{1, 0}, {1, 1}, {0, 1}, {-1, 1},
+				{-1, 0}, {-1, -1}, {0, -1}, {1, -1}
+			};
+
+			const bool bBlockByOccupant = (movePattern == EMovePattern::Straight_WBlock);
+
+			for (const FTileCoord& Dir : Directions)
 			{
-
-				//meter sist blqueos u obstaculos
-				/*if(IsTileBlocked(Target)){
-				 *break;
-				 *}
-				 **/
-				//si la casilla esta ocupada ,no se mueve
-				AActor* Occupant = BoardActor->GetTileOccupant(Target);
-
-				if (Occupant && Occupant != GetOwner())
+				for (int32 Step = 1; Step <= moveRange; ++Step)
 				{
-					//bloquea el movimiento en esta direccion
-					break;//en caso de no bloquear cambiar por continue;
+					FTileCoord Target = { CurrentTile.X + Dir.X * Step, CurrentTile.Y + Dir.Y * Step };
+
+					if (!IsTileValid(Target))
+					{
+						break;
+					}
+
+					// si la casilla esta ocupada por otro, no se puede terminar ahí
+					AActor* Occupant = BoardActor->GetTileOccupant(Target);
+					if (Occupant && Occupant != GetOwner())
+					{
+						//si bloquea para y si no bloquea sigue comprobando
+						if (bBlockByOccupant)
+						{
+							break;
+						}
+						else
+						{
+							continue;
+						}
+					}
+
+					OutTiles.Add(Target);
 				}
-				
-				OutTiles.Add(Target);
-				
 			}
-			else
-			{
-				break;
-			}
+			break;
 		}
+
+		//patron L para Raton
+	case EMovePattern::L_CanStop:
+		AddLTiles(CurrentTile, OutTiles, /*bCanStopAnywhere=*/true);
+		break;
+
+		//patron L para Cabeza Ardiente
+	case EMovePattern::L_MustEnd:
+		AddLTiles(CurrentTile, OutTiles, /*bCanStopAnywhere=*/false);
+		break;
+
+		//patron triangulo
+	case EMovePattern::Triangle:
+		AddTriangleTiles(CurrentTile, OutTiles);
+		break;
+
+	//patorn diagonal + 1
+	case EMovePattern::DiagonalPlusRing1:
+		AddDiagonalPlusRing1Tiles(CurrentTile, OutTiles);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -229,4 +259,202 @@ bool UGridMovementComponent::moveToTile(const FTileCoord& Target)
 	UE_LOG(LogTemp, Log, TEXT("Unidad movida a (%d,%d)"), Target.X, Target.Y);
 
 	return true;
+}
+
+void UGridMovementComponent::AddLTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles, bool bCanStopAnywhere)
+{
+	//longitud total <= moveRange.
+	//elige dir principal (4 cardinales) y longitud (1 a moveRange-1)
+	const FTileCoord Cardinals[4] = { {1,0}, {-1,0}, {0,1}, {0,-1} };
+
+	auto GetPerpendiculars = [](const FTileCoord& D, FTileCoord& OutA, FTileCoord& OutB)
+	{
+		if (D.X != 0)
+		{
+			//si dir horizontal, perpendiculares verticales
+			OutA = {0, 1}; OutB = {0, -1};
+		}
+		else
+		{//si dir vertical, perpendiculares horizontales
+			OutA = {1, 0}; OutB = {-1, 0};
+		}
+	};
+
+	for (const FTileCoord& MainDir : Cardinals)
+	{
+		FTileCoord PerpA, PerpB;//dir perpendiculares a la dir principal
+		GetPerpendiculars(MainDir, PerpA, PerpB);
+		const FTileCoord Perps[2] = { PerpA, PerpB };
+
+		for (int32 Len1 = 1; Len1 <= moveRange - 1; ++Len1)
+		{
+			bool bBlocked = false;
+			FTileCoord Corner = CurrentTile;
+
+			//tr1
+			for (int32 i = 1; i <= Len1; ++i)
+			{
+				Corner = { CurrentTile.X + MainDir.X * i, CurrentTile.Y + MainDir.Y * i };
+
+				if (!IsTileValid(Corner))
+				{
+					bBlocked = true;
+					break;
+				}
+
+					//si casilla ocupada, bloquea tr 1 y no deja continuar a tr 2
+				AActor* Occ = BoardActor->GetTileOccupant(Corner);
+				if (Occ && Occ != GetOwner())
+				{
+					bBlocked = true;
+					break;
+				}
+
+				//patron ratón puede para en cualquier casilla de L
+				if (bCanStopAnywhere)
+				{
+					OutTiles.AddUnique(Corner);
+				}
+			}
+
+			if (bBlocked)
+			{
+				continue;
+			}
+
+			//tr2
+			for (const FTileCoord& PerpDir : Perps)
+			{
+				//la esquina como punto de partida para la parte perpendicular
+				FTileCoord End = Corner;
+
+				for (int32 Len2 = 1; Len2 <= (moveRange - Len1); ++Len2)
+				{
+					End = { Corner.X + PerpDir.X * Len2, Corner.Y + PerpDir.Y * Len2 };
+
+					if (!IsTileValid(End))
+					{
+						break;
+					}
+					//si casilla ocupada, no deja continuar
+					AActor* Occ = BoardActor->GetTileOccupant(End);
+					if (Occ && Occ != GetOwner())
+					{
+						break;
+					}
+
+					if (bCanStopAnywhere)
+					{
+						//para ratón puede parar en cualquier casilla
+						OutTiles.AddUnique(End);
+					}
+					else
+					{
+						//para cabezas ardientes solo final tr 2 no tr1
+						OutTiles.AddUnique(End);
+					}
+				}
+			}
+		}
+	}
+}
+void UGridMovementComponent::AddTriangleTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles)
+{
+	EnsureBoardActor();
+	if (!BoardActor) return;
+
+	//en las 4 dir 
+	const FTileCoord ForwardDirs[4] = { {1,0}, {-1,0}, {0,1}, {0,-1} };
+
+	for (const FTileCoord& Fwd : ForwardDirs)
+	{
+		//cada distancia
+		for (int32 Dist = 1; Dist <= moveRange; ++Dist)
+		{
+			//ancho triangulo ,dist hacia adelante
+			for (int32 Side = -Dist; Side <= Dist; ++Side)
+			{
+				FTileCoord Target = CurrentTile;
+
+				if (Fwd.X != 0)
+				{
+					//triangulo apuntando en X: avanza en X y abre en Y
+					Target.X += Fwd.X * Dist;
+					Target.Y += Side;
+				}
+				else
+				{
+					//traingulo apunta en Y: avanza en Y y abre en X
+					Target.Y += Fwd.Y * Dist;
+					Target.X += Side;
+				}
+
+				if (!IsTileValid(Target))
+					continue;
+
+				//no deja continuar si la casilla esta ocupada por otro
+				AActor* Occ = BoardActor->GetTileOccupant(Target);
+				if (Occ && Occ != GetOwner())
+					continue;
+
+				OutTiles.AddUnique(Target);
+			}
+		}
+	}
+}
+void UGridMovementComponent::AddDiagonalPlusRing1Tiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles)
+{
+	EnsureBoardActor();
+	if (!BoardActor) return;
+
+	//1.diagonales en rango de 4 dir
+	const FTileCoord Diagonals[4] = { {1,1}, {1,-1}, {-1,1}, {-1,-1} };
+
+	for (const FTileCoord& Dir : Diagonals)
+	{
+		//cada distancia en diagonal
+		for (int32 Step = 1; Step <= moveRange; ++Step)
+		{
+			FTileCoord Target(CurrentTile.X + Dir.X * Step, CurrentTile.Y + Dir.Y * Step);
+
+			if (!IsTileValid(Target))
+				break;
+
+			AActor* Occ = BoardActor->GetTileOccupant(Target);
+			if (Occ && Occ != GetOwner())
+			{
+				//bloquea diagonal ( prov)
+				break;
+			}
+
+			OutTiles.AddUnique(Target);
+		}
+	}
+
+	//2.anillo en 8 dir
+	const FTileCoord Ring8[8] =
+	{
+		{1,0}, {1,1}, {0,1}, {-1,1},
+		{-1,0}, {-1,-1}, {0,-1}, {1,-1}
+	};
+
+	for (const FTileCoord& Ofs : Ring8)
+	{
+		//casilla objetivo
+		FTileCoord Target(CurrentTile.X + Ofs.X, CurrentTile.Y + Ofs.Y);
+
+		if (!IsTileValid(Target))
+		{
+			continue;
+		}
+		//no deja continuar si la casilla esta ocupada por otro
+		AActor* Occ = BoardActor->GetTileOccupant(Target);
+		if (Occ && Occ != GetOwner())
+		{
+			continue;
+		}
+			
+
+		OutTiles.AddUnique(Target);
+	}
 }
