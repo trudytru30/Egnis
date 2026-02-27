@@ -54,5 +54,5 @@ private:
 	ACharacterBase* FindClosestPlayer() const;
 	static int32 ManhattanDistance(const FTileCoord& A, const FTileCoord& B);
 
-	ACharacterBase* FindBestTarget(int32 Range, int32 _BestRatio, int32 Team);
+	ACharacterBase* FindBestTarget(int32 _Range, int32 _BestRatio, int32 _Team);
 };

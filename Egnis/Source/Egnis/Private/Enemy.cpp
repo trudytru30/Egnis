@@ -233,7 +233,7 @@ int32 AEnemy::ManhattanDistance(const FTileCoord& A, const FTileCoord& B)
 	return FMath::Abs(A.X - B.X) + FMath::Abs(A.Y - B.Y);
 }
 
-ACharacterBase* AEnemy::FindBestTarget(int32 Range, int32 _BestRatio, int32 Team)
+ACharacterBase* AEnemy::FindBestTarget(int32 _Range, int32 _BestRatio, int32 _Team)
 {
 	auto HealthRatio = [](const ACharacterBase* Unit) -> float
 	{
@@ -265,13 +265,13 @@ ACharacterBase* AEnemy::FindBestTarget(int32 Range, int32 _BestRatio, int32 Team
 		}
 
 		// Solo un team
-		if (Char->GetTeam() != Team)
+		if (Char->GetTeam() != _Team)
 		{
 			continue;
 		}
 
 		const int32 Dist = ManhattanDistance(CurrentTile, Char->CurrentTile);
-		if (Dist > Range)
+		if (Dist > _Range)
 		{
 			continue;
 		}
