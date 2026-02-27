@@ -168,6 +168,18 @@ void UBattleManager::EndBattle(bool bPlayerWon)
 	//TODO: Notificar al GameMode (no entra en prototipo)
 }
 
+void UBattleManager::SelectUnit()
+{
+}
+
+void UBattleManager::SelectCard()
+{
+}
+
+void UBattleManager::SelectTarget()
+{
+}
+
 // ===== Getters =====
 int32 UBattleManager::GetTurnCount() const
 {

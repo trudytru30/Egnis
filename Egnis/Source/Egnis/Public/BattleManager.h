@@ -29,11 +29,11 @@ public:
 	void UpdateUnitsAlive();
 	void EndBattle(bool bPlayerWon);
 	// Funciones que se llaman desde Bps
-	UPROPERTY(BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void SelectUnit();
-	UPROPERTY(BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void SelectCard();
-	UPROPERTY(BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void SelectTarget();
 	// Getters
 	int32 GetTurnCount() const;
