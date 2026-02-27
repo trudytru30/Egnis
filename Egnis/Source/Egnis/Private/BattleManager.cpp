@@ -2,6 +2,7 @@
 #include "DeckManager.h"
 #include "BaseCard.h"
 #include "CharacterBase.h"
+#include "Enemy.h"
 #include "EngineUtils.h"
 
 // Iniciar combate
@@ -22,7 +23,9 @@ void UBattleManager::StartBattle()
 	// Obtener numero de personajes en el campo
 	CharactersOnField.Empty();
 	for (TActorIterator<ACharacterBase> It(GetWorld()); It; ++It)
+	{
 		CharactersOnField.Add(*It);
+	}
 	
 	UE_LOG(LogTemp, Log, TEXT("Battle Started! Characters on field: %d"), CharactersOnField.Num());
 	
@@ -48,6 +51,23 @@ void UBattleManager::StartEnemyTurn()
 {
 	UE_LOG(LogTemp, Log, TEXT("Enemy Turn %d"), TurnCount);
 	//TODO: Llamar a la IA del enemigo
+	/*//identifica enemigos
+	TArray<AEnemy*> Enemies;
+	int32 index = 0;
+	for (ACharacterBase* Character : CharactersOnField)
+	{
+		if (Character->GetTeam() == 1)
+		{
+			Enemies[index];
+			index++;
+		}
+	}
+
+	for (AEnemy* Enemy:Enemies)
+	{
+		Enemy->MoveTowardClosesPlayer();
+		Enemy->MakeAction();
+	}*/
 	
 	// Comprobar estado de unidades despues de cada turno enemigo y terminar el turno
 	UpdateUnitsAlive();

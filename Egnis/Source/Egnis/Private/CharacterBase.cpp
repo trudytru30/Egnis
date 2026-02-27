@@ -3,6 +3,7 @@
 
 #include "CharacterBase.h"
 
+#include "EnergyComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -77,6 +78,33 @@ void ACharacterBase::GainHealth(float AmountHealed)
 	}
 
 	HealthComp->ApplyDelta(+AmountHealed);
+}
+
+void ACharacterBase::LossPoints(int32 Cost)
+{
+	if (!EnergyComp)
+	{
+		return;
+	}
+
+	EnergyComp->ApplyDelta(-Cost);
+}
+
+void ACharacterBase::GainPoints(int32 Bonus)
+{
+	if (!EnergyComp)
+	{
+		return;
+	}
+
+	if (Bonus > 0)
+	{
+		EnergyComp->ApplyDelta(+Bonus);
+	}
+	else
+	{
+		EnergyComp->ResetPoints();
+	}
 }
 
 // Getter para obtener el equipo del enemigo

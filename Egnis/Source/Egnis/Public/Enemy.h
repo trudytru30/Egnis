@@ -37,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category ="Enemy|AI")
 	void MoveTowardClosesPlayer();
 
+	UFUNCTION(BlueprintCallable, Category ="Enemy|AI")
+	void MakeAction();
+
 	UFUNCTION(BlueprintCallable,Category = "Enemy|Actions")
 	const UActionDataAsset* GetActionById(EActionId ActionId) const;
 

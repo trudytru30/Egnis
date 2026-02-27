@@ -149,10 +149,9 @@ void AEnemy::MoveTowardClosesPlayer()
 		*GetName(), CurrentTile.X, CurrentTile.Y, Goal.X, Goal.Y);
 }
 
-
-
-
-	
+void AEnemy::MakeAction()
+{
+}
 
 
 ACharacterBase* AEnemy::FindClosestPlayer() const

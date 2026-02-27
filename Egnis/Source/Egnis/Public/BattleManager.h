@@ -6,6 +6,7 @@
 class UDeckManager;
 class UBaseCard;
 class ACharacterBase;
+class AEnemy;
 
 // Enumerador de los posibles turnos
 UENUM()

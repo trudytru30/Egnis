@@ -33,6 +33,12 @@ public:
 	void GainHealth(float AmountHealed);
 
 	UFUNCTION(BlueprintCallable, Category="Stats")
+	void LossPoints(int32 Cost);
+
+	UFUNCTION(BlueprintCallable, Category="Stats")
+	void GainPoints(int32 Bonus);
+
+	UFUNCTION(BlueprintCallable, Category="Stats")
 	int32 GetTeam();
 
 	// ===== Grid / Board =====
@@ -54,9 +60,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Grid")
 	void SnapToCurrentTile(bool bKeepCurrentZ = false);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Team")
-	int32 Team = 0; // 0 para el jugador, 1 para los enemigos, etc.
 
 protected:
 	virtual void BeginPlay() override;
@@ -66,5 +69,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EColorType Type;
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Team")
+	int32 Team = 0; // 0 para el jugador, 1 para los enemigos, etc.
 };
