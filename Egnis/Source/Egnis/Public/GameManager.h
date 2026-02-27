@@ -15,6 +15,11 @@ class EGNIS_API AGameManager : public AGameModeBase
 public:
 	AGameManager();
 	
+#pragma region Functions
+	UDeckManager* GetDeckManager() const { return DeckManager; }
+	UBattleManager* GetBattleManager() const { return BattleManager; }
+#pragma endregion
+	
 protected:
 	
 	virtual void BeginPlay() override;

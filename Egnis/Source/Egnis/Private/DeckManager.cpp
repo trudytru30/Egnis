@@ -10,11 +10,11 @@ void UDeckManager::GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCa
 	}
 	
 	// Limpiar mazo y aniadir las cartas
-	Deck.Empty();	
+	ResetDeck();
 	for (TSubclassOf Card : SelectedCarts)
 	{
 		if (!Card) continue;
-		Deck.Add(NewObject<UBaseCard>(this, Card));
+		AddCardToDeck(NewObject<UBaseCard>(this, Card));
 	}
 }
 

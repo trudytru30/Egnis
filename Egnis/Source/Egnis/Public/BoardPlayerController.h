@@ -4,15 +4,29 @@
 #include "GameFramework/PlayerController.h"
 #include "BoardPlayerController.generated.h"
 
+class UBaseCard;
+class ACharacterBase;
 class UInputAction;
 class UInputMappingContext;
+class UBattleManager;
 
+#pragma region Enums
 UENUM(BlueprintType)
 enum class EInputIntent: uint8
 {
 	Move,
 	Action
 };
+
+UENUM(BlueprintType)
+enum class ECardSelectionState: uint8
+{
+	None,
+	SelectingUnit,
+	SelectingTarget
+};
+
+#pragma endregion
 
 USTRUCT(BlueprintType)
 struct FClickResult
@@ -41,7 +55,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
-#pragma region Input
+#pragma region Inputs
 	UFUNCTION(BlueprintImplementableEvent, Category="Input")
 	void BP_OnclickResolved(const FClickResult& Result);
 	
@@ -66,11 +80,29 @@ protected:
 
 private:
 	
-	bool bIsInMenu = false;
+#pragma region Variables
+	UPROPERTY()
+	TObjectPtr<UBattleManager> BM = nullptr;
 	
+	bool bIsInMenu = false;
+	//Cartas
+	UPROPERTY()
+	TObjectPtr<UBaseCard> PendingCard = nullptr;
+
+	UPROPERTY()
+	TObjectPtr<ACharacterBase> PendingSource = nullptr;
+
+	ECardSelectionState SelectionState = ECardSelectionState::None;
+#pragma endregion
+	
+#pragma region Functions
 	void OpenMenu();
 	void CloseMenu();
 	void HandleMenu();
 	void HandleLeftClick();
 	bool TraceUnderCursor(ECollisionChannel Channel, FHitResult& OutHit ) const;
+	// Funciones que se llaman desde Bps
+	UFUNCTION(BlueprintCallable)
+	void BeginPlayCard(UBaseCard* Card);
+#pragma endregion
 };

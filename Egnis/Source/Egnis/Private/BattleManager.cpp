@@ -90,8 +90,14 @@ void UBattleManager::EndTurn()
 	{
 		case ETurnEnum::PlayerTurn:
 			if (DeckManager->GetHand().Num() > 0)
-				for (int32 i = 0; i < DeckManager->GetHand().Num(); i++)
-					DeckManager->DiscardCardFromHand(DeckManager->GetHand()[i]);
+			{
+				const TArray<UBaseCard*> HandCopy = DeckManager->GetHand();
+				for (UBaseCard* Card : HandCopy)
+				{
+					DeckManager->DiscardCardFromHand(Card);
+				}
+			}
+		
 			CurrentTurn = ETurnEnum::EnemyTurn;
 			StartEnemyTurn();
 			break;
@@ -173,24 +179,6 @@ void UBattleManager::EndBattle(bool bPlayerWon)
 	//TODO: Notificar al GameMode (no entra en prototipo)
 }
 
-// Seleccionar carta para jugar
-void UBattleManager::SelectCard()
-{
-	
-}
-
-// Seleccionar unidad para jugar la carta
-void UBattleManager::SelectUnit()
-{
-	
-}
-
-// Seleccionar objetivo de la carta
-void UBattleManager::SelectTarget()
-{
-	
-}
-
 // ===== Getters =====
 int32 UBattleManager::GetTurnCount() const
 {
@@ -200,4 +188,9 @@ int32 UBattleManager::GetTurnCount() const
 TArray<ACharacterBase*> UBattleManager::GetCharactersOnField() const
 {
 	return CharactersOnField;
+}
+
+bool UBattleManager::IsPlayerTurn() const
+{
+	return CurrentTurn == ETurnEnum::PlayerTurn;
 }

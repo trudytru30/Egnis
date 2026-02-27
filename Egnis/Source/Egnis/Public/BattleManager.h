@@ -28,27 +28,21 @@ public:
 	bool PlayCard(UBaseCard* Card, ACharacterBase* Character, ACharacterBase* TargetCharacter, FVector Location);
 	void UpdateUnitsAlive();
 	void EndBattle(bool bPlayerWon);
-	// Funciones que se llaman desde Bps
-	UFUNCTION(BlueprintCallable)
-	void SelectCard();
-	UFUNCTION(BlueprintCallable)
-	void SelectUnit();
-	UFUNCTION(BlueprintCallable)
-	void SelectTarget();
 	// Getters
 	int32 GetTurnCount() const;
 	TArray<ACharacterBase*> GetCharactersOnField() const;
+	UFUNCTION(BlueprintPure)
+	bool IsPlayerTurn() const;
 #pragma endregion
 	
 private:
 	
-#pragma region Variables
+#pragma region Private Variables
 	// ===== Managers =====
 	UPROPERTY()
 	UDeckManager* DeckManager;
 	
 	// ===== Turn System =====
-	UPROPERTY()
 	int32 TurnCount = 0;
 	ETurnEnum CurrentTurn = ETurnEnum::PlayerTurn;
 	

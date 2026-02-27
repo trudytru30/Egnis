@@ -1,8 +1,10 @@
 ﻿#include "BoardPlayerController.h"
+#include "BattleManager.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Board.h"
+#include "GameManager.h"
 
 ABoardPlayerController::ABoardPlayerController()
 {
@@ -31,6 +33,17 @@ void ABoardPlayerController::BeginPlay()
 			if (IMCUI)
 				Subsystem->AddMappingContext(IMCUI, 1);	// Mayor prioridad
 		}
+	}
+	
+	// Referencia al GameManager
+	if (AGameManager* GM = Cast<AGameManager>(GetWorld()->GetAuthGameMode()))
+	{
+		BM = GM->GetBattleManager();
+	}
+
+	if (!BM)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BoardPlayerController: BattleManager is null"));
 	}
 }
 
@@ -74,6 +87,8 @@ void ABoardPlayerController::HandleLeftClick()
 
 	FHitResult Hit;
 
+	// ===== CONTROLAR ESTADOS =====
+	
 	if (CurrentIntent == EInputIntent::Action)
 	{
 		if (TraceUnderCursor(UnitChannel, Hit))
@@ -205,9 +220,10 @@ void ABoardPlayerController::OpenMenu()	// De momento solo el de pausa, en un fu
 	SetInputMode(Mode);
 }
 
+// Cerrar menus y activar los inputs para el juego
 void ABoardPlayerController::CloseMenu()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CloseMenu"));	// TODO: Borrar al final
+	UE_LOG(LogTemp, Warning, TEXT("CloseMenu"));
 	bIsInMenu = false;
 	
 	// Activar InputMappingContext
@@ -223,7 +239,26 @@ void ABoardPlayerController::CloseMenu()
 	SetInputMode(FInputModeGameAndUI());
 }
 
+// Cambiar estado del Menu
 void ABoardPlayerController::HandleMenu()
 {
 	bIsInMenu ? CloseMenu() : OpenMenu();
+}
+
+// Comprobar e iniciar accion de jugar carta
+void ABoardPlayerController::BeginPlayCard(UBaseCard* Card)
+{
+	if (!Card) return;
+	
+	if (!BM || !BM->IsPlayerTurn())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot play card: Not player turn"));
+		return;
+	}
+	
+	PendingCard = Card;
+	PendingSource = nullptr;
+	SelectionState = ECardSelectionState::SelectingUnit;
+
+	CurrentIntent = EInputIntent::Action; // Cambiar estado a accion (elegir unidades para jugar la carta)
 }
