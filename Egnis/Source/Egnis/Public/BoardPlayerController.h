@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "CardTarget.h"
 #include "GameFramework/PlayerController.h"
 #include "BoardPlayerController.generated.h"
 
@@ -85,14 +86,15 @@ private:
 	TObjectPtr<UBattleManager> BM = nullptr;
 	
 	bool bIsInMenu = false;
+	
 	//Cartas
 	UPROPERTY()
 	TObjectPtr<UBaseCard> PendingCard = nullptr;
-
 	UPROPERTY()
 	TObjectPtr<ACharacterBase> PendingSource = nullptr;
-
 	ECardSelectionState SelectionState = ECardSelectionState::None;
+	UPROPERTY()
+	ECardTarget PendingCardTarget = ECardTarget::None;	// Target de la carta que se quiere jugar
 #pragma endregion
 	
 #pragma region Functions

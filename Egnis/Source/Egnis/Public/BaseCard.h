@@ -10,8 +10,8 @@
 class UDeckManager;
 class ACharacterBase;
 
-UCLASS(BlueprintType, Abstract)
-class EGNIS_API UBaseCard : public UObject
+UCLASS(BlueprintType, Blueprintable)
+class EGNIS_API UBaseCard : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 
@@ -27,25 +27,25 @@ public:
 	ECardTarget GetTarget() const;
 #pragma endregion
 	
-private:
+protected:
 	
 #pragma region Stats
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	FText CardName;
 	
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	ECardType CardType;
 	
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	EColorType Color;
 	
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	int32 Cost;
 	
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Card")
 	ECardTarget Target = ECardTarget::None;
 	
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, Instanced, BlueprintReadOnly, Category="Card")
 	TArray<UCardEffect*> Effects;
 
 #pragma endregion

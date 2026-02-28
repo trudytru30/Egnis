@@ -6,7 +6,7 @@
 
 class UDeckManager;
 
-UCLASS()
+UCLASS(EditInlineNew)
 class EGNIS_API UCard_DrawEffect : public UCardEffect
 {
 	GENERATED_BODY()

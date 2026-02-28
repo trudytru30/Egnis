@@ -5,7 +5,7 @@
 #include "CharacterBase.h"
 #include "Card_AttackEffect.generated.h"
 
-UCLASS()
+UCLASS(EditInlineNew)
 class EGNIS_API UCard_AttackEffect : public UCardEffect
 {
 	GENERATED_BODY()

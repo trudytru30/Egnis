@@ -1,4 +1,6 @@
 ﻿#include "BoardPlayerController.h"
+
+#include "BaseCard.h"
 #include "BattleManager.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -92,61 +94,82 @@ void ABoardPlayerController::HandleLeftClick()
 	// Comprobar que se esta jugando una carta (BeginPlayCard cambia el estado de None ECardSelectionState)
 	if (SelectionState != ECardSelectionState::None)
 	{
-		// 1- Eligiendo unidad que juega la carta
+		// 1- Elegir unidad que juega la carta (Source)
 		if (SelectionState == ECardSelectionState::SelectingUnit)
 		{
-			if (TraceUnderCursor(UnitChannel, Hit))
+			if (!TraceUnderCursor(UnitChannel, Hit)) return;
+			
+			ACharacterBase* ClickedCharacter = Cast<ACharacterBase>(Hit.GetActor());
+			if (!ClickedCharacter) return;
+			
+			if (ClickedCharacter->GetTeam() != 0)	// Solo se pueden seleccionar unidades aliadas para jugar cartas
 			{
-				if (ACharacterBase* Character = Cast<ACharacterBase>(Hit.GetActor()))
-				{
-					if (Character->GetTeam() == 0)	// Solo se pueden seleccionar unidades aliadas para jugar cartas
-					{
-						PendingSource = Character;
-						SelectionState = ECardSelectionState::SelectingTarget;
-						Result.bHit = true;
-						Result.bHitUnit = true;
-						Result.HitActor = Hit.GetActor();
-						Result.WorldPoint = Hit.ImpactPoint;
-						UE_LOG(LogTemp, Log, TEXT("Unit selected: %s"), *Character->GetName());
-					}
-					else
-					{
-						UE_LOG(LogTemp, Warning, TEXT("Selected unit is not an ally"));
-					}
-				}
-				else
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Clicked actor is not a character"));
-				}
+				UE_LOG(LogTemp, Warning, TEXT("Selected unit is not an ally."));
+				return;	
 			}
+			
+			PendingSource = ClickedCharacter;
+			
+			// Jugar carta si no necesita target
+			if (PendingCardTarget == ECardTarget::None || PendingCardTarget == ECardTarget::Self)
+			{
+				BM->PlayCard(PendingCard, PendingSource, nullptr, FVector::ZeroVector);
+				// Resetear estado
+				PendingCard = nullptr;
+				PendingSource = nullptr;
+				SelectionState = ECardSelectionState::None;
+				CurrentIntent = EInputIntent::Move;
+				return;
+			}
+			
+			// Si necesita target, seguir con la fase 2
+			SelectionState = ECardSelectionState::SelectingTarget;
+			
 			return;
-		// 2- Eligiendo objetivo de la carta
-		} else if (SelectionState == ECardSelectionState::SelectingTarget)
+		}
+		// 2- Elegir objetivo de la carta (Target y Location)
+		if (SelectionState == ECardSelectionState::SelectingTarget)
 		{
 			ACharacterBase* TargetUnit = nullptr;
 			FVector TargetLocation = FVector::ZeroVector;
 			
-			// Elegir enemigo
-			if (Result.bHitUnit)
+			// Target Enemy
+			if (PendingCardTarget == ECardTarget::Enemy)
 			{
+				if (!TraceUnderCursor(UnitChannel, Hit)) return;
+				
 				TargetUnit = Cast<ACharacterBase>(Hit.GetActor());
 				TargetLocation = Hit.ImpactPoint;
-			// Elegir casilla del tablero
-			} else if (Result.bHitBoard)
+				if (!TargetUnit || TargetUnit->GetTeam() == 0)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Selected target is not an enemy."));
+					return;
+				}
+				
+			// Target Ally
+			} else if (PendingCardTarget == ECardTarget::Ally)
 			{
+				if (!TraceUnderCursor(UnitChannel, Hit)) return;
+				
+				TargetUnit = Cast<ACharacterBase>(Hit.GetActor());
+				TargetLocation = Hit.ImpactPoint;
+				if (!TargetUnit || TargetUnit->GetTeam() != 0)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Selected target is not an ally."));
+					return;
+				}
+				
+			// Target Tile
+			} else if (PendingCardTarget == ECardTarget::Tile)
+			{
+				if (!TraceUnderCursor(BoardChannel, Hit)) return;
 				TargetLocation = Hit.ImpactPoint;
 			}
 			
-			// Comprobar que hay una carta y unidad ya seleccionadas
-			if (PendingCard && PendingSource)
-			{
-				if (BM)
-				{
-					BM->PlayCard(PendingCard, PendingSource, TargetUnit, TargetLocation);
-				}
-			}
+			// Intentar jugar la carta
+			BM->PlayCard(PendingCard, PendingSource, TargetUnit, TargetLocation);
 
-			// Resetear selección
+			// Reset
 			PendingCard = nullptr;
 			PendingSource = nullptr;
 			SelectionState = ECardSelectionState::None;
@@ -324,7 +347,8 @@ void ABoardPlayerController::BeginPlayCard(UBaseCard* Card)
 	
 	PendingCard = Card;
 	PendingSource = nullptr;
+	PendingCardTarget = Card->GetTarget();
+	
 	SelectionState = ECardSelectionState::SelectingUnit;
-
 	CurrentIntent = EInputIntent::Action; // Cambiar estado a accion (elegir unidades para jugar la carta)
 }
