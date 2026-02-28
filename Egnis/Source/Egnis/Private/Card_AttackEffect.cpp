@@ -5,8 +5,14 @@ void UCard_AttackEffect::Execute_Enemy(ACharacterBase* Self, ACharacterBase* Ene
 {
 	Super::Execute_Enemy(Self, Enemy);
 	
+	if (!Enemy)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AttackEffect: Enemy is null"));
+		return;
+	}
+	
 	// Comprobar que la carta hace danio y que el objetivo es tipo characterBase
-	if (DamageAmount >= 0 && Enemy->ACharacterBase::GetTeam() != Self->ACharacterBase::GetTeam())
+	if (DamageAmount >= 0 && Enemy->GetTeam() != Self->GetTeam())
 	{
 		Enemy->LossHealth(DamageAmount);
 	}

@@ -4,6 +4,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "GameManager.generated.h"
 
+class UBaseCard;
 class UBattleManager;
 class UDeckManager;
 
@@ -23,6 +24,8 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<UBaseCard*> InitialDeck;
 	
 private:
 	

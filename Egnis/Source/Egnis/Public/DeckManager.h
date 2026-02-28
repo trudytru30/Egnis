@@ -29,6 +29,7 @@ public:
 	int32 GetInitialHandSize();
 	int32 GetMaxHandSize();
 	TArray<UBaseCard*> GetHand();
+	void SetDeck(const TArray<UBaseCard*>& InDeck);
 #pragma endregion
 	
 private:

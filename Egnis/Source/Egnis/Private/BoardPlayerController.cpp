@@ -1,5 +1,4 @@
 ﻿#include "BoardPlayerController.h"
-
 #include "BaseCard.h"
 #include "BattleManager.h"
 #include "EnhancedInputSubsystems.h"
@@ -7,19 +6,29 @@
 #include "DrawDebugHelpers.h"
 #include "Board.h"
 #include "CharacterBase.h"
+#include "DeckManager.h"
 #include "GameManager.h"
+#include "Blueprint/UserWidget.h"
 
 ABoardPlayerController::ABoardPlayerController()
 {
 	bShowMouseCursor = true;
-	//bEnableClickEvents = true;
-	//bEnableMouseOverEvents = true;
 }
 
 void ABoardPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	// Aniadir UI
+	if (BattleHUDClass)
+	{
+		BattleHUD = CreateWidget<UUserWidget>(this, BattleHUDClass);
+		if (BattleHUD)
+		{
+			BattleHUD->AddToViewport();
+		}
+	}
+	
 	FInputModeGameAndUI Mode;
 	Mode.SetHideCursorDuringCapture(false);
 	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
@@ -42,6 +51,10 @@ void ABoardPlayerController::BeginPlay()
 	if (AGameManager* GM = Cast<AGameManager>(GetWorld()->GetAuthGameMode()))
 	{
 		BM = GM->GetBattleManager();
+		// Carta de prueba
+		UBaseCard* TestCard = GM->GetDeckManager()->GetHand()[0];
+		UE_LOG(LogTemp, Warning, TEXT("TestCard: %s"), *TestCard->GetName());
+		BeginPlayCard(TestCard);
 	}
 
 	if (!BM)
@@ -113,6 +126,11 @@ void ABoardPlayerController::HandleLeftClick()
 			// Jugar carta si no necesita target
 			if (PendingCardTarget == ECardTarget::None || PendingCardTarget == ECardTarget::Self)
 			{
+				if (!PendingCard)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("PendingCard is null"));
+					return;
+				}
 				BM->PlayCard(PendingCard, PendingSource, nullptr, FVector::ZeroVector);
 				// Resetear estado
 				PendingCard = nullptr;
@@ -132,14 +150,22 @@ void ABoardPlayerController::HandleLeftClick()
 		{
 			ACharacterBase* TargetUnit = nullptr;
 			FVector TargetLocation = FVector::ZeroVector;
+			UE_LOG(LogTemp, Warning, TEXT("[SelectingTarget] PendingTarget=%d"), (int32)PendingCardTarget);
 			
 			// Target Enemy
 			if (PendingCardTarget == ECardTarget::Enemy)
 			{
-				if (!TraceUnderCursor(UnitChannel, Hit)) return;
+				if (!TraceUnderCursor(UnitChannel, Hit))
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Target trace failed (UnitChannel)"));
+					return;
+				}
+				
+				UE_LOG(LogTemp, Warning, TEXT("Hit Actor=%s"),Hit.GetActor() ? *Hit.GetActor()->GetName() : TEXT("None"));
 				
 				TargetUnit = Cast<ACharacterBase>(Hit.GetActor());
-				TargetLocation = Hit.ImpactPoint;
+				UE_LOG(LogTemp, Warning, TEXT("Hit actor class: %s"), 
+					Hit.GetActor() ? *Hit.GetActor()->GetClass()->GetName() : TEXT("None"));
 				if (!TargetUnit || TargetUnit->GetTeam() == 0)
 				{
 					UE_LOG(LogTemp, Warning, TEXT("Selected target is not an enemy."));
@@ -152,7 +178,6 @@ void ABoardPlayerController::HandleLeftClick()
 				if (!TraceUnderCursor(UnitChannel, Hit)) return;
 				
 				TargetUnit = Cast<ACharacterBase>(Hit.GetActor());
-				TargetLocation = Hit.ImpactPoint;
 				if (!TargetUnit || TargetUnit->GetTeam() != 0)
 				{
 					UE_LOG(LogTemp, Warning, TEXT("Selected target is not an ally."));
@@ -164,6 +189,13 @@ void ABoardPlayerController::HandleLeftClick()
 			{
 				if (!TraceUnderCursor(BoardChannel, Hit)) return;
 				TargetLocation = Hit.ImpactPoint;
+			}
+			
+			// Comprobación de que no se elige a la misma unidad
+			if (TargetUnit == PendingSource)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Target cannot be the source"));
+				return;
 			}
 			
 			// Intentar jugar la carta
@@ -178,27 +210,14 @@ void ABoardPlayerController::HandleLeftClick()
 			return;
 		}
 	}
-	
-	if (CurrentIntent == EInputIntent::Action)
-	{
-		if (TraceUnderCursor(UnitChannel, Hit))
-		{
-			Result.bHit =true;
-			Result.bHitUnit = true;
-			Result.HitActor = Hit.GetActor();
-			Result.WorldPoint = Hit.ImpactPoint;
-		}
-	}
 
-	else //Movement
+	// Movimiento (Cuando no se juega carta)
+	if (TraceUnderCursor(BoardChannel, Hit))
 	{
-		if (TraceUnderCursor(BoardChannel, Hit))
-		{
-			Result.bHit =true;
-			Result.bHitBoard = true;
-			Result.HitActor = Hit.GetActor();
-			Result.WorldPoint = Hit.ImpactPoint;
-		}
+		Result.bHit =true;
+		Result.bHitBoard = true;
+		Result.HitActor = Hit.GetActor();
+		Result.WorldPoint = Hit.ImpactPoint;
 	}
 
 	if (Result.bHitBoard && Result.HitActor)
@@ -235,7 +254,6 @@ void ABoardPlayerController::HandleLeftClick()
 			UE_LOG(LogTemp, Warning, TEXT("HitActor is not ABoard. Actor=%s"), *Result.HitActor->GetName());
 		}
 	}
-
 	
 	// Debug rápido
 	if (GEngine)
@@ -274,8 +292,6 @@ bool ABoardPlayerController::TraceUnderCursor(ECollisionChannel Channel, FHitRes
 	const float TraceDistance = 200000.f;
 	const FVector Start = WorldOrigin;
 	const FVector End = WorldOrigin + (WorldDirection * TraceDistance);
-
-
 
 	FCollisionQueryParams Params(SCENE_QUERY_STAT(ClickTrace), true);
 	const bool bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, Channel, Params);
@@ -345,10 +361,35 @@ void ABoardPlayerController::BeginPlayCard(UBaseCard* Card)
 		return;
 	}
 	
+	if (SelectionState != ECardSelectionState::None)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BeginPlayCard ignored: already selecting"));
+		return;
+	}
+	
 	PendingCard = Card;
 	PendingSource = nullptr;
 	PendingCardTarget = Card->GetTarget();
 	
 	SelectionState = ECardSelectionState::SelectingUnit;
 	CurrentIntent = EInputIntent::Action; // Cambiar estado a accion (elegir unidades para jugar la carta)
+}
+
+// Solicitar al BattleManager terminar el turno (función llamada por UI)
+void ABoardPlayerController::RequestEndTurn()
+{
+	if (!BM || !BM->IsPlayerTurn())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot end turn: Not player turn"));
+		return;
+	} else if (SelectionState != ECardSelectionState::None)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Cancelling card selection and ending turn..."));
+		PendingCard = nullptr;
+		PendingSource = nullptr;
+		SelectionState = ECardSelectionState::None;
+		CurrentIntent = EInputIntent::Move;
+	}
+	
+	BM->EndTurn();
 }

@@ -87,6 +87,11 @@ private:
 	
 	bool bIsInMenu = false;
 	
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget> BattleHUDClass;
+	UPROPERTY()
+	UUserWidget* BattleHUD;
+	
 	//Cartas
 	UPROPERTY()
 	TObjectPtr<UBaseCard> PendingCard = nullptr;
@@ -103,8 +108,8 @@ private:
 	void HandleMenu();
 	void HandleLeftClick();
 	bool TraceUnderCursor(ECollisionChannel Channel, FHitResult& OutHit ) const;
-	// Funciones que se llaman desde Bps
-	UFUNCTION(BlueprintCallable)
 	void BeginPlayCard(UBaseCard* Card);
+	UFUNCTION(BlueprintCallable)
+	void RequestEndTurn();
 #pragma endregion
 };

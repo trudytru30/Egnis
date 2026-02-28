@@ -40,12 +40,13 @@ void UBattleManager::StartPlayerTurn()
 	for (ACharacterBase* Character : CharactersOnField)
 	{
 		if (Character->GetTeam() == 0)
-			Character->GainPoints(-1);
+			Character->GainPoints(-1);	// Para reiniciar los puntos al valor default (mirar EnergyComponent)
 	}
 	
 	if (DeckManager && DeckManager->GetHand().Num() < DeckManager->GetInitialHandSize())
 	{
 		DeckManager->DrawCardAmount(DeckManager->GetInitialHandSize());
+		UE_LOG(LogTemp, Log, TEXT("Drawn %d cards"), DeckManager->GetHand().Num());
 	}
 	
 	UE_LOG(LogTemp, Log, TEXT("Player Turn %d"), TurnCount);
@@ -114,6 +115,11 @@ void UBattleManager::EndTurn()
 bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
 	ACharacterBase* TargetCharacter, FVector Location)
 {
+	if (!Character || !Character->EnergyComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character or EnergyComp is null"));
+		return false;
+	}
 	// Comprobaciones
 	if (CurrentTurn != ETurnEnum::PlayerTurn || !Card || !DeckManager)
 	{
@@ -127,6 +133,11 @@ bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
 	} else
 	{
 		// Jugar carta y restar coste
+		if (!Character || !Character->EnergyComp)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character or EnergyComp is null"));
+			return false;
+		}
 		Character->LossPoints(Card->GetCost());
 		UE_LOG(LogTemp, Log, TEXT("Played card: %s. Energy left: %d"), *Card->GetName(), 
 			Character->EnergyComp->GetCurrentPoints());

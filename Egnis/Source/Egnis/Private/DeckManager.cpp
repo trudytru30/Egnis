@@ -118,3 +118,9 @@ TArray<UBaseCard*> UDeckManager::GetHand()
 {
 	return Hand;
 }
+
+void UDeckManager::SetDeck(const TArray<UBaseCard*>& InDeck)
+{
+	ResetDeck();
+	Deck = InDeck;
+}
