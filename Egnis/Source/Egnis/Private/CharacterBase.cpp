@@ -51,6 +51,7 @@ void ACharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	if (Board)
 	{
 		Board->UnregisterOccupant(CurrentTile, this);
+		this->Destroy();
 	}
 }
 

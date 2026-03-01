@@ -21,10 +21,10 @@ public:
 	int32 ResetPoints();
 	
 	UFUNCTION(BlueprintCallable, Category="Points")
-	int32 GetCurrentPoints() const {return CurrentPoints;}
+	int32 GetCurrentPoints() {return CurrentPoints;}
 
 	UFUNCTION(BlueprintCallable, Category="Points")
-	int32 GetMaxPoints() const {return MaxPoints;}
+	int32 GetMaxPoints() {return MaxPoints;}
 #pragma endregion
 
 protected:

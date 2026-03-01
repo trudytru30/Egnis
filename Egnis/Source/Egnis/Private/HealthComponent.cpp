@@ -1,5 +1,7 @@
 ﻿#include "HealthComponent.h"
 
+#include "CharacterBase.h"
+
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
 {
@@ -46,5 +48,6 @@ float UHealthComponent::ApplyDelta(float Delta)
 void UHealthComponent::OnDeath()
 {
 	bDead = true;
-	//deasctiva el character
+	ACharacterBase* Owner = GetOwner<ACharacterBase>();
+	Owner->EndPlay(EEndPlayReason::Destroyed);
 }

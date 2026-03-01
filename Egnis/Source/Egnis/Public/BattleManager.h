@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "BattleManager.generated.h"
 
+struct FTileCoord;
 class UDeckManager;
 class UBaseCard;
 class ACharacterBase;
@@ -28,14 +29,13 @@ public:
 	bool PlayCard(UBaseCard* Card, ACharacterBase* Character, ACharacterBase* TargetCharacter, FVector Location);
 	void UpdateUnitsAlive();
 	void EndBattle(bool bPlayerWon);
+	UFUNCTION(BlueprintCallable, Category="Battle|Player")
+	bool RequestMove(ACharacterBase* Unit, const FTileCoord& TargetTile);
 	// Getters
 	int32 GetTurnCount() const;
 	TArray<ACharacterBase*> GetCharactersOnField() const;
 	UFUNCTION(BlueprintPure)
 	bool IsPlayerTurn() const;
-	
-	UFUNCTION(BlueprintCallable, Category="Battle|Player")
-	bool RequestMove(ACharacterBase* Unit, const FTileCoord& TargetTile);
 #pragma endregion
 	
 private:
