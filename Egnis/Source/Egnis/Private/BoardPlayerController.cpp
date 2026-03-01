@@ -19,16 +19,6 @@ void ABoardPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// Aniadir UI
-	if (BattleHUDClass)
-	{
-		BattleHUD = CreateWidget<UUserWidget>(this, BattleHUDClass);
-		if (BattleHUD)
-		{
-			BattleHUD->AddToViewport();
-		}
-	}
-	
 	FInputModeGameAndUI Mode;
 	Mode.SetHideCursorDuringCapture(false);
 	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);

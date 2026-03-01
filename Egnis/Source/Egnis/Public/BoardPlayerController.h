@@ -87,11 +87,6 @@ private:
 	
 	bool bIsInMenu = false;
 	
-	UPROPERTY(EditDefaultsOnly, Category="UI")
-	TSubclassOf<UUserWidget> BattleHUDClass;
-	UPROPERTY()
-	UUserWidget* BattleHUD;
-	
 	//Cartas
 	UPROPERTY()
 	TObjectPtr<UBaseCard> PendingCard = nullptr;
