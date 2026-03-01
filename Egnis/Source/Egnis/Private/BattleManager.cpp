@@ -1,4 +1,5 @@
 #include "BattleManager.h"
+#include "Ally.h"
 #include "DeckManager.h"
 #include "BaseCard.h"
 #include "CharacterBase.h"
@@ -6,6 +7,7 @@
 #include "EnergyComponent.h"
 #include "EngineUtils.h"
 
+class AAlly;
 // Iniciar combate
 void UBattleManager::Initialize(UDeckManager* InDeckManager)
 {
@@ -39,8 +41,8 @@ void UBattleManager::StartPlayerTurn()
 	// Robar mano al inicio del turno y establecer energia
 	for (ACharacterBase* Character : CharactersOnField)
 	{
-		if (Character->GetTeam() == 0)
-			Character->GainPoints(-1);	// Para reiniciar los puntos al valor default (mirar EnergyComponent)
+		if (AAlly* Ally = Cast<AAlly>(Character))
+			Ally->GainPoints(-1);	// Para reiniciar los puntos al valor default (mirar EnergyComponent)
 	}
 	
 	if (DeckManager && DeckManager->GetHand().Num() < DeckManager->GetInitialHandSize())
@@ -112,17 +114,24 @@ void UBattleManager::EndTurn()
 }
 
 // Comprobar si el player puede jugar una carta (es decir, que sea su turno y tenga energia)
-bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
+bool UBattleManager::PlayCard(UBaseCard* Card, AAlly* Character,
 	ACharacterBase* TargetCharacter, FVector Location)
 {
-	if (!Character || !Character->EnergyComp)
+	if (!Character)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character or EnergyComp is null"));
+		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character is null"));
 		return false;
 	}
+	if (!Character->EnergyComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BattleManager: EnergyComp is null"));
+		return false;
+	}
+	
 	// Comprobaciones
 	if (CurrentTurn != ETurnEnum::PlayerTurn || !Card || !DeckManager)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Not player turn or card is null"));
 		return false;
 	}
 	
@@ -130,22 +139,21 @@ bool UBattleManager::PlayCard(UBaseCard* Card, ACharacterBase* Character,
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Not enough energy to play card"));
 		return false;
-	} else
-	{
-		// Jugar carta y restar coste
-		if (!Character || !Character->EnergyComp)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character or EnergyComp is null"));
-			return false;
-		}
-		Character->LossPoints(Card->GetCost());
-		UE_LOG(LogTemp, Log, TEXT("Played card: %s. Energy left: %d"), *Card->GetName(), 
-			Character->EnergyComp->GetCurrentPoints());
-		Card->Execute(DeckManager, Character, TargetCharacter, Location);
-		UpdateUnitsAlive();
-	
-		return true;
 	}
+	
+	// Jugar carta y restar coste
+	if (!Character || !Character->EnergyComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character or EnergyComp is null"));
+		return false;
+	}
+	Character->LossPoints(Card->GetCost());
+	UE_LOG(LogTemp, Log, TEXT("Played card: %s. Energy left: %d"), *Card->GetName(), 
+		Character->EnergyComp->GetCurrentPoints());
+	Card->Execute(DeckManager, Character, TargetCharacter, Location);
+	UpdateUnitsAlive();
+
+	return true;
 }
 
 // Gestionar las unidades que hay en el campo de batalla (despues de cada carta/ accion enemiga lo suyo es llamar a esto)
@@ -154,6 +162,14 @@ void UBattleManager::UpdateUnitsAlive()
 	int32 AlliesAlive = 0;
 	int32 EnemiesAlive = 0;
 	
+	// Limpiar punteros invalidos
+	for (int32 i = CharactersOnField.Num()-1; i >= 0; i--)
+	{
+		if (!IsValid((CharactersOnField[i])))
+			CharactersOnField.RemoveAt(i);
+	}
+	
+	// Comrpobar cuantos aliados y enemigos quedan en campo
 	for (ACharacterBase* Character : CharactersOnField)
 	{
 		if (Character->GetTeam() == 0)
@@ -190,22 +206,7 @@ void UBattleManager::EndBattle(bool bPlayerWon)
 	//TODO: Notificar al GameMode (no entra en prototipo)
 }
 
-// ===== Getters =====
-int32 UBattleManager::GetTurnCount() const
-{
-	return TurnCount;
-}
-
-TArray<ACharacterBase*> UBattleManager::GetCharactersOnField() const
-{
-	return CharactersOnField;
-}
-
-bool UBattleManager::IsPlayerTurn() const
-{
-	return CurrentTurn == ETurnEnum::PlayerTurn;
-}
-
+// Pedir movimiento
 bool UBattleManager::RequestMove(ACharacterBase* Unit, const FTileCoord& TargetTile)
 {
 	if (!Unit)
@@ -345,4 +346,20 @@ bool UBattleManager::RequestMove(ACharacterBase* Unit, const FTileCoord& TargetT
 
 	UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: unsupported move pattern."));
 	return false;
+}
+
+// ===== Getters =====
+int32 UBattleManager::GetTurnCount() const
+{
+	return TurnCount;
+}
+
+TArray<ACharacterBase*> UBattleManager::GetCharactersOnField() const
+{
+	return CharactersOnField;
+}
+
+bool UBattleManager::IsPlayerTurn() const
+{
+	return CurrentTurn == ETurnEnum::PlayerTurn;
 }

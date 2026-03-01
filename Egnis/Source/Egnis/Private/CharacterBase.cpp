@@ -1,15 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "CharacterBase.h"
-
-#include "EnergyComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-// Sets default values
 ACharacterBase::ACharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComp"));
 }
 
 void ACharacterBase::BeginPlay()
@@ -51,7 +46,6 @@ void ACharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	if (Board)
 	{
 		Board->UnregisterOccupant(CurrentTile, this);
-		this->Destroy();
 	}
 }
 
@@ -59,16 +53,6 @@ void ACharacterBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
-void ACharacterBase::LossHealth(float HealthToLoss)
-{
-	if (!HealthComp)
-	{
-		return;
-	}
-
-	HealthComp->ApplyDelta(-HealthToLoss);
 }
 
 void ACharacterBase::GainHealth(float AmountHealed)
@@ -81,38 +65,33 @@ void ACharacterBase::GainHealth(float AmountHealed)
 	HealthComp->ApplyDelta(+AmountHealed);
 }
 
-void ACharacterBase::LossPoints(int32 Cost)
+void ACharacterBase::LossHealth(float HealthToLoss)
 {
-	if (!EnergyComp)
+	if (!HealthComp)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] LossHealth failed: HealthComp is null."), *GetName());
 		return;
 	}
 
-	EnergyComp->ApplyDelta(-Cost);
+	HealthComp->ApplyDelta(-HealthToLoss);
+	
+	if (HealthComp->GetCurrentHealth() <= 0)
+	{
+		HandleDeath();
+	}
 }
 
-void ACharacterBase::GainPoints(int32 Bonus)
+// Lógica de muerte: desregistrarse del tablero y destruir actor
+void ACharacterBase::HandleDeath()
 {
-	if (!EnergyComp)
+	if (Board)
 	{
-		return;
+		Board->UnregisterOccupant(CurrentTile, this);
 	}
 
-	if (Bonus > 0)
-	{
-		EnergyComp->ApplyDelta(+Bonus);
-	}
-	else
-	{
-		EnergyComp->ResetPoints();
-	}
+	Destroy();
 }
 
-// Getter para obtener el equipo del enemigo
-int32 ACharacterBase::GetTeam()
-{
-	return Team;
-}
 
 bool ACharacterBase::SetCurrentTile(const FTileCoord& NewTile)
 {
@@ -159,4 +138,10 @@ void ACharacterBase::SnapToCurrentTile(bool bKeepCurrentZ)
 	}
 
 	SetActorLocation(NewLocation);
+}
+
+// Getter para obtener el equipo del personaje
+int32 ACharacterBase::GetTeam()
+{
+	return Team;
 }

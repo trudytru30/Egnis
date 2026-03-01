@@ -1,22 +1,14 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "Enemy.h"
-
+﻿#include "Enemy.h"
 #include "ActionDataAsset.h"
 #include "EnemyArcheTypeDataAsset.h"
 #include "EntitySystem/MovieSceneEntitySystemRunner.h"
 #include "Kismet/GameplayStatics.h"
 
-
-// Sets default values
 AEnemy::AEnemy()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-// Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
@@ -38,11 +30,9 @@ void AEnemy::BeginPlay()
 	{
 		FTimerHandle TimerHandle;
 		GetWorldTimerManager().SetTimer(TimerHandle,this,&AEnemy::MoveTowardClosesPlayer,0.5f,false);
-		
 	}
 }
 
-// Called every frame
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -176,7 +166,7 @@ void AEnemy::MakeAction()
 		return;
 	}
 
-	//sino cura ataca
+	// Si no cura, ataca
 	const UActionDataAsset* AttackAction = GetActionById(EActionId::Attack);
 	if (!AttackAction)
 	{
@@ -225,7 +215,6 @@ ACharacterBase* AEnemy::FindClosestPlayer() const
 	}
 
 	return Best;
-	
 }
 
 int32 AEnemy::ManhattanDistance(const FTileCoord& A, const FTileCoord& B)

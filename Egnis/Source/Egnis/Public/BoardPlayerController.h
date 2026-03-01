@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BoardPlayerController.generated.h"
 
+class AAlly;
 class UBaseCard;
 class ACharacterBase;
 class UInputAction;
@@ -99,7 +100,7 @@ private:
 	UPROPERTY()
 	TObjectPtr<UBaseCard> PendingCard = nullptr;
 	UPROPERTY()
-	TObjectPtr<ACharacterBase> PendingSource = nullptr;
+	TObjectPtr<AAlly> PendingSource = nullptr;
 	ECardSelectionState SelectionState = ECardSelectionState::None;
 	UPROPERTY()
 	ECardTarget PendingCardTarget = ECardTarget::None;	// Target de la carta que se quiere jugar

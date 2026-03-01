@@ -8,6 +8,7 @@
 #include "CharacterBase.h"
 #include "DeckManager.h"
 #include "GameManager.h"
+#include "Ally.h"
 #include "Blueprint/UserWidget.h"
 
 ABoardPlayerController::ABoardPlayerController()
@@ -102,16 +103,14 @@ void ABoardPlayerController::HandleLeftClick()
 		{
 			if (!TraceUnderCursor(UnitChannel, Hit)) return;
 			
-			ACharacterBase* ClickedCharacter = Cast<ACharacterBase>(Hit.GetActor());
-			if (!ClickedCharacter) return;
-			
-			if (ClickedCharacter->GetTeam() != 0)	// Solo se pueden seleccionar unidades aliadas para jugar cartas
+			AAlly* ClickedAlly = Cast<AAlly>(Hit.GetActor());
+			if (!ClickedAlly)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Selected unit is not an ally."));
-				return;	
+				UE_LOG(LogTemp, Warning, TEXT("BoardPlayerComponent: Clicked actor is not an ally"));
+				return;
 			}
 			
-			PendingSource = ClickedCharacter;
+			PendingSource = ClickedAlly;
 			
 			// Jugar carta si no necesita target
 			if (PendingCardTarget == ECardTarget::None || PendingCardTarget == ECardTarget::Self)
@@ -121,7 +120,9 @@ void ABoardPlayerController::HandleLeftClick()
 					UE_LOG(LogTemp, Warning, TEXT("PendingCard is null"));
 					return;
 				}
+				
 				BM->PlayCard(PendingCard, PendingSource, nullptr, FVector::ZeroVector);
+				
 				// Resetear estado
 				PendingCard = nullptr;
 				PendingSource = nullptr;

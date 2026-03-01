@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "BattleManager.generated.h"
 
+class AAlly;
 struct FTileCoord;
 class UDeckManager;
 class UBaseCard;
@@ -26,7 +27,7 @@ public:
 	void StartPlayerTurn();
 	void StartEnemyTurn();
 	void EndTurn();
-	bool PlayCard(UBaseCard* Card, ACharacterBase* Character, ACharacterBase* TargetCharacter, FVector Location);
+	bool PlayCard(UBaseCard* Card, AAlly* Character, ACharacterBase* TargetCharacter, FVector Location);
 	void UpdateUnitsAlive();
 	void EndBattle(bool bPlayerWon);
 	UFUNCTION(BlueprintCallable, Category="Battle|Player")

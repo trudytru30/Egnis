@@ -20,23 +20,16 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
-	UHealthComponent* HealthComp = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
-	UEnergyComponent* EnergyComp = nullptr;
+	UHealthComponent* HealthComp;
 
 	// ===== Funciones =====
 	UFUNCTION(BlueprintCallable, Category="Stats")
 	void LossHealth(float HealthToLoss);
+	
+	void HandleDeath();
 
 	UFUNCTION(BlueprintCallable, Category="Stats")
 	void GainHealth(float AmountHealed);
-
-	UFUNCTION(BlueprintCallable, Category="Stats")
-	void LossPoints(int32 Cost);
-
-	UFUNCTION(BlueprintCallable, Category="Stats")
-	void GainPoints(int32 Bonus);
 	
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
