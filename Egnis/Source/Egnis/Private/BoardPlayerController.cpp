@@ -201,6 +201,26 @@ void ABoardPlayerController::HandleLeftClick()
 		}
 	}
 
+	if (TraceUnderCursor(UnitChannel, Hit))
+	{
+		if (ACharacterBase* ClickedCharacter = Cast<ACharacterBase>(Hit.GetActor()))
+		{
+			if (ClickedCharacter->GetTeam() == 0)
+			{
+				SelectedAlly = ClickedCharacter;
+				UE_LOG(LogTemp, Log, TEXT("Selected Ally: %s"), *SelectedAlly->GetName());
+
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green,
+				   FString::Printf(TEXT("Selected: %s"), *SelectedAlly->GetName()));
+				}
+
+				return; //para que solo seleccione
+			}
+		}
+	}
+	
 	// Movimiento (Cuando no se juega carta)
 	if (TraceUnderCursor(BoardChannel, Hit))
 	{
@@ -217,6 +237,24 @@ void ABoardPlayerController::HandleLeftClick()
 			FTileCoord Tile;
 			if (Board->WorldPointToTile(Result.WorldPoint, Tile))
 			{
+				if (!SelectedAlly)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("No ally selected. Click an ally first."));
+					if (GEngine)
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Red, TEXT("No ally selected"));
+					}
+					return;
+				}
+
+				if (!BM)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("BattleManager is null"));
+					return;
+				}
+
+				BM->RequestMove(SelectedAlly, Tile);
+				
 				if (GEngine)
 				{
 					GEngine->AddOnScreenDebugMessage(

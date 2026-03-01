@@ -52,9 +52,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Input")
 	EInputIntent CurrentIntent = EInputIntent::Move;
 
+	//Getter para UI
+	UFUNCTION(BlueprintCallable, Category="Selection")
+	ACharacterBase* GetSelectedAlly() const { return SelectedAlly; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+
+	//Ally seleccionado
+	UPROPERTY()
+	TObjectPtr<ACharacterBase> SelectedAlly = nullptr;
 
 #pragma region Inputs
 	UFUNCTION(BlueprintImplementableEvent, Category="Input")

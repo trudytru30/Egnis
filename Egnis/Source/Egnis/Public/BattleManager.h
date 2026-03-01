@@ -33,6 +33,9 @@ public:
 	TArray<ACharacterBase*> GetCharactersOnField() const;
 	UFUNCTION(BlueprintPure)
 	bool IsPlayerTurn() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Battle|Player")
+	bool RequestMove(ACharacterBase* Unit, const FTileCoord& TargetTile);
 #pragma endregion
 	
 private:
