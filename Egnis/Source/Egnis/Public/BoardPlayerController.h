@@ -57,6 +57,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Selection")
 	ACharacterBase* GetSelectedAlly() const { return SelectedAlly; }
 
+	UFUNCTION(BlueprintCallable, Category="Battle|Turn")
+	void RequestEndTurn();
+
+	UFUNCTION(BlueprintCallable, Category="Battle|Cards")
+	void BeginPlayCard(UBaseCard* Card);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -112,8 +117,8 @@ private:
 	void HandleMenu();
 	void HandleLeftClick();
 	bool TraceUnderCursor(ECollisionChannel Channel, FHitResult& OutHit ) const;
-	void BeginPlayCard(UBaseCard* Card);
-	UFUNCTION(BlueprintCallable)
-	void RequestEndTurn();
+
+	//UFUNCTION(BlueprintCallable)
+	//void RequestEndTurn();
 #pragma endregion
 };

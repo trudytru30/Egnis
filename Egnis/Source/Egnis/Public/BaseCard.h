@@ -16,15 +16,29 @@ class EGNIS_API UBaseCard : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintPure, Category="Card")
+	FText GetCardName() const;
+
+	UFUNCTION(BlueprintPure, Category="Card")
+	ECardType GetCardType() const;
+
+	UFUNCTION(BlueprintPure, Category="Card")
+	EColorType GetColor() const;
+
+	UFUNCTION(BlueprintPure, Category="Card")
+	int32 GetCost() const;
+
+	UFUNCTION(BlueprintPure, Category="Card")
+	ECardTarget GetTarget() const;
 #pragma region Functions
 	// Acciones de las cartas
 	void Execute(UDeckManager* Deck, ACharacterBase* Self, ACharacterBase* TargetCharacter, FVector Location);
 	// Getters
-	FText GetCardName() const;
-	ECardType GetCardType() const;
-	EColorType GetColor() const;
-	int32 GetCost() const;
-	ECardTarget GetTarget() const;
+	//FText GetCardName() const;
+	//ECardType GetCardType() const;
+	//EColorType GetColor() const;
+	//int32 GetCost() const;
+	//ECardTarget GetTarget() const;
 #pragma endregion
 	
 protected:
