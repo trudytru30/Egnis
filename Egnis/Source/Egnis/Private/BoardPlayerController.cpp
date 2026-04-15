@@ -422,3 +422,15 @@ void ABoardPlayerController::RequestEndTurn()
 	
 	BM->EndTurn();
 }
+TArray<UBaseCard*> ABoardPlayerController::GetCurrentHand() const
+{
+	if (AGameManager* GM = Cast<AGameManager>(GetWorld()->GetAuthGameMode()))
+	{
+		if (UDeckManager* Deck = GM->GetDeckManager())
+		{
+			return Deck->GetHand();
+		}
+	}
+
+	return TArray<UBaseCard*>();
+}

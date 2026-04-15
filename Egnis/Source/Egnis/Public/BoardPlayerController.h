@@ -62,6 +62,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Battle|Cards")
 	void BeginPlayCard(UBaseCard* Card);
+
+	UFUNCTION(BlueprintPure, Category="Battle|Cards")
+	TArray<UBaseCard*> GetCurrentHand() const;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
