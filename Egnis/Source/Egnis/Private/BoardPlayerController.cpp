@@ -42,10 +42,6 @@ void ABoardPlayerController::BeginPlay()
 	if (AGameManager* GM = Cast<AGameManager>(GetWorld()->GetAuthGameMode()))
 	{
 		BM = GM->GetBattleManager();
-		// Carta de prueba
-		UBaseCard* TestCard = GM->GetDeckManager()->GetHand()[0];
-		UE_LOG(LogTemp, Warning, TEXT("TestCard: %s"), *TestCard->GetName());
-		BeginPlayCard(TestCard);
 	}
 
 	if (!BM)
