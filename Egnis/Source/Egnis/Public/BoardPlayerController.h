@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "CardTarget.h"
+#include  "DeckManager.h"
 #include "GameFramework/PlayerController.h"
 #include "BoardPlayerController.generated.h"
 
@@ -65,6 +66,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="Battle|Cards")
 	TArray<UBaseCard*> GetCurrentHand() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Battle|UI")
+	void BP_RefreshHandUI();
+	UPROPERTY()
+	UDeckManager* DeckManager = nullptr;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
