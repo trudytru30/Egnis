@@ -12,7 +12,7 @@ class EGNIS_API UCard_HealEffect : public UCardEffect
 	
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HealEffect")
-	int32 HealAmount = 10;
+	float HealAmount = 10.0f;
 	
 	virtual void Execute_Ally(ACharacterBase* Self, ACharacterBase* Ally) override;
 };

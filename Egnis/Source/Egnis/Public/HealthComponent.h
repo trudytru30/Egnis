@@ -4,6 +4,9 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+// Delegado para notificar cambios de salud a la UI
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, NewHealth, float, MaxHealthValue);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class EGNIS_API UHealthComponent : public UActorComponent
 {
@@ -23,6 +26,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Health")
 	float GetHealthRatio(){return GetCurrentHealth() / GetMaxHealth();}
+
+	// Delegado que se dispara cuando la salud cambia
+	UPROPERTY(BlueprintAssignable, Category="Health")
+	FOnHealthChanged OnHealthChanged;
 
 protected:
 	virtual void BeginPlay() override;

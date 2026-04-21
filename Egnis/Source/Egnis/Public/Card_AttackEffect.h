@@ -12,7 +12,7 @@ class EGNIS_API UCard_AttackEffect : public UCardEffect
 	
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AttackEffect")
-	int32 DamageAmount;
+	float DamageAmount = 10.0f;
 	
 	virtual void Execute_Enemy(ACharacterBase* Self, ACharacterBase* Enemy) override;
 };
