@@ -1,12 +1,14 @@
 ﻿#include "Ally.h"
 
 #include "EnergyComponent.h"
+#include "GridMovementComponent.h"
 
 AAlly::AAlly()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	// CREAR SI O SI AQUI PARA QUE FUNCIONE
 	EnergyComp = CreateDefaultSubobject<UEnergyComponent>(TEXT("EnergyComp"));
+	MoveComp = CreateDefaultSubobject<UGridMovementComponent>(TEXT("MoveComp"));
 }
 
 void AAlly::BeginPlay()
