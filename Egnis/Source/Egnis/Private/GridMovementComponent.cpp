@@ -2,8 +2,9 @@
 
 
 #include "GridMovementComponent.h"
+#include "CharacterBase.h"
 #include "Engine.h"
-#include"Kismet/GameplayStatics.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 
 
@@ -60,15 +61,21 @@ bool UGridMovementComponent::IsTileValid(const FTileCoord& T)
 }
 
 
-//calcula la actual
+//calcula la actual: usa CharacterBase::CurrentTile como fuente de verdad
 bool UGridMovementComponent::getCurrentTile(FTileCoord& OutTile)
 {
+	if (ACharacterBase* Character = Cast<ACharacterBase>(GetOwner()))
+	{
+		OutTile = Character->CurrentTile;
+		return (OutTile.X >= 0 && OutTile.Y >= 0);
+	}
+
+	// Fallback por posicion mundial si el owner no es CharacterBase
 	if (!BoardActor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No hay BoardActor asignado"));
 		return false;
 	}
-
 	return BoardActor->WorldPointToTile(GetOwner()->GetActorLocation(), OutTile);
 }
 
