@@ -42,6 +42,15 @@ void ABoardPlayerController::BeginPlay()
 	if (AGameManager* GM = Cast<AGameManager>(GetWorld()->GetAuthGameMode()))
 	{
 		BM = GM->GetBattleManager();
+		DeckManager = GM->GetDeckManager();
+
+		UE_LOG(LogTemp, Warning, TEXT("BeginPlay: BM %s | DeckManager %s"),
+			BM ? TEXT("OK") : TEXT("NULL"),
+			DeckManager ? TEXT("OK") : TEXT("NULL"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BeginPlay: GameManager NULL"));
 	}
 
 	if (!BM)
@@ -118,7 +127,19 @@ void ABoardPlayerController::HandleLeftClick()
 				}
 				
 				BM->PlayCard(PendingCard, PendingSource, nullptr, FVector::ZeroVector);
-				
+				UE_LOG(LogTemp, Warning, TEXT("PlayCard ejecutada"));
+				if (DeckManager)
+				{
+					DeckManager->DiscardCardFromHand(PendingCard);
+					UE_LOG(LogTemp, Warning, TEXT("Carta descartada de la mano"));
+					UE_LOG(LogTemp, Warning, TEXT("Cartas en mano tras descartar: %d"), DeckManager->GetHand().Num());
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("DeckManager NULL al descartar"));
+				}
+
+				BP_RefreshHandUI();
 				// Resetear estado
 				PendingCard = nullptr;
 				PendingSource = nullptr;
@@ -187,6 +208,19 @@ void ABoardPlayerController::HandleLeftClick()
 			
 			// Intentar jugar la carta
 			BM->PlayCard(PendingCard, PendingSource, TargetUnit, TargetLocation);
+			UE_LOG(LogTemp, Warning, TEXT("PlayCard ejecutada"));
+			if (DeckManager)
+			{
+				DeckManager->DiscardCardFromHand(PendingCard);
+				UE_LOG(LogTemp, Warning, TEXT("Carta descartada de la mano"));
+				UE_LOG(LogTemp, Warning, TEXT("Cartas en mano tras descartar: %d"), DeckManager->GetHand().Num());
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("DeckManager NULL al descartar"));
+			}
+
+			BP_RefreshHandUI();
 
 			// Reset
 			PendingCard = nullptr;
@@ -378,6 +412,7 @@ void ABoardPlayerController::HandleMenu()
 // Comprobar e iniciar accion de jugar carta
 void ABoardPlayerController::BeginPlayCard(UBaseCard* Card)
 {
+	UE_LOG(LogTemp, Warning, TEXT("BeginPlayCard llamada con carta: %s"), Card ? *Card->GetName() : TEXT("NULL"));
 	if (!Card) return;
 	
 	if (!BM || !BM->IsPlayerTurn())
@@ -420,13 +455,12 @@ void ABoardPlayerController::RequestEndTurn()
 }
 TArray<UBaseCard*> ABoardPlayerController::GetCurrentHand() const
 {
-	if (AGameManager* GM = Cast<AGameManager>(GetWorld()->GetAuthGameMode()))
+	if (DeckManager)
 	{
-		if (UDeckManager* Deck = GM->GetDeckManager())
-		{
-			return Deck->GetHand();
-		}
+		UE_LOG(LogTemp, Warning, TEXT("GetCurrentHand: %d cartas"), DeckManager->GetHand().Num());
+		return DeckManager->GetHand();
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("GetCurrentHand: DeckManager NULL"));
 	return TArray<UBaseCard*>();
 }
