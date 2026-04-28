@@ -1,12 +1,48 @@
 {
 	"RemapUnityFiles": 
 	{
-		"Module.Egnis.gen.cpp.obj": [
-			"AIEnemyController.gen.cpp.obj",
+		"Module.Egnis.cpp.obj": [
+			"ActionDataAsset.gen.cpp.obj",
+			"Ally.gen.cpp.obj",
+			"BaseCard.gen.cpp.obj",
+			"BattleManager.gen.cpp.obj",
 			"Board.gen.cpp.obj",
-			"CharacterBase.gen.cpp.obj",
 			"BoardPlayerController.gen.cpp.obj",
-			"Egnis.init.gen.cpp.obj"
+			"CardEffect.gen.cpp.obj",
+			"CardTarget.gen.cpp.obj",
+			"CardType.gen.cpp.obj",
+			"Card_AttackEffect.gen.cpp.obj",
+			"Card_DrawEffect.gen.cpp.obj",
+			"Card_HealEffect.gen.cpp.obj",
+			"CharacterBase.gen.cpp.obj",
+			"ColorType.gen.cpp.obj",
+			"DeckManager.gen.cpp.obj",
+			"Egnis.init.gen.cpp.obj",
+			"Enemy.gen.cpp.obj",
+			"EnemyArcheTypeDataAsset.gen.cpp.obj",
+			"EnergyComponent.gen.cpp.obj",
+			"GameManager.gen.cpp.obj",
+			"GridMovementComponent.gen.cpp.obj",
+			"HealthComponent.gen.cpp.obj",
+			"PerModuleInline.gen.cpp.obj",
+			"Egnis.cpp.obj",
+			"ActionDataAsset.cpp.obj",
+			"Ally.cpp.obj",
+			"BaseCard.cpp.obj",
+			"BattleManager.cpp.obj",
+			"Board.cpp.obj",
+			"BoardPlayerController.cpp.obj",
+			"Card_AttackEffect.cpp.obj",
+			"Card_DrawEffect.cpp.obj",
+			"Card_HealEffect.cpp.obj",
+			"CharacterBase.cpp.obj",
+			"DeckManager.cpp.obj",
+			"Enemy.cpp.obj",
+			"EnemyArcheTypeDataAsset.cpp.obj",
+			"EnergyComponent.cpp.obj",
+			"GameManager.cpp.obj",
+			"GridMovementComponent.cpp.obj",
+			"HealthComponent.cpp.obj"
 		]
 	}
 }

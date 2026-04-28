@@ -1,4 +1,21 @@
-F:\Adriana\Egnis\Egnis\Source\Egnis\Public\AIEnemyController.h
-F:\Adriana\Egnis\Egnis\Source\Egnis\Public\Board.h
-F:\Adriana\Egnis\Egnis\Source\Egnis\Public\BoardPlayerController.h
-F:\Adriana\Egnis\Egnis\Source\Egnis\Public\CharacterBase.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\BattleManager.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\Ally.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\ActionDataAsset.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\BoardPlayerController.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\CardTarget.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\CardEffect.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\Card_AttackEffect.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\Card_DrawEffect.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\Board.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\BaseCard.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\CardType.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\Enemy.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\Card_HealEffect.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\DeckManager.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\GameManager.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\EnergyComponent.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\GridMovementComponent.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\CharacterBase.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\HealthComponent.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\ColorType.h
+C:\Users\luis2\OneDrive - U-tad\Documents\GitHub\Egnis\Egnis\Source\Egnis\Public\EnemyArcheTypeDataAsset.h

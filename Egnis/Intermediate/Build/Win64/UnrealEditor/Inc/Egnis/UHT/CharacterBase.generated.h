@@ -16,10 +16,20 @@
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
+struct FTileCoord;
+
 // ********** Begin Class ACharacterBase ***********************************************************
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+	DECLARE_FUNCTION(execSnapToCurrentTile); \
+	DECLARE_FUNCTION(execSetCurrentTile); \
+	DECLARE_FUNCTION(execGetTeam); \
+	DECLARE_FUNCTION(execGainHealth); \
+	DECLARE_FUNCTION(execLossHealth);
+
+
 EGNIS_API UClass* Z_Construct_UClass_ACharacterBase_NoRegister();
 
-#define FID_Egnis_Source_Egnis_Public_CharacterBase_h_12_INCLASS_NO_PURE_DECLS \
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_15_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesACharacterBase(); \
 	friend struct Z_Construct_UClass_ACharacterBase_Statics; \
@@ -30,7 +40,7 @@ public: \
 	DECLARE_SERIALIZER(ACharacterBase)
 
 
-#define FID_Egnis_Source_Egnis_Public_CharacterBase_h_12_ENHANCED_CONSTRUCTORS \
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_15_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	ACharacterBase(ACharacterBase&&) = delete; \
 	ACharacterBase(const ACharacterBase&) = delete; \
@@ -40,12 +50,13 @@ public: \
 	NO_API virtual ~ACharacterBase();
 
 
-#define FID_Egnis_Source_Egnis_Public_CharacterBase_h_9_PROLOG
-#define FID_Egnis_Source_Egnis_Public_CharacterBase_h_12_GENERATED_BODY \
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_12_PROLOG
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_15_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Egnis_Source_Egnis_Public_CharacterBase_h_12_INCLASS_NO_PURE_DECLS \
-	FID_Egnis_Source_Egnis_Public_CharacterBase_h_12_ENHANCED_CONSTRUCTORS \
+	FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_15_INCLASS_NO_PURE_DECLS \
+	FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h_15_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -55,6 +66,6 @@ class ACharacterBase;
 // ********** End Class ACharacterBase *************************************************************
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_Egnis_Source_Egnis_Public_CharacterBase_h
+#define CURRENT_FILE_ID FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_CharacterBase_h
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

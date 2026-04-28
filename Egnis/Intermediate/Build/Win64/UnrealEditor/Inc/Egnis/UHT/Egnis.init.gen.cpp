@@ -7,23 +7,27 @@
 #include "UObject/GeneratedCppIncludes.h"
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeEgnis_init() {}
+	EGNIS_API UFunction* Z_Construct_UDelegateFunction_Egnis_OnHealthChanged__DelegateSignature();
 	static FPackageRegistrationInfo Z_Registration_Info_UPackage__Script_Egnis;
 	FORCENOINLINE UPackage* Z_Construct_UPackage__Script_Egnis()
 	{
 		if (!Z_Registration_Info_UPackage__Script_Egnis.OuterSingleton)
 		{
+			static UObject* (*const SingletonFuncArray[])() = {
+				(UObject* (*)())Z_Construct_UDelegateFunction_Egnis_OnHealthChanged__DelegateSignature,
+			};
 			static const UECodeGen_Private::FPackageParams PackageParams = {
 				"/Script/Egnis",
-				nullptr,
-				0,
+				SingletonFuncArray,
+				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0x99F72ECD,
-				0xBFF86194,
+				0x39339DFA,
+				0x8B5300EA,
 				METADATA_PARAMS(0, nullptr)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_Egnis.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_Egnis.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_Egnis(Z_Construct_UPackage__Script_Egnis, TEXT("/Script/Egnis"), Z_Registration_Info_UPackage__Script_Egnis, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x99F72ECD, 0xBFF86194));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_Egnis(Z_Construct_UPackage__Script_Egnis, TEXT("/Script/Egnis"), Z_Registration_Info_UPackage__Script_Egnis, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x39339DFA, 0x8B5300EA));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

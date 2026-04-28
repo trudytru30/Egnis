@@ -16,10 +16,12 @@
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
+class ACharacterBase;
+class UBaseCard;
 struct FClickResult;
 
 // ********** Begin ScriptStruct FClickResult ******************************************************
-#define FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_20_GENERATED_BODY \
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_36_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FClickResult_Statics; \
 	EGNIS_API static class UScriptStruct* StaticStruct();
 
@@ -28,10 +30,17 @@ struct FClickResult;
 // ********** End ScriptStruct FClickResult ********************************************************
 
 // ********** Begin Class ABoardPlayerController ***************************************************
-#define FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_33_CALLBACK_WRAPPERS
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_RPC_WRAPPERS_NO_PURE_DECLS \
+	DECLARE_FUNCTION(execGetCurrentHand); \
+	DECLARE_FUNCTION(execBeginPlayCard); \
+	DECLARE_FUNCTION(execRequestEndTurn); \
+	DECLARE_FUNCTION(execGetSelectedAlly);
+
+
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_CALLBACK_WRAPPERS
 EGNIS_API UClass* Z_Construct_UClass_ABoardPlayerController_NoRegister();
 
-#define FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_33_INCLASS_NO_PURE_DECLS \
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesABoardPlayerController(); \
 	friend struct Z_Construct_UClass_ABoardPlayerController_Statics; \
@@ -42,7 +51,7 @@ public: \
 	DECLARE_SERIALIZER(ABoardPlayerController)
 
 
-#define FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_33_ENHANCED_CONSTRUCTORS \
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	ABoardPlayerController(ABoardPlayerController&&) = delete; \
 	ABoardPlayerController(const ABoardPlayerController&) = delete; \
@@ -52,13 +61,14 @@ public: \
 	NO_API virtual ~ABoardPlayerController();
 
 
-#define FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_30_PROLOG
-#define FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_33_GENERATED_BODY \
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_46_PROLOG
+#define FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_33_CALLBACK_WRAPPERS \
-	FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_33_INCLASS_NO_PURE_DECLS \
-	FID_Egnis_Source_Egnis_Public_BoardPlayerController_h_33_ENHANCED_CONSTRUCTORS \
+	FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_CALLBACK_WRAPPERS \
+	FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_INCLASS_NO_PURE_DECLS \
+	FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h_49_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -68,7 +78,7 @@ class ABoardPlayerController;
 // ********** End Class ABoardPlayerController *****************************************************
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_Egnis_Source_Egnis_Public_BoardPlayerController_h
+#define CURRENT_FILE_ID FID_Users_luis2_OneDrive___U_tad_Documents_GitHub_Egnis_Egnis_Source_Egnis_Public_BoardPlayerController_h
 
 // ********** Begin Enum EInputIntent **************************************************************
 #define FOREACH_ENUM_EINPUTINTENT(op) \
@@ -79,5 +89,16 @@ enum class EInputIntent : uint8;
 template<> struct TIsUEnumClass<EInputIntent> { enum { Value = true }; };
 template<> EGNIS_API UEnum* StaticEnum<EInputIntent>();
 // ********** End Enum EInputIntent ****************************************************************
+
+// ********** Begin Enum ECardSelectionState *******************************************************
+#define FOREACH_ENUM_ECARDSELECTIONSTATE(op) \
+	op(ECardSelectionState::None) \
+	op(ECardSelectionState::SelectingUnit) \
+	op(ECardSelectionState::SelectingTarget) 
+
+enum class ECardSelectionState : uint8;
+template<> struct TIsUEnumClass<ECardSelectionState> { enum { Value = true }; };
+template<> EGNIS_API UEnum* StaticEnum<ECardSelectionState>();
+// ********** End Enum ECardSelectionState *********************************************************
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
