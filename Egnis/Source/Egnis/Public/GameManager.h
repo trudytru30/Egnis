@@ -36,4 +36,5 @@ private:
 	UBattleManager* BattleManager;
 	
 	void InitializeManagers();
+	
 };

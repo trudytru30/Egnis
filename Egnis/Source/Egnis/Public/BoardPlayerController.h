@@ -72,6 +72,11 @@ public:
 	UPROPERTY()
 	UDeckManager* DeckManager = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UUserWidget> GameHUDClass;
+	UPROPERTY()
+	UUserWidget* HUDWidget;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;

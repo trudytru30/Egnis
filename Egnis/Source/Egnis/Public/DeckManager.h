@@ -12,7 +12,7 @@ class EGNIS_API UDeckManager : public UObject
 	GENERATED_BODY()
 	
 public:
-
+	int32 GetDrawPileSize() const { return DrawPile.Num(); }
 #pragma region Functions
 	// Modificar las cartas del mazo elegidas por el player
 	void GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCarts);

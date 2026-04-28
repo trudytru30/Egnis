@@ -11,6 +11,7 @@
 #include "Ally.h"
 #include "Blueprint/UserWidget.h"
 
+
 ABoardPlayerController::ABoardPlayerController()
 {
 	bShowMouseCursor = true;
@@ -57,6 +58,16 @@ void ABoardPlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("BoardPlayerController: BattleManager is null"));
 	}
+
+	if (GameHUDClass)
+	{
+		HUDWidget = CreateWidget<UUserWidget>(this, GameHUDClass);
+		if (HUDWidget)
+		{
+			HUDWidget->AddToViewport();
+		}
+	}
+	BP_RefreshHandUI();
 }
 
 // Asignar controles
