@@ -17,16 +17,24 @@ void AGameManager::BeginPlay()
 
 void AGameManager::InitializeManagers()
 {
-	// Crear PlayerController
 	DeckManager = NewObject<UDeckManager>(this);
 	check(DeckManager);
+    
+	UE_LOG(LogTemp, Warning, TEXT("InitialDeck size: %d"), InitialDeck.Num());
+	for (UBaseCard* Card : InitialDeck)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Card: %s"), Card ? *Card->GetName() : TEXT("NULL"));
+	}
+    
 	DeckManager->SetDeck(InitialDeck);
-	
-	// Crear BattleManager
+	DeckManager->InitializeDeck();
+    
+	UE_LOG(LogTemp, Warning, TEXT("DrawPile after init: %d"), DeckManager->GetDrawPileSize());
+    
 	BattleManager = NewObject<UBattleManager>(this);
 	check(BattleManager);
 	BattleManager->Initialize(DeckManager);
-	
-	// Iniciar combate
 	BattleManager->StartBattle();
+    
+	UE_LOG(LogTemp, Warning, TEXT("Hand after StartBattle: %d"), DeckManager->GetHand().Num());
 }
