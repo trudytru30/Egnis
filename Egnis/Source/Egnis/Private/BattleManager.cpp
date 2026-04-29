@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "EnergyComponent.h"
 #include "EngineUtils.h"
+#include "GridMovementComponent.h"
 
 class AAlly;
 // Iniciar combate
@@ -45,12 +46,21 @@ void UBattleManager::StartPlayerTurn()
 			Ally->GainPoints(-1);	// Para reiniciar los puntos al valor default (mirar EnergyComponent)
 	}
 	
+	// Resetear bHasMoved para todos los aliados al inicio del turno
+	for (ACharacterBase* Character : CharactersOnField)
+	{
+		if (Character && Character->GetTeam() == 0)
+		{
+			Character->bHasMoved = false;
+		}
+	}
+
 	if (DeckManager && DeckManager->GetHand().Num() < DeckManager->GetInitialHandSize())
 	{
 		DeckManager->DrawCardAmount(DeckManager->GetInitialHandSize());
 		UE_LOG(LogTemp, Log, TEXT("Drawn %d cards"), DeckManager->GetHand().Num());
 	}
-	
+
 	UE_LOG(LogTemp, Log, TEXT("Player Turn %d"), TurnCount);
 }
 
@@ -230,122 +240,39 @@ bool UBattleManager::RequestMove(ACharacterBase* Unit, const FTileCoord& TargetT
 		return false;
 	}
 
-	const FTileCoord Start = Unit->CurrentTile;
-
-	const int32 DeltaX = TargetTile.X - Start.X;
-	const int32 DeltaY = TargetTile.Y - Start.Y;
-
-	const int32 AbsX = FMath::Abs(DeltaX);
-	const int32 AbsY = FMath::Abs(DeltaY);
-	const int32 Dist = AbsX + AbsY;
-
-	if (Dist == 0)
+	if (Unit->bHasMoved)
 	{
-		return true;
-	}
-	if (Dist > 2)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: too far (dist=%d). Max=2"), Dist);
+		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: %s already moved this turn"), *Unit->GetName());
 		return false;
 	}
 
-	// Helpers: signo de avance en cada eje
-	const int32 StepX = (DeltaX == 0) ? 0 : (DeltaX > 0 ? 1 : -1);
-	const int32 StepY = (DeltaY == 0) ? 0 : (DeltaY > 0 ? 1 : -1);
-
-	// ---- Caso 1: movimiento recto (2,0) o (0,2) o (1,0) o (0,1) ----
-	if (AbsX == 0 || AbsY == 0)
+	UGridMovementComponent* MoveComp = Unit->FindComponentByClass<UGridMovementComponent>();
+	if (!MoveComp)
 	{
-		// Primer paso
-		FTileCoord Step1(Start.X + StepX, Start.Y + StepY);
-
-		if (!Unit->SetCurrentTile(Step1))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: step1 blocked (%d,%d)"), Step1.X, Step1.Y);
-			return false;
-		}
-
-		// Segundo paso si Dist==2
-		if (Dist == 2)
-		{
-			FTileCoord Step2(Step1.X + StepX, Step1.Y + StepY);
-
-			if (!Unit->SetCurrentTile(Step2))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("RequestMove partial: step2 blocked (%d,%d). Staying at step1."), Step2.X, Step2.Y);
-				Unit->SnapToCurrentTile(false);
-				return true;
-			}
-		}
-
-		Unit->SnapToCurrentTile(false);
-		UE_LOG(LogTemp, Log, TEXT("RequestMove OK: %s -> (%d,%d)"),
-			*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
-		return true;
-	}
-
-	// ---- Caso 2: diagonal tipo "L" (1,1) ----
-	// Dist==2 y AbsX==1 y AbsY==1
-	if (Dist == 2 && AbsX == 1 && AbsY == 1)
-	{
-		// Ruta A: X luego Y
-		const FTileCoord AX1(Start.X + StepX, Start.Y);
-		const FTileCoord AX2(Start.X + StepX, Start.Y + StepY); // destino
-
-		// Ruta B: Y luego X
-		const FTileCoord BY1(Start.X, Start.Y + StepY);
-		const FTileCoord BY2(Start.X + StepX, Start.Y + StepY); // destino
-
-		// Intento A
-		{
-			// Guardamos tile actual por si queremos revertir (SetCurrentTile ya gestiona ocupación)
-			const FTileCoord Orig = Unit->CurrentTile;
-
-			if (Unit->SetCurrentTile(AX1))
-			{
-				if (Unit->SetCurrentTile(AX2))
-				{
-					Unit->SnapToCurrentTile(false);
-					UE_LOG(LogTemp, Log, TEXT("RequestMove OK (X->Y): %s -> (%d,%d)"),
-						*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
-					return true;
-				}
-
-				// No pudo hacer segundo paso: se queda en AX1
-				Unit->SnapToCurrentTile(false);
-				UE_LOG(LogTemp, Warning, TEXT("RequestMove partial (X->Y): second step blocked, staying at (%d,%d)"),
-					Unit->CurrentTile.X, Unit->CurrentTile.Y);
-				return true;
-			}
-
-			// Si falla el primer paso A, probamos B desde Orig (sin cambios)
-			// (Si SetCurrentTile falló, Unit sigue en Orig)
-		}
-
-		// Intento B
-		if (Unit->SetCurrentTile(BY1))
-		{
-			if (Unit->SetCurrentTile(BY2))
-			{
-				Unit->SnapToCurrentTile(false);
-				UE_LOG(LogTemp, Log, TEXT("RequestMove OK (Y->X): %s -> (%d,%d)"),
-					*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
-				return true;
-			}
-
-			// No pudo hacer segundo paso: se queda en BY1
-			Unit->SnapToCurrentTile(false);
-			UE_LOG(LogTemp, Warning, TEXT("RequestMove partial (Y->X): second step blocked, staying at (%d,%d)"),
-				Unit->CurrentTile.X, Unit->CurrentTile.Y);
-			return true;
-		}
-
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: both diagonal paths blocked."));
+		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: %s has no GridMovementComponent"), *Unit->GetName());
 		return false;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: unsupported move pattern."));
-	return false;
+	if (!MoveComp->canMoveToTile(TargetTile))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: tile (%d,%d) not reachable by MoveComponent"),
+			TargetTile.X, TargetTile.Y);
+		return false;
+	}
+
+	if (!Unit->SetCurrentTile(TargetTile))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: SetCurrentTile rejected (%d,%d)"),
+			TargetTile.X, TargetTile.Y);
+		return false;
+	}
+
+	Unit->SnapToCurrentTile(false);
+	Unit->bHasMoved = true;
+
+	UE_LOG(LogTemp, Log, TEXT("RequestMove OK: %s -> (%d,%d)"),
+		*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
+	return true;
 }
 
 // ===== Getters =====

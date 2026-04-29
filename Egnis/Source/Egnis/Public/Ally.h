@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
+#include "GridMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "Ally.generated.h"
 
@@ -19,6 +20,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
 	UEnergyComponent* EnergyComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	UGridMovementComponent* MoveComp;
 	
 protected:
 	virtual void BeginPlay() override;

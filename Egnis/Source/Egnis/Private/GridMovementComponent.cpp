@@ -14,14 +14,6 @@ void UGridMovementComponent::BeginPlay()
 	Super::BeginPlay();
 
 	EnsureBoardActor();
-	if (!BoardActor) return;
-
-	FTileCoord StartTile;
-	if (getCurrentTile(StartTile))
-	{
-		//ocupa la casilla inicial en el tablero
-		BoardActor->SetTileOccupant(StartTile, GetOwner());
-	}
 }
 
 void UGridMovementComponent::EnsureBoardActor()
@@ -51,12 +43,12 @@ void UGridMovementComponent::EnsureBoardActor()
 		if (GEngine)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Red,TEXT("No se ha encontrado tablero"));
-				
+
 		}
 	}
 }
 
-//comprueba casilla si esta dentro del tablero 
+//comprueba casilla si esta dentro del tablero
 bool UGridMovementComponent::IsTileValid(const FTileCoord& T)
 {
 	if (!BoardActor)
@@ -129,11 +121,8 @@ void UGridMovementComponent::getRachableTiles(TArray<FTileCoord>& OutTiles)
 						break;
 					}
 
-					// si la casilla esta ocupada por otro, no se puede terminar ahí
-					AActor* Occupant = BoardActor->GetTileOccupant(Target);
-					if (Occupant && Occupant != GetOwner())
+					if (BoardActor->IsTileOccupied(Target))
 					{
-						//si bloquea para y si no bloquea sigue comprobando
 						if (bBlockByOccupant)
 						{
 							break;
@@ -169,6 +158,12 @@ void UGridMovementComponent::getRachableTiles(TArray<FTileCoord>& OutTiles)
 	case EMovePattern::DiagonalPlusRing1:
 		AddDiagonalPlusRing1Tiles(CurrentTile, OutTiles);
 		break;
+
+	//linea recta 4 cardinales para aliados
+	case EMovePattern::StraightLine_Cardinal:
+		AddStraightLineCardinalTiles(CurrentTile, OutTiles);
+		break;
+
 	default:
 		break;
 	}
@@ -190,13 +185,12 @@ bool UGridMovementComponent::canMoveToTile(const FTileCoord& Target)
 		return false;
 	}
 
-	//si casilla esta ocupada no se puede mover
-	AActor* Occupant = BoardActor->GetTileOccupant(Target);
-	if (Occupant && Occupant != GetOwner())
+	if (BoardActor->IsTileOccupied(Target))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Casilla ocupada (%d,%d)"), Target.X, Target.Y);
 		return false;
 	}
+
 	//obtiene las casillas a las que se puede mover
 	TArray<FTileCoord> ReachableTiles;
 	getRachableTiles(ReachableTiles);
@@ -228,22 +222,16 @@ bool UGridMovementComponent::moveToTile(const FTileCoord& Target)
 		return false;
 	}
 
-	//comprueba que esta dentro del patron 
+	//comprueba que esta dentro del patron
 	if (!canMoveToTile(Target))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Movimiento no permitido a (%d,%d)"), Target.X, Target.Y);
 		return false;
 	}
-	
 
 	//casilla a pos en juego
 	FVector Destination = BoardActor->TileToWorldCenter(Target);
 
-	/*
-	 *Actualizar sist de ocupacion de casillas del tablero
-	 *liberar casilla anterior
-	 * marcar casilla nueva como ocupada
-	 */
 	//guarda la casilla anterior para liberar
 	FTileCoord OldTile;
 	const bool bHasOldTile = getCurrentTile(OldTile);
@@ -302,9 +290,7 @@ void UGridMovementComponent::AddLTiles(const FTileCoord& CurrentTile, TArray<FTi
 					break;
 				}
 
-					//si casilla ocupada, bloquea tr 1 y no deja continuar a tr 2
-				AActor* Occ = BoardActor->GetTileOccupant(Corner);
-				if (Occ && Occ != GetOwner())
+				if (BoardActor->IsTileOccupied(Corner))
 				{
 					bBlocked = true;
 					break;
@@ -336,9 +322,8 @@ void UGridMovementComponent::AddLTiles(const FTileCoord& CurrentTile, TArray<FTi
 					{
 						break;
 					}
-					//si casilla ocupada, no deja continuar
-					AActor* Occ = BoardActor->GetTileOccupant(End);
-					if (Occ && Occ != GetOwner())
+
+					if (BoardActor->IsTileOccupied(End))
 					{
 						break;
 					}
@@ -363,7 +348,7 @@ void UGridMovementComponent::AddTriangleTiles(const FTileCoord& CurrentTile, TAr
 	EnsureBoardActor();
 	if (!BoardActor) return;
 
-	//en las 4 dir 
+	//en las 4 dir
 	const FTileCoord ForwardDirs[4] = { {1,0}, {-1,0}, {0,1}, {0,-1} };
 
 	for (const FTileCoord& Fwd : ForwardDirs)
@@ -392,9 +377,7 @@ void UGridMovementComponent::AddTriangleTiles(const FTileCoord& CurrentTile, TAr
 				if (!IsTileValid(Target))
 					continue;
 
-				//no deja continuar si la casilla esta ocupada por otro
-				AActor* Occ = BoardActor->GetTileOccupant(Target);
-				if (Occ && Occ != GetOwner())
+				if (BoardActor->IsTileOccupied(Target))
 					continue;
 
 				OutTiles.AddUnique(Target);
@@ -402,6 +385,35 @@ void UGridMovementComponent::AddTriangleTiles(const FTileCoord& CurrentTile, TAr
 		}
 	}
 }
+void UGridMovementComponent::AddStraightLineCardinalTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles)
+{
+	EnsureBoardActor();
+	if (!BoardActor) return;
+
+	// 4 direcciones cardinales: arriba, abajo, izquierda, derecha
+	const FTileCoord Cardinals[4] = { {1,0}, {-1,0}, {0,1}, {0,-1} };
+
+	for (const FTileCoord& Dir : Cardinals)
+	{
+		for (int32 Step = 1; Step <= moveRange; ++Step)
+		{
+			FTileCoord Target = { CurrentTile.X + Dir.X * Step, CurrentTile.Y + Dir.Y * Step };
+
+			if (!IsTileValid(Target))
+			{
+				break;
+			}
+
+			if (BoardActor->IsTileOccupied(Target))
+			{
+				break;
+			}
+
+			OutTiles.Add(Target);
+		}
+	}
+}
+
 void UGridMovementComponent::AddDiagonalPlusRing1Tiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles)
 {
 	EnsureBoardActor();
@@ -420,10 +432,8 @@ void UGridMovementComponent::AddDiagonalPlusRing1Tiles(const FTileCoord& Current
 			if (!IsTileValid(Target))
 				break;
 
-			AActor* Occ = BoardActor->GetTileOccupant(Target);
-			if (Occ && Occ != GetOwner())
+			if (BoardActor->IsTileOccupied(Target))
 			{
-				//bloquea diagonal ( prov)
 				break;
 			}
 
@@ -447,13 +457,11 @@ void UGridMovementComponent::AddDiagonalPlusRing1Tiles(const FTileCoord& Current
 		{
 			continue;
 		}
-		//no deja continuar si la casilla esta ocupada por otro
-		AActor* Occ = BoardActor->GetTileOccupant(Target);
-		if (Occ && Occ != GetOwner())
+
+		if (BoardActor->IsTileOccupied(Target))
 		{
 			continue;
 		}
-			
 
 		OutTiles.AddUnique(Target);
 	}

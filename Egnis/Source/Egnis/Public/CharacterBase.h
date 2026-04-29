@@ -47,6 +47,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
 	bool bSnapToTileOnBeginPlay = true;
 
+	UPROPERTY(BlueprintReadOnly, Category="Grid")
+	bool bHasMoved = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
 	float TileZOffset = 0.f;
 
