@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="645c957e-2a11-4435-a599-603038e5d66c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../.idea/.idea.Egnis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.idea/.idea.Egnis/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Content/BPs/BP_BoardCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Content/BPs/BP_BoardCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Content/UI/WBP_BattleUI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Content/UI/WBP_BattleUI.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Content/UI/WBP_Card.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Content/UI/WBP_Card.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Content/UI/WBP_GameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Content/UI/WBP_GameHUD.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Content/UI/WBP_UnitSlot.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Content/UI/WBP_UnitSlot.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../DerivedDataCache/VT/TEXTURE_7C16439390E24F1F9468894FB4D4BC55_VTCHUNK4C15C5D860D44EA7D95D008347AD27AB205DDE3E" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Intermediate/CachedAssetRegistryDiscovery.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Intermediate/CachedAssetRegistryDiscovery.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Intermediate/CachedAssetRegistry_0.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Intermediate/CachedAssetRegistry_0.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Intermediate/PipInstall/Lib/site-packages/plugin_site_package.pth" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Intermediate/PipInstall/Lib/site-packages/plugin_site_package.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/AutoScreenshot.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Saved/AutoScreenshot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Config/CrashReportClient/UECC-Windows-1EA2B68B43DC85BBBD08C6B64A553A53/CrashReportClient.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Config/CrashReportClient/UECC-Windows-B4B730DA4112477C1B90BFB413CE1375/CrashReportClient.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Config/CrashReportClient/UECC-Windows-BFEAF9D0419C9DE44D6158BE46D25563/CrashReportClient.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Config/CrashReportClient/UECC-Windows-D480740A489A0772DB0A7C9AF8F23EA7/CrashReportClient.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Config/CrashReportClient/UECC-Windows-F18FA48143B0914AD1527D9D6E88BC24/CrashReportClient.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Config/CrashReportClient/UECC-Windows-F5793A384C48A9C73C512992D8E6EE7F/CrashReportClient.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Config/WindowsEditor/EditorPerProjectUserSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Saved/Config/WindowsEditor/EditorPerProjectUserSettings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Logs/Egnis-backup-2026.02.15-17.26.40.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Logs/Egnis-backup-2026.02.15-17.46.30.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Logs/Egnis-backup-2026.02.15-18.39.20.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Logs/Egnis-backup-2026.02.15-19.03.42.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Logs/Egnis-backup-2026.02.15-19.37.23.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/Logs/Egnis.log" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Saved/Logs/Egnis.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Saved/SourceControl/UncontrolledChangelists.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Saved/SourceControl/UncontrolledChangelists.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BoardPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/BoardPlayerController.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="3CKGnTiXgEiXbsjdxan325EOpTn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "NickyProgra",
+    "ignore.virus.scanning.warn.message": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="645c957e-2a11-4435-a599-603038e5d66c" name="Changes" comment="" />
+      <created>1776127015709</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1776127015709</updated>
+      <workItem from="1776127017374" duration="26000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

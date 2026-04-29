@@ -158,6 +158,12 @@ void UGridMovementComponent::getRachableTiles(TArray<FTileCoord>& OutTiles)
 	case EMovePattern::DiagonalPlusRing1:
 		AddDiagonalPlusRing1Tiles(CurrentTile, OutTiles);
 		break;
+
+	//linea recta 4 cardinales para aliados
+	case EMovePattern::StraightLine_Cardinal:
+		AddStraightLineCardinalTiles(CurrentTile, OutTiles);
+		break;
+
 	default:
 		break;
 	}
@@ -379,6 +385,35 @@ void UGridMovementComponent::AddTriangleTiles(const FTileCoord& CurrentTile, TAr
 		}
 	}
 }
+void UGridMovementComponent::AddStraightLineCardinalTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles)
+{
+	EnsureBoardActor();
+	if (!BoardActor) return;
+
+	// 4 direcciones cardinales: arriba, abajo, izquierda, derecha
+	const FTileCoord Cardinals[4] = { {1,0}, {-1,0}, {0,1}, {0,-1} };
+
+	for (const FTileCoord& Dir : Cardinals)
+	{
+		for (int32 Step = 1; Step <= moveRange; ++Step)
+		{
+			FTileCoord Target = { CurrentTile.X + Dir.X * Step, CurrentTile.Y + Dir.Y * Step };
+
+			if (!IsTileValid(Target))
+			{
+				break;
+			}
+
+			if (BoardActor->IsTileOccupied(Target))
+			{
+				break;
+			}
+
+			OutTiles.Add(Target);
+		}
+	}
+}
+
 void UGridMovementComponent::AddDiagonalPlusRing1Tiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles)
 {
 	EnsureBoardActor();
