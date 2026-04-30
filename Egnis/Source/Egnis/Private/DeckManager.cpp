@@ -43,6 +43,10 @@ void UDeckManager::DrawCard()
 {
 	if (DrawPile.Num() <= 0)
 	{
+		if (DiscardedPile.Num() <= 0)		{
+			UE_LOG(LogTemp, Warning, TEXT("[DeckManager]: No cards left to draw"));
+			return;
+		}
 		DrawPile = DiscardedPile;
 		DiscardedPile.Empty();
 		ShuffleDeck();

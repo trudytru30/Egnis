@@ -112,6 +112,8 @@ void UBattleManager::StartEnemyTurn()
 // Fin del turno y cambio al otro bando
 void UBattleManager::EndTurn()
 {
+	if (bBattleIsOver) return;
+	
 	switch ( CurrentTurn)
 	{
 		case ETurnEnum::PlayerTurn:
