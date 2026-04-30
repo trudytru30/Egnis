@@ -53,11 +53,13 @@ void ABoardPlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BeginPlay: GameManager NULL"));
 	}
-
+	
 	if (!BM)
 	{
 		UE_LOG(LogTemp, Error, TEXT("BoardPlayerController: BattleManager is null"));
 	}
+	
+	BM->OnPlayerTurnStarted.AddDynamic(this, &ABoardPlayerController::BP_RefreshHandUI);
 
 	if (GameHUDClass)
 	{
@@ -423,25 +425,30 @@ void ABoardPlayerController::HandleMenu()
 // Comprobar e iniciar accion de jugar carta
 void ABoardPlayerController::BeginPlayCard(UBaseCard* Card)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BeginPlayCard llamada con carta: %s"), Card ? *Card->GetName() : TEXT("NULL"));
+	UE_LOG(LogTemp, Warning, TEXT("[BoardPlayerController]: BeginPlayCard llamada con carta: %s"), Card ? *Card->GetName() : TEXT("NULL"));
 	if (!Card) return;
 	
 	if (!BM || !BM->IsPlayerTurn())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Cannot play card: Not player turn"));
+		UE_LOG(LogTemp, Warning, TEXT("[BoardPlayerController]: Cannot play card: Not player turn"));
 		return;
 	}
 	
-	if (SelectionState != ECardSelectionState::None)
+	// Deseleccionar carta al hacer seleccionarla otra vez
+	if (SelectionState != ECardSelectionState::None && PendingCard == Card)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BeginPlayCard ignored: already selecting"));
+		PendingCard = nullptr;
+		PendingSource = nullptr;
+		SelectionState = ECardSelectionState::None;
+		CurrentIntent = EInputIntent::Move;
+		BP_RefreshHandUI();
 		return;
 	}
 	
+	// Seleccionar carta (sustituye a la anterior si ya hay)
 	PendingCard = Card;
 	PendingSource = nullptr;
 	PendingCardTarget = Card->GetTarget();
-	
 	SelectionState = ECardSelectionState::SelectingUnit;
 	CurrentIntent = EInputIntent::Action; // Cambiar estado a accion (elegir unidades para jugar la carta)
 }
@@ -451,11 +458,11 @@ void ABoardPlayerController::RequestEndTurn()
 {
 	if (!BM || !BM->IsPlayerTurn())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Cannot end turn: Not player turn"));
+		UE_LOG(LogTemp, Warning, TEXT("[BoardPlayerController]: Cannot end turn: Not player turn"));
 		return;
 	} else if (SelectionState != ECardSelectionState::None)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Cancelling card selection and ending turn..."));
+		UE_LOG(LogTemp, Warning, TEXT("[BoardPlayerController]: Cancelling card selection and ending turn..."));
 		PendingCard = nullptr;
 		PendingSource = nullptr;
 		SelectionState = ECardSelectionState::None;
@@ -468,10 +475,10 @@ TArray<UBaseCard*> ABoardPlayerController::GetCurrentHand() const
 {
 	if (DeckManager)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GetCurrentHand: %d cartas"), DeckManager->GetHand().Num());
+		UE_LOG(LogTemp, Warning, TEXT("[BoardPlayerController]: GetCurrentHand: %d cartas"), DeckManager->GetHand().Num());
 		return DeckManager->GetHand();
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("GetCurrentHand: DeckManager NULL"));
+	UE_LOG(LogTemp, Warning, TEXT("[BoardPlayerController]: GetCurrentHand: DeckManager NULL"));
 	return TArray<UBaseCard*>();
 }

@@ -21,6 +21,12 @@ class EGNIS_API UBattleManager : public UObject
 	
 public:
 	
+	// Conexión con la UI para la mano
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerTurnStarted);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerTurnStarted OnPlayerTurnStarted;
+	
 #pragma region Functions
 	void Initialize(UDeckManager* DeckManager);
 	void StartBattle();
@@ -49,6 +55,7 @@ private:
 	// ===== Turn System =====
 	int32 TurnCount = 0;
 	ETurnEnum CurrentTurn = ETurnEnum::PlayerTurn;
+	bool bBattleIsOver = false;
 	
 	// ===== Units =====
 	UPROPERTY()

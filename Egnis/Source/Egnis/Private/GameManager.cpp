@@ -27,13 +27,12 @@ void AGameManager::InitializeManagers()
 	}
     
 	DeckManager->SetDeck(InitialDeck);
-	DeckManager->InitializeDeck();
     
 	UE_LOG(LogTemp, Warning, TEXT("DrawPile after init: %d"), DeckManager->GetDrawPileSize());
     
 	BattleManager = NewObject<UBattleManager>(this);
 	check(BattleManager);
-	BattleManager->Initialize(DeckManager);
+	BattleManager->Initialize(DeckManager);	// Aqui se inicializa el mazo
 	BattleManager->StartBattle();
     
 	UE_LOG(LogTemp, Warning, TEXT("Hand after StartBattle: %d"), DeckManager->GetHand().Num());

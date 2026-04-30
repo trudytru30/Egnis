@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "EnergyComponent.h"
 #include "EngineUtils.h"
+#include "GridMovementComponent.h"
 
 class AAlly;
 // Iniciar combate
@@ -30,7 +31,7 @@ void UBattleManager::StartBattle()
 		CharactersOnField.Add(*It);
 	}
 	
-	UE_LOG(LogTemp, Log, TEXT("Battle Started! Characters on field: %d"), CharactersOnField.Num());
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Battle Started! Characters on field: %d"), CharactersOnField.Num());
 	
 	StartPlayerTurn();
 }
@@ -38,6 +39,8 @@ void UBattleManager::StartBattle()
 // Turno del player
 void UBattleManager::StartPlayerTurn()
 {
+	if (bBattleIsOver) return;
+	
 	// Robar mano al inicio del turno y establecer energia
 	for (ACharacterBase* Character : CharactersOnField)
 	{
@@ -45,20 +48,40 @@ void UBattleManager::StartPlayerTurn()
 			Ally->GainPoints(-1);	// Para reiniciar los puntos al valor default (mirar EnergyComponent)
 	}
 	
-	if (DeckManager && DeckManager->GetHand().Num() < DeckManager->GetInitialHandSize())
+	// Resetear bHasMoved para todos los aliados al inicio del turno
+	for (ACharacterBase* Character : CharactersOnField)
 	{
-		DeckManager->DrawCardAmount(DeckManager->GetInitialHandSize());
-		UE_LOG(LogTemp, Log, TEXT("Drawn %d cards"), DeckManager->GetHand().Num());
+		if (Character && Character->GetTeam() == 0)
+		{
+			Character->bHasMoved = false;
+		}
 	}
+
+	if (DeckManager)
+	{
+		int32 NumCardsToDraw = DeckManager->GetInitialHandSize() - DeckManager->GetHand().Num();
+		if (NumCardsToDraw <= 0){
+			UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Hand is already full. No cards drawn."));
+		}
+		else
+		{
+			DeckManager->DrawCardAmount(NumCardsToDraw);
+			UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Drawn %d cards"), DeckManager->GetHand().Num());
+		}
+	}
+
+	OnPlayerTurnStarted.Broadcast();
 	
-	UE_LOG(LogTemp, Log, TEXT("Player Turn %d"), TurnCount);
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Player Turn %d"), TurnCount);
 }
 
 // Turno del enemigo
 void UBattleManager::StartEnemyTurn()
 {
-	UE_LOG(LogTemp, Log, TEXT("Enemy Turn %d"), TurnCount);
-	//TODO: Llamar a la IA del enemigo
+	if (bBattleIsOver) return;
+	
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]:Enemy Turn %d"), TurnCount);
+	
 	//identifica enemigos
 	TArray<AEnemy*> Enemies;
 
@@ -89,6 +112,8 @@ void UBattleManager::StartEnemyTurn()
 // Fin del turno y cambio al otro bando
 void UBattleManager::EndTurn()
 {
+	if (bBattleIsOver) return;
+	
 	switch ( CurrentTurn)
 	{
 		case ETurnEnum::PlayerTurn:
@@ -109,7 +134,7 @@ void UBattleManager::EndTurn()
 			TurnCount++;
 			StartPlayerTurn();
 			break;
-	default: UE_LOG(LogTemp, Warning, TEXT("Invalid turn"));
+	default: UE_LOG(LogTemp, Warning, TEXT("[BaattleManager]: Invalid turn"));
 	}
 }
 
@@ -119,36 +144,36 @@ bool UBattleManager::PlayCard(UBaseCard* Card, AAlly* Character,
 {
 	if (!Character)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Character is null"));
 		return false;
 	}
 	if (!Character->EnergyComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: EnergyComp is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager[: EnergyComp is null"));
 		return false;
 	}
 	
 	// Comprobaciones
 	if (CurrentTurn != ETurnEnum::PlayerTurn || !Card || !DeckManager)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Not player turn or card is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Not player turn or card is null"));
 		return false;
 	}
 	
 	if (Character->EnergyComp->GetCurrentPoints() < Card->GetCost())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Not enough energy to play card"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Not enough energy to play card"));
 		return false;
 	}
 	
 	// Jugar carta y restar coste
 	if (!Character || !Character->EnergyComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character or EnergyComp is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Character or EnergyComp is null"));
 		return false;
 	}
 	Character->LossPoints(Card->GetCost());
-	UE_LOG(LogTemp, Log, TEXT("Played card: %s. Energy left: %d"), *Card->GetName(), 
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Played card: %s. Energy left: %d"), *Card->GetName(), 
 		Character->EnergyComp->GetCurrentPoints());
 	Card->Execute(DeckManager, Character, TargetCharacter, Location);
 	UpdateUnitsAlive();
@@ -181,7 +206,7 @@ void UBattleManager::UpdateUnitsAlive()
 			EnemiesAlive++;
 		}
 	}
-	UE_LOG(LogTemp, Log, TEXT("Allies alive: %d, Enemies alive: %d"), AlliesAlive, EnemiesAlive);
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Allies alive: %d, Enemies alive: %d"), AlliesAlive, EnemiesAlive);
 	
 	if (AlliesAlive == 0)
 		EndBattle(false);
@@ -192,15 +217,16 @@ void UBattleManager::UpdateUnitsAlive()
 // Fin del combate
 void UBattleManager::EndBattle(bool bPlayerWon)
 {
+	bBattleIsOver = true;
 	if (bPlayerWon)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
-			TEXT("PLAYER WINS"));
+			TEXT("[BattleManager]: PLAYER WINS"));
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-			TEXT("PLAYER LOST"));
+			TEXT("[BattleManager]: PLAYER LOST"));
 	}
 	
 	//TODO: Notificar al GameMode (no entra en prototipo)
@@ -211,141 +237,58 @@ bool UBattleManager::RequestMove(ACharacterBase* Unit, const FTileCoord& TargetT
 {
 	if (!Unit)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Unit is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Unit is null"));
 		return false;
 	}
 	if (!IsPlayerTurn())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Not player turn"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Not player turn"));
 		return false;
 	}
 	if (Unit->GetTeam() != 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Unit is not ally"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Unit is not ally"));
 		return false;
 	}
 	if (!Unit->Board)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Unit has no Board"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Unit has no Board"));
 		return false;
 	}
 
-	const FTileCoord Start = Unit->CurrentTile;
-
-	const int32 DeltaX = TargetTile.X - Start.X;
-	const int32 DeltaY = TargetTile.Y - Start.Y;
-
-	const int32 AbsX = FMath::Abs(DeltaX);
-	const int32 AbsY = FMath::Abs(DeltaY);
-	const int32 Dist = AbsX + AbsY;
-
-	if (Dist == 0)
+	if (Unit->bHasMoved)
 	{
-		return true;
-	}
-	if (Dist > 2)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: too far (dist=%d). Max=2"), Dist);
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: %s already moved this turn"), *Unit->GetName());
 		return false;
 	}
 
-	// Helpers: signo de avance en cada eje
-	const int32 StepX = (DeltaX == 0) ? 0 : (DeltaX > 0 ? 1 : -1);
-	const int32 StepY = (DeltaY == 0) ? 0 : (DeltaY > 0 ? 1 : -1);
-
-	// ---- Caso 1: movimiento recto (2,0) o (0,2) o (1,0) o (0,1) ----
-	if (AbsX == 0 || AbsY == 0)
+	UGridMovementComponent* MoveComp = Unit->FindComponentByClass<UGridMovementComponent>();
+	if (!MoveComp)
 	{
-		// Primer paso
-		FTileCoord Step1(Start.X + StepX, Start.Y + StepY);
-
-		if (!Unit->SetCurrentTile(Step1))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: step1 blocked (%d,%d)"), Step1.X, Step1.Y);
-			return false;
-		}
-
-		// Segundo paso si Dist==2
-		if (Dist == 2)
-		{
-			FTileCoord Step2(Step1.X + StepX, Step1.Y + StepY);
-
-			if (!Unit->SetCurrentTile(Step2))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("RequestMove partial: step2 blocked (%d,%d). Staying at step1."), Step2.X, Step2.Y);
-				Unit->SnapToCurrentTile(false);
-				return true;
-			}
-		}
-
-		Unit->SnapToCurrentTile(false);
-		UE_LOG(LogTemp, Log, TEXT("RequestMove OK: %s -> (%d,%d)"),
-			*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
-		return true;
-	}
-
-	// ---- Caso 2: diagonal tipo "L" (1,1) ----
-	// Dist==2 y AbsX==1 y AbsY==1
-	if (Dist == 2 && AbsX == 1 && AbsY == 1)
-	{
-		// Ruta A: X luego Y
-		const FTileCoord AX1(Start.X + StepX, Start.Y);
-		const FTileCoord AX2(Start.X + StepX, Start.Y + StepY); // destino
-
-		// Ruta B: Y luego X
-		const FTileCoord BY1(Start.X, Start.Y + StepY);
-		const FTileCoord BY2(Start.X + StepX, Start.Y + StepY); // destino
-
-		// Intento A
-		{
-			// Guardamos tile actual por si queremos revertir (SetCurrentTile ya gestiona ocupación)
-			const FTileCoord Orig = Unit->CurrentTile;
-
-			if (Unit->SetCurrentTile(AX1))
-			{
-				if (Unit->SetCurrentTile(AX2))
-				{
-					Unit->SnapToCurrentTile(false);
-					UE_LOG(LogTemp, Log, TEXT("RequestMove OK (X->Y): %s -> (%d,%d)"),
-						*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
-					return true;
-				}
-
-				// No pudo hacer segundo paso: se queda en AX1
-				Unit->SnapToCurrentTile(false);
-				UE_LOG(LogTemp, Warning, TEXT("RequestMove partial (X->Y): second step blocked, staying at (%d,%d)"),
-					Unit->CurrentTile.X, Unit->CurrentTile.Y);
-				return true;
-			}
-
-			// Si falla el primer paso A, probamos B desde Orig (sin cambios)
-			// (Si SetCurrentTile falló, Unit sigue en Orig)
-		}
-
-		// Intento B
-		if (Unit->SetCurrentTile(BY1))
-		{
-			if (Unit->SetCurrentTile(BY2))
-			{
-				Unit->SnapToCurrentTile(false);
-				UE_LOG(LogTemp, Log, TEXT("RequestMove OK (Y->X): %s -> (%d,%d)"),
-					*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
-				return true;
-			}
-
-			// No pudo hacer segundo paso: se queda en BY1
-			Unit->SnapToCurrentTile(false);
-			UE_LOG(LogTemp, Warning, TEXT("RequestMove partial (Y->X): second step blocked, staying at (%d,%d)"),
-				Unit->CurrentTile.X, Unit->CurrentTile.Y);
-			return true;
-		}
-
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: both diagonal paths blocked."));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: %s has no GridMovementComponent"), *Unit->GetName());
 		return false;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: unsupported move pattern."));
-	return false;
+	if (!MoveComp->canMoveToTile(TargetTile))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: tile (%d,%d) not reachable by MoveComponent"),
+			TargetTile.X, TargetTile.Y);
+		return false;
+	}
+
+	if (!Unit->SetCurrentTile(TargetTile))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: SetCurrentTile rejected (%d,%d)"),
+			TargetTile.X, TargetTile.Y);
+		return false;
+	}
+
+	Unit->SnapToCurrentTile(false);
+	Unit->bHasMoved = true;
+
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: RequestMove OK: %s -> (%d,%d)"),
+		*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
+	return true;
 }
 
 // ===== Getters =====

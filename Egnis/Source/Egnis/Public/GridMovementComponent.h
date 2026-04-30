@@ -21,7 +21,9 @@ enum class EMovePattern : uint8
 	L_MustEnd UMETA(DisplayName="L: debe parar al final"),
 
 	Triangle UMETA(DisplayName="Triángulo (abanico)"),
-	DiagonalPlusRing1 UMETA(DisplayName="Diagonal + 1 alrededor")
+	DiagonalPlusRing1 UMETA(DisplayName="Diagonal + 1 alrededor"),
+
+	StraightLine_Cardinal UMETA(DisplayName="Línea recta (4 cardinales con bloqueo)")
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -34,7 +36,7 @@ public:
 	UGridMovementComponent();
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Movement")
-	int32 moveRange=4;//maximo de casillas a recorrer (oso)
+	int32 moveRange=3;//maximo de casillas a recorrer
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Movement")
 	EMovePattern movePattern=EMovePattern::Straight_WBlock;//patron actual
@@ -60,6 +62,7 @@ private:
 	void AddLTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles, bool bCanStopAnywhere);//calcula las casillas en L
 	void AddTriangleTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles);
 	void AddDiagonalPlusRing1Tiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles);
+	void AddStraightLineCardinalTiles(const FTileCoord& CurrentTile, TArray<FTileCoord>& OutTiles);
 
 	
 protected:

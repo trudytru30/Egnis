@@ -43,14 +43,17 @@ void UDeckManager::DrawCard()
 {
 	if (DrawPile.Num() <= 0)
 	{
+		if (DiscardedPile.Num() <= 0)		{
+			UE_LOG(LogTemp, Warning, TEXT("[DeckManager]: No cards left to draw"));
+			return;
+		}
 		DrawPile = DiscardedPile;
 		DiscardedPile.Empty();
 		ShuffleDeck();
-	} else if (DrawPile.Num() > 0)
-	{
-		Hand.Add(DrawPile.Last());
-		DrawPile.Pop();
 	}
+	Hand.Add(DrawPile.Last());
+	DrawPile.Pop();
+	OnHandChanged.Broadcast();
 }
 
 // Robar cartas (con habilidades)
@@ -69,6 +72,7 @@ void UDeckManager::DiscardCardFromHand(UBaseCard* Card)
 	{
 		Hand.Remove(Card);
 		DiscardedPile.Add(Card);
+		OnHandChanged.Broadcast();
 	}
 }
 
