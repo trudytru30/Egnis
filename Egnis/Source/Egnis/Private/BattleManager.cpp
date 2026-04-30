@@ -39,6 +39,8 @@ void UBattleManager::StartBattle()
 // Turno del player
 void UBattleManager::StartPlayerTurn()
 {
+	if (bBattleIsOver) return;
+	
 	// Robar mano al inicio del turno y establecer energia
 	for (ACharacterBase* Character : CharactersOnField)
 	{
@@ -58,8 +60,14 @@ void UBattleManager::StartPlayerTurn()
 	if (DeckManager)
 	{
 		int32 NumCardsToDraw = DeckManager->GetInitialHandSize() - DeckManager->GetHand().Num();
-		DeckManager->DrawCardAmount(NumCardsToDraw);
-		UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Drawn %d cards"), DeckManager->GetHand().Num());
+		if (NumCardsToDraw <= 0){
+			UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Hand is already full. No cards drawn."));
+		}
+		else
+		{
+			DeckManager->DrawCardAmount(NumCardsToDraw);
+			UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Drawn %d cards"), DeckManager->GetHand().Num());
+		}
 	}
 
 	OnPlayerTurnStarted.Broadcast();
@@ -70,6 +78,8 @@ void UBattleManager::StartPlayerTurn()
 // Turno del enemigo
 void UBattleManager::StartEnemyTurn()
 {
+	if (bBattleIsOver) return;
+	
 	UE_LOG(LogTemp, Log, TEXT("[BattleManager]:Enemy Turn %d"), TurnCount);
 	
 	//identifica enemigos
@@ -205,6 +215,7 @@ void UBattleManager::UpdateUnitsAlive()
 // Fin del combate
 void UBattleManager::EndBattle(bool bPlayerWon)
 {
+	bBattleIsOver = true;
 	if (bPlayerWon)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,

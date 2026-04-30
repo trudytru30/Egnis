@@ -49,6 +49,7 @@ void UDeckManager::DrawCard()
 	}
 	Hand.Add(DrawPile.Last());
 	DrawPile.Pop();
+	OnHandChanged.Broadcast();
 }
 
 // Robar cartas (con habilidades)
@@ -67,6 +68,7 @@ void UDeckManager::DiscardCardFromHand(UBaseCard* Card)
 	{
 		Hand.Remove(Card);
 		DiscardedPile.Add(Card);
+		OnHandChanged.Broadcast();
 	}
 }
 

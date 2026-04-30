@@ -55,6 +55,7 @@ private:
 	// ===== Turn System =====
 	int32 TurnCount = 0;
 	ETurnEnum CurrentTurn = ETurnEnum::PlayerTurn;
+	bool bBattleIsOver = false;
 	
 	// ===== Units =====
 	UPROPERTY()

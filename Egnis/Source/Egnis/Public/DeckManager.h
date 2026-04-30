@@ -12,6 +12,11 @@ class EGNIS_API UDeckManager : public UObject
 	GENERATED_BODY()
 	
 public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHandChanged);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHandChanged OnHandChanged;
+	
 	int32 GetDrawPileSize() const { return DrawPile.Num(); }
 #pragma region Functions
 	// Modificar las cartas del mazo elegidas por el player
