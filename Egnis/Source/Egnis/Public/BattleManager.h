@@ -21,6 +21,12 @@ class EGNIS_API UBattleManager : public UObject
 	
 public:
 	
+	// Conexión con la UI para la mano
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerTurnStarted);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerTurnStarted OnPlayerTurnStarted;
+	
 #pragma region Functions
 	void Initialize(UDeckManager* DeckManager);
 	void StartBattle();

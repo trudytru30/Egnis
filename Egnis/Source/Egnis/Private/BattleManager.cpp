@@ -31,7 +31,7 @@ void UBattleManager::StartBattle()
 		CharactersOnField.Add(*It);
 	}
 	
-	UE_LOG(LogTemp, Log, TEXT("Battle Started! Characters on field: %d"), CharactersOnField.Num());
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Battle Started! Characters on field: %d"), CharactersOnField.Num());
 	
 	StartPlayerTurn();
 }
@@ -55,20 +55,23 @@ void UBattleManager::StartPlayerTurn()
 		}
 	}
 
-	if (DeckManager && DeckManager->GetHand().Num() < DeckManager->GetInitialHandSize())
+	if (DeckManager)
 	{
-		DeckManager->DrawCardAmount(DeckManager->GetInitialHandSize());
-		UE_LOG(LogTemp, Log, TEXT("Drawn %d cards"), DeckManager->GetHand().Num());
+		int32 NumCardsToDraw = DeckManager->GetInitialHandSize() - DeckManager->GetHand().Num();
+		DeckManager->DrawCardAmount(NumCardsToDraw);
+		UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Drawn %d cards"), DeckManager->GetHand().Num());
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Player Turn %d"), TurnCount);
+	OnPlayerTurnStarted.Broadcast();
+	
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Player Turn %d"), TurnCount);
 }
 
 // Turno del enemigo
 void UBattleManager::StartEnemyTurn()
 {
-	UE_LOG(LogTemp, Log, TEXT("Enemy Turn %d"), TurnCount);
-	//TODO: Llamar a la IA del enemigo
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]:Enemy Turn %d"), TurnCount);
+	
 	//identifica enemigos
 	TArray<AEnemy*> Enemies;
 
@@ -119,7 +122,7 @@ void UBattleManager::EndTurn()
 			TurnCount++;
 			StartPlayerTurn();
 			break;
-	default: UE_LOG(LogTemp, Warning, TEXT("Invalid turn"));
+	default: UE_LOG(LogTemp, Warning, TEXT("[BaattleManager]: Invalid turn"));
 	}
 }
 
@@ -129,36 +132,36 @@ bool UBattleManager::PlayCard(UBaseCard* Card, AAlly* Character,
 {
 	if (!Character)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Character is null"));
 		return false;
 	}
 	if (!Character->EnergyComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: EnergyComp is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager[: EnergyComp is null"));
 		return false;
 	}
 	
 	// Comprobaciones
 	if (CurrentTurn != ETurnEnum::PlayerTurn || !Card || !DeckManager)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Not player turn or card is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Not player turn or card is null"));
 		return false;
 	}
 	
 	if (Character->EnergyComp->GetCurrentPoints() < Card->GetCost())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Not enough energy to play card"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Not enough energy to play card"));
 		return false;
 	}
 	
 	// Jugar carta y restar coste
 	if (!Character || !Character->EnergyComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BattleManager: Character or EnergyComp is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Character or EnergyComp is null"));
 		return false;
 	}
 	Character->LossPoints(Card->GetCost());
-	UE_LOG(LogTemp, Log, TEXT("Played card: %s. Energy left: %d"), *Card->GetName(), 
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Played card: %s. Energy left: %d"), *Card->GetName(), 
 		Character->EnergyComp->GetCurrentPoints());
 	Card->Execute(DeckManager, Character, TargetCharacter, Location);
 	UpdateUnitsAlive();
@@ -191,7 +194,7 @@ void UBattleManager::UpdateUnitsAlive()
 			EnemiesAlive++;
 		}
 	}
-	UE_LOG(LogTemp, Log, TEXT("Allies alive: %d, Enemies alive: %d"), AlliesAlive, EnemiesAlive);
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: Allies alive: %d, Enemies alive: %d"), AlliesAlive, EnemiesAlive);
 	
 	if (AlliesAlive == 0)
 		EndBattle(false);
@@ -205,12 +208,12 @@ void UBattleManager::EndBattle(bool bPlayerWon)
 	if (bPlayerWon)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
-			TEXT("PLAYER WINS"));
+			TEXT("[BattleManager]: PLAYER WINS"));
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-			TEXT("PLAYER LOST"));
+			TEXT("[BattleManager]: PLAYER LOST"));
 	}
 	
 	//TODO: Notificar al GameMode (no entra en prototipo)
@@ -221,48 +224,48 @@ bool UBattleManager::RequestMove(ACharacterBase* Unit, const FTileCoord& TargetT
 {
 	if (!Unit)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Unit is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Unit is null"));
 		return false;
 	}
 	if (!IsPlayerTurn())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Not player turn"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Not player turn"));
 		return false;
 	}
 	if (Unit->GetTeam() != 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Unit is not ally"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Unit is not ally"));
 		return false;
 	}
 	if (!Unit->Board)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: Unit has no Board"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: Unit has no Board"));
 		return false;
 	}
 
 	if (Unit->bHasMoved)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: %s already moved this turn"), *Unit->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: %s already moved this turn"), *Unit->GetName());
 		return false;
 	}
 
 	UGridMovementComponent* MoveComp = Unit->FindComponentByClass<UGridMovementComponent>();
 	if (!MoveComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: %s has no GridMovementComponent"), *Unit->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: %s has no GridMovementComponent"), *Unit->GetName());
 		return false;
 	}
 
 	if (!MoveComp->canMoveToTile(TargetTile))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: tile (%d,%d) not reachable by MoveComponent"),
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: tile (%d,%d) not reachable by MoveComponent"),
 			TargetTile.X, TargetTile.Y);
 		return false;
 	}
 
 	if (!Unit->SetCurrentTile(TargetTile))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RequestMove failed: SetCurrentTile rejected (%d,%d)"),
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: RequestMove failed: SetCurrentTile rejected (%d,%d)"),
 			TargetTile.X, TargetTile.Y);
 		return false;
 	}
@@ -270,7 +273,7 @@ bool UBattleManager::RequestMove(ACharacterBase* Unit, const FTileCoord& TargetT
 	Unit->SnapToCurrentTile(false);
 	Unit->bHasMoved = true;
 
-	UE_LOG(LogTemp, Log, TEXT("RequestMove OK: %s -> (%d,%d)"),
+	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: RequestMove OK: %s -> (%d,%d)"),
 		*Unit->GetName(), Unit->CurrentTile.X, Unit->CurrentTile.Y);
 	return true;
 }

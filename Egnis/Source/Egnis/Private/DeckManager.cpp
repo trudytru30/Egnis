@@ -46,11 +46,9 @@ void UDeckManager::DrawCard()
 		DrawPile = DiscardedPile;
 		DiscardedPile.Empty();
 		ShuffleDeck();
-	} else if (DrawPile.Num() > 0)
-	{
-		Hand.Add(DrawPile.Last());
-		DrawPile.Pop();
 	}
+	Hand.Add(DrawPile.Last());
+	DrawPile.Pop();
 }
 
 // Robar cartas (con habilidades)

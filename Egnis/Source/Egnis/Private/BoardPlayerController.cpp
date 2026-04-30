@@ -53,11 +53,13 @@ void ABoardPlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BeginPlay: GameManager NULL"));
 	}
-
+	
 	if (!BM)
 	{
 		UE_LOG(LogTemp, Error, TEXT("BoardPlayerController: BattleManager is null"));
 	}
+	
+	BM->OnPlayerTurnStarted.AddDynamic(this, &ABoardPlayerController::BP_RefreshHandUI);
 
 	if (GameHUDClass)
 	{
