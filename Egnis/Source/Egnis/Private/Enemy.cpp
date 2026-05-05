@@ -124,6 +124,7 @@ void AEnemy::MoveTowardClosesPlayer()
 			*GetName(), CurrentTile.X, CurrentTile.Y);
 		
 		SetActorLocation(Board->TileToWorldCenter(CurrentTile));
+		if (UAudioManager* AM = GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayLandSound(0);
 		return;
 	}
 	if (!SetCurrentTile(SecondStep))
@@ -132,6 +133,7 @@ void AEnemy::MoveTowardClosesPlayer()
 			*GetName(), CurrentTile.X, CurrentTile.Y);
 
 		SetActorLocation(Board->TileToWorldCenter(CurrentTile));
+		if (UAudioManager* AM = GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayLandSound(0);
 		return;
 	}
 
@@ -139,6 +141,7 @@ void AEnemy::MoveTowardClosesPlayer()
 
 	UE_LOG(LogTemp, Log, TEXT("[%s] Moved 2 tiles straight to (%d,%d) towards player (%d,%d)."),
 		*GetName(), CurrentTile.X, CurrentTile.Y, Goal.X, Goal.Y);
+	if (UAudioManager* AM = GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayLandSound(0);
 }
 
 void AEnemy::MakeAction()

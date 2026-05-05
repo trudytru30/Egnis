@@ -1,4 +1,5 @@
 ﻿#include "BoardPlayerController.h"
+#include "AudioManager.h"
 #include "BaseCard.h"
 #include "BattleManager.h"
 #include "EnhancedInputSubsystems.h"
@@ -252,6 +253,7 @@ void ABoardPlayerController::HandleLeftClick()
 			if (ClickedCharacter->GetTeam() == 0)
 			{
 				SelectedAlly = ClickedCharacter;
+				if (UAudioManager* AM = GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayElevateSound(0);
 				UE_LOG(LogTemp, Log, TEXT("Selected Ally: %s"), *SelectedAlly->GetName());
 
 				if (GEngine)

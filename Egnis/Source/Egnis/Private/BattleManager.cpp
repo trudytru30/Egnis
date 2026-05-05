@@ -285,6 +285,7 @@ bool UBattleManager::RequestMove(ACharacterBase* Unit, const FTileCoord& TargetT
 	}
 
 	Unit->SnapToCurrentTile(false);
+	if (UAudioManager* AM = GetWorld()->GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayLandSound(0);
 	Unit->bHasMoved = true;
 
 	UE_LOG(LogTemp, Log, TEXT("[BattleManager]: RequestMove OK: %s -> (%d,%d)"),

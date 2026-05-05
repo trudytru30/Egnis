@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "BoardPlayerController.generated.h"
 
+class UAudioManager;
+
 class AAlly;
 class UBaseCard;
 class ACharacterBase;
