@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "BattleManager.generated.h"
 
+class UAudioManager;
+
 class AAlly;
 struct FTileCoord;
 class UDeckManager;

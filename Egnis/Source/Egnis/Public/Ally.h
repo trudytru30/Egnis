@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Ally.generated.h"
 
+class UAudioManager;
+
 UCLASS()
 class EGNIS_API AAlly : public ACharacterBase
 {

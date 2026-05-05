@@ -5,6 +5,8 @@
 #include "CharacterBase.h"
 #include "Card_HealEffect.generated.h"
 
+class UAudioManager;
+
 UCLASS(EditInlineNew)
 class EGNIS_API UCard_HealEffect : public UCardEffect
 {

@@ -1,4 +1,5 @@
 #include "Card_DrawEffect.h"
+#include "AudioManager.h"
 #include "DeckManager.h"
 
 void UCard_DrawEffect::Execute_None(UDeckManager* Deck)

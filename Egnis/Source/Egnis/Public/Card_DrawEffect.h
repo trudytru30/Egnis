@@ -4,6 +4,8 @@
 #include "CardEffect.h"
 #include "Card_DrawEffect.generated.h"
 
+class UAudioManager;
+
 class UDeckManager;
 
 UCLASS(EditInlineNew)

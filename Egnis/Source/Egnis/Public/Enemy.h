@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
 
+class UAudioManager;
+
 enum class EActionId : uint8;
 class UActionDataAsset;
 class UEnemyArchetypeDataAsset;

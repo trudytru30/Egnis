@@ -1,4 +1,5 @@
 #include "Card_AttackEffect.h"
+#include "AudioManager.h"
 
 
 void UCard_AttackEffect::Execute_Enemy(ACharacterBase* Self, ACharacterBase* Enemy)

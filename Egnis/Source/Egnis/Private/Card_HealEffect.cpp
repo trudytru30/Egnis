@@ -1,4 +1,5 @@
 #include "Card_HealEffect.h"
+#include "AudioManager.h"
 
 void UCard_HealEffect::Execute_Ally(ACharacterBase* Self, ACharacterBase* Ally)
 {

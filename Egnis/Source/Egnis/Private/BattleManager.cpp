@@ -1,4 +1,5 @@
 #include "BattleManager.h"
+#include "AudioManager.h"
 #include "Ally.h"
 #include "DeckManager.h"
 #include "BaseCard.h"
