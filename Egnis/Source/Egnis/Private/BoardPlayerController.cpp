@@ -45,30 +45,18 @@ void ABoardPlayerController::BeginPlay()
 	{
 		BM = GM->GetBattleManager();
 		DeckManager = GM->GetDeckManager();
-
-		UE_LOG(LogTemp, Warning, TEXT("BeginPlay: BM %s | DeckManager %s"),
-			BM ? TEXT("OK") : TEXT("NULL"),
-			DeckManager ? TEXT("OK") : TEXT("NULL"));
 	}
+	
+	if (BM)
+		BM->OnPlayerTurnStarted.AddDynamic(this, &ABoardPlayerController::BP_RefreshHandUI);
 	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("BeginPlay: GameManager NULL"));
-	}
-	
-	if (!BM)
-	{
-		UE_LOG(LogTemp, Error, TEXT("BoardPlayerController: BattleManager is null"));
-	}
-	
-	BM->OnPlayerTurnStarted.AddDynamic(this, &ABoardPlayerController::BP_RefreshHandUI);
+		UE_LOG(LogTemp, Error, TEXT("[BoardPlayerController]: BattleManager is null"));
 
 	if (GameHUDClass)
 	{
 		HUDWidget = CreateWidget<UUserWidget>(this, GameHUDClass);
 		if (HUDWidget)
-		{
 			HUDWidget->AddToViewport();
-		}
 	}
 	BP_RefreshHandUI();
 }
