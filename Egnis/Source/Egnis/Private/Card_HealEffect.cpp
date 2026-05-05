@@ -27,6 +27,7 @@ void UCard_HealEffect::Execute_Ally(ACharacterBase* Self, ACharacterBase* Ally)
 	
 	// Aplicar curación
 	Ally->GainHealth(HealAmount);
+	if (UAudioManager* AM = Self->GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayDoruSpellSound(0);
 	
 	UE_LOG(LogTemp, Log, TEXT("HealEffect: %s healed %s for %.1f HP"), *Self->GetName(), *Ally->GetName(), HealAmount);
 }

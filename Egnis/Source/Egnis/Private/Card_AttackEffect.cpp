@@ -16,5 +16,6 @@ void UCard_AttackEffect::Execute_Enemy(ACharacterBase* Self, ACharacterBase* Ene
 	if (DamageAmount >= 0 && Enemy->GetTeam() != Self->GetTeam())
 	{
 		Enemy->LossHealth(DamageAmount);
+		if (UAudioManager* AM = Self->GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayAttackSound(0);
 	}
 }
