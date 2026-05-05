@@ -46,6 +46,12 @@ void UAudioManager::PlaySelectCardSound(int32 Index)
 	PlaySoundFromArray(AudioData->SelectCardSounds, Index, TEXT("SelectCardSounds"));
 }
 
+void UAudioManager::PlayDrawCardSound(int32 Index)
+{
+	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	PlaySoundFromArray(AudioData->DrawCardSounds, Index, TEXT("DrawCardSounds"));
+}
+
 void UAudioManager::PlayElevateSound(int32 Index)
 {
 	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;

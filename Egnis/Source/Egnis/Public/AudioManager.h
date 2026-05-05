@@ -34,6 +34,9 @@ public:
 	void PlaySelectCardSound(int32 Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Audio|SFX")
+	void PlayDrawCardSound(int32 Index);
+
+	UFUNCTION(BlueprintCallable, Category = "Audio|SFX")
 	void PlayElevateSound(int32 Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Audio|SFX")

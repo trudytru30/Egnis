@@ -1,4 +1,5 @@
 #include "DeckManager.h"
+#include "AudioManager.h"
 
 // Aniadir cartas al mazo
 void UDeckManager::GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCarts)
@@ -53,6 +54,7 @@ void UDeckManager::DrawCard()
 	}
 	Hand.Add(DrawPile.Last());
 	DrawPile.Pop();
+	if (UAudioManager* AM = GetWorld()->GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayDrawCardSound(0);
 	OnHandChanged.Broadcast();
 }
 

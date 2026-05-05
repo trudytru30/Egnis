@@ -20,6 +20,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX|UI")
 	TArray<TObjectPtr<USoundBase>> SelectCardSounds;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX|UI")
+	TArray<TObjectPtr<USoundBase>> DrawCardSounds;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX|Movement")
 	TArray<TObjectPtr<USoundBase>> ElevateSounds;
 
