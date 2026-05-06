@@ -6,7 +6,7 @@ void UDeckManager::GenerateDeck(const TArray<TSubclassOf<UBaseCard>>& SelectedCa
 {
 	if (SelectedCarts.Num() < InitialDeckSize)
 	{
-		UE_LOG(LogTemp, Error, TEXT("No hay suficientes cartas seleccionadas para generar el mazo"));
+		UE_LOG(LogTemp, Error, TEXT("[DeckManager]: No hay suficientes cartas seleccionadas para generar el mazo"));
 		return;
 	}
 	
@@ -44,10 +44,6 @@ void UDeckManager::DrawCard()
 {
 	if (DrawPile.Num() <= 0)
 	{
-		if (DiscardedPile.Num() <= 0)		{
-			UE_LOG(LogTemp, Warning, TEXT("[DeckManager]: No cards left to draw"));
-			return;
-		}
 		DrawPile = DiscardedPile;
 		DiscardedPile.Empty();
 		ShuffleDeck();

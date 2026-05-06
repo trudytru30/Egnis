@@ -61,7 +61,7 @@ private:
 	TArray<UBaseCard*> Hand;
 	
 	int32 InitialDeckSize = 20;
-	int32 InitialHandSize = 6;
+	int32 InitialHandSize = 3;
 	int32 MaxHandSize = 9;
 #pragma endregion
 };
