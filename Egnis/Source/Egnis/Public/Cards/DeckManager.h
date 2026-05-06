@@ -5,7 +5,6 @@
 #include "DeckManager.generated.h"
 
 class UAudioManager;
-
 class UBaseCard;
 
 UCLASS()

@@ -44,6 +44,11 @@ void UDeckManager::DrawCard()
 {
 	if (DrawPile.Num() <= 0)
 	{
+		if (DiscardedPile.Num() <= 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("[DeckManager]: Pila de descartes vacia"));
+			return;
+		}
 		DrawPile = DiscardedPile;
 		DiscardedPile.Empty();
 		ShuffleDeck();

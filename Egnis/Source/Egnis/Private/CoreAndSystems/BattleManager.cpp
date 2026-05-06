@@ -135,7 +135,7 @@ void UBattleManager::EndTurn()
 			TurnCount++;
 			StartPlayerTurn();
 			break;
-	default: UE_LOG(LogTemp, Warning, TEXT("[BaattleManager]: Invalid turn"));
+	default: UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Invalid turn"));
 	}
 }
 
@@ -143,14 +143,9 @@ void UBattleManager::EndTurn()
 bool UBattleManager::PlayCard(UBaseCard* Card, AAlly* Character,
 	ACharacterBase* TargetCharacter, FVector Location)
 {
-	if (!Character)
+	if (!Character || !Character->EnergyComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Character is null"));
-		return false;
-	}
-	if (!Character->EnergyComp)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("[BattleManager[: EnergyComp is null"));
+		UE_LOG(LogTemp, Warning, TEXT("[BattleManager]: Character or EnergyComp is null"));
 		return false;
 	}
 	
