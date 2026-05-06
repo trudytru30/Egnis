@@ -4,6 +4,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "GameManager.generated.h"
 
+class UAudioDataAsset;
+class UAudioManager;
 class UBaseCard;
 class UBattleManager;
 class UDeckManager;
@@ -24,6 +26,9 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, Category="Audio")
+	TObjectPtr<UAudioDataAsset> AudioData;
+
 	UPROPERTY(EditDefaultsOnly)
 	TArray<UBaseCard*> InitialDeck;
 	
