@@ -1,0 +1,71 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "CoreAndSystems/Board.h"
+#include "GameFramework/Character.h"
+#include "CoreAndSystems/ColorType.h"
+#include "Components/HealthComponent.h"
+#include "CharacterBase.generated.h"
+
+class UEnergyComponent;
+
+UCLASS()
+class EGNIS_API ACharacterBase : public ACharacter
+{
+	GENERATED_BODY()
+
+public:
+	ACharacterBase();
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	UHealthComponent* HealthComp;
+
+	// ===== Funciones =====
+	UFUNCTION(BlueprintCallable, Category="Stats")
+	void LossHealth(float HealthToLoss);
+	
+	void HandleDeath();
+
+	UFUNCTION(BlueprintCallable, Category="Stats")
+	void GainHealth(float AmountHealed);
+	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
+	UFUNCTION(BlueprintCallable, Category="Stats")
+	int32 GetTeam();
+
+	// ===== Grid / Board =====
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Grid")
+	TObjectPtr<ABoard> Board = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
+	FTileCoord CurrentTile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
+	bool bSnapToTileOnBeginPlay = true;
+
+	UPROPERTY(BlueprintReadOnly, Category="Grid")
+	bool bHasMoved = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Grid")
+	float TileZOffset = 0.f;
+
+	UFUNCTION(BlueprintCallable, Category="Grid")
+	bool SetCurrentTile(const FTileCoord& NewTile);
+
+	UFUNCTION(BlueprintCallable, Category="Grid")
+	void SnapToCurrentTile(bool bKeepCurrentZ = false);
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EColorType Type;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Team")
+	int32 Team = 0; // 0 para el jugador, 1 para los enemigos, etc.
+};
