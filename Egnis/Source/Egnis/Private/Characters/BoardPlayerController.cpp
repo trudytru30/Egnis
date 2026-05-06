@@ -440,6 +440,7 @@ void ABoardPlayerController::BeginPlayCard(UBaseCard* Card)
 	PendingCardTarget = Card->GetTarget();
 	SelectionState = ECardSelectionState::SelectingUnit;
 	CurrentIntent = EInputIntent::Action; // Cambiar estado a accion (elegir unidades para jugar la carta)
+	BP_RefreshHandUI();
 }
 
 // Solicitar al BattleManager terminar el turno (función llamada por UI)

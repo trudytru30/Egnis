@@ -86,6 +86,10 @@ protected:
 	//Ally seleccionado
 	UPROPERTY()
 	TObjectPtr<ACharacterBase> SelectedAlly = nullptr;
+	
+	// Carta seleccionada (para UI)
+	UPROPERTY(BlueprintReadOnly, Category = "Cards")
+	TObjectPtr<UBaseCard> PendingCard = nullptr;
 
 #pragma region Inputs
 	UFUNCTION(BlueprintImplementableEvent, Category="Input")
@@ -119,8 +123,6 @@ private:
 	bool bIsInMenu = false;
 	
 	//Cartas
-	UPROPERTY()
-	TObjectPtr<UBaseCard> PendingCard = nullptr;
 	UPROPERTY()
 	TObjectPtr<AAlly> PendingSource = nullptr;
 	ECardSelectionState SelectionState = ECardSelectionState::None;
