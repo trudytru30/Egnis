@@ -1,5 +1,7 @@
 #include "CoreAndSystems/GameManager.h"
 #include "Characters/BoardPlayerController.h"
+#include "CoreAndSystems/AudioDataAsset.h"
+#include "CoreAndSystems/AudioManager.h"
 #include "CoreAndSystems/BattleManager.h"
 #include "Cards/DeckManager.h"
 
@@ -17,6 +19,9 @@ void AGameManager::BeginPlay()
 
 void AGameManager::InitializeManagers()
 {
+	if (UAudioManager* AM = GetGameInstance()->GetSubsystem<UAudioManager>())
+		AM->SetAudioData(AudioData);
+
 	DeckManager = NewObject<UDeckManager>(this);
 	check(DeckManager);
     

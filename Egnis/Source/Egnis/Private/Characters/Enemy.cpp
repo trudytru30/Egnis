@@ -187,6 +187,7 @@ void AEnemy::MakeAction()
 			*GetName(), *Target->GetName(), Range, AttackDamage);
 
 		Target->LossHealth(AttackDamage);
+		if (UAudioManager* AM = GetGameInstance()->GetSubsystem<UAudioManager>()) AM->PlayAttackSound(4);
 		return;
 	}
 

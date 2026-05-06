@@ -30,61 +30,61 @@ void UAudioManager::PlaySoundFromArray(const TArray<TObjectPtr<USoundBase>>& Sou
 
 void UAudioManager::PlayAttackSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado. Llama a SetAudioData primero."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->AttackSounds, Index, TEXT("AttackSounds"));
 }
 
 void UAudioManager::PlayHoverSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->HoverSounds, Index, TEXT("HoverSounds"));
 }
 
 void UAudioManager::PlaySelectCardSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->SelectCardSounds, Index, TEXT("SelectCardSounds"));
 }
 
 void UAudioManager::PlayDrawCardSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->DrawCardSounds, Index, TEXT("DrawCardSounds"));
 }
 
 void UAudioManager::PlayElevateSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->ElevateSounds, Index, TEXT("ElevateSounds"));
 }
 
 void UAudioManager::PlayLandSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->LandSounds, Index, TEXT("LandSounds"));
 }
 
 void UAudioManager::PlayDoruSpellSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->DoruSpellSounds, Index, TEXT("DoruSpellSounds"));
 }
 
 void UAudioManager::PlayEgnisSpellSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->EgnisSpellSounds, Index, TEXT("EgnisSpellSounds"));
 }
 
 void UAudioManager::PlayMenSpellSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->MenSpellSounds, Index, TEXT("MenSpellSounds"));
 }
 
 void UAudioManager::PlayWersSpellSound(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 	PlaySoundFromArray(AudioData->WersSpellSounds, Index, TEXT("WersSpellSounds"));
 }
 
@@ -102,7 +102,7 @@ void UAudioManager::PlaySound(USoundBase* Sound)
 
 void UAudioManager::PlayMusicByIndex(int32 Index)
 {
-	if (!ensureMsgf(AudioData, TEXT("AudioManager: AudioData no asignado."))) return;
+	if (!AudioData) return;
 
 	if (!AudioData->MusicTracks.IsValidIndex(Index))
 	{
